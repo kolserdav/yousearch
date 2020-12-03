@@ -2,6 +2,7 @@ import { gql } from '@apollo/client';
 import { ApolloClient, HttpLink, InMemoryCache, ApolloQueryResult } from '@apollo/client';
 import { concatPagination } from '@apollo/client/utilities'
 import * as Types from '../../../next-env';
+import { requestQuery, requestMutate } from '../../../lib/request';
 
 const dev = process.env.NODE_ENV === 'development';
 const server = typeof window === 'undefined';
@@ -23,31 +24,28 @@ const client = new ApolloClient({
   }),
 });
 
-export const fetchTest = {
-  context: this,
-  fn: (context: Types.Action<Types.Schema.Params.User>, ...args: any[]): any => {
-    return new Promise((resolve, reject) => {
-      client
-        .query({
-          variables: {
-            name: context.body.name,
-          },
-          query: gql`
-            query ($name: String!) {
-              getUser(name: $name) {
-                ${context.body.results}
-              }
-            }
-          `,
-        })
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .then((result: ApolloQueryResult<any>) => {
-          if (result.error && dev) {
-            console.error(`<${Date()}>`, '[User fetch error]', result.error);
-          }
-          resolve(result.data.getUser);
-        })
-        .catch(e => reject(e));
-    });
+export const fetchTest = requestQuery((context) => ({
+  variables: {
+    input: context.body.input,
   },
-};
+  query: gql`
+    query ($input: String!) {
+      getUser(name: $input) {
+        ${context.body.results}
+      }
+    }
+  `,
+}));
+
+export const registration = requestMutate((context) => ({
+  variables: {
+    input: context.body.input,
+  },
+  mutation: gql`
+    mutation ($input: Registration!) {
+      registration(input: $input) {
+        ${context.body.results}
+      }
+    }
+  `,
+}));

@@ -3,7 +3,15 @@
 import * as Schema from './node/schemas';
 export { Schema };
 
-export type ActionTypes = 'USER_FETCH_REQUEST' | 'USER_FETCH_FAILED' | 'USER_FETCH' | 'INITIAL';
+export declare type ActionTypesUserFetch =
+  | 'USER_FETCH_REQUEST'
+  | 'USER_FETCH_FAILED'
+  | 'USER_FETCH';
+export declare type ActionTypesTypesRegistration =
+  | 'REGISTRATION_REQUEST'
+  | 'REGISTRATION_FAILED'
+  | 'REGISTRATION';
+export declare type ActionTypes = ActionTypesUserFetch | ActionTypesTypesRegistration | 'INITIAL';
 
 export type Action<T> = {
   type: ActionTypes;

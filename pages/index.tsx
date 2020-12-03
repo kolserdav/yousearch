@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
 import { NextPage, NextPageContext } from 'next';
-import { store, action } from './store';
+import { store, action } from '../lib/store';
 import * as Types from '../next-env';
 
 const Home: NextPage = (props): React.ReactElement => {
   const [name, setName] = useState<string>('');
 
   store.subscribe(() => {
-    const state: Types.Reducer<Types.Schema.Values.User> = store.getState();
-    const { body }: Types.Action<Types.Schema.Values.User> = state[state.type];
-    if (state.type === 'USER_FETCH') {
-      console.log(body.id)
+    const state: Types.Reducer<Types.Schema.Values.Registration> = store.getState();
+    const { body }: Types.Action<Types.Schema.Values.Registration> = state[state.type];
+    if (state.type === 'REGISTRATION') {
+      console.log(body)
     }
   });
 
   const handleClick = () => {
-    action({ type: 'USER_FETCH_REQUEST', body: { name: 'kolserdav', results: ['id', 'login'] } });
+    action({ type: 'REGISTRATION_REQUEST', body: {input: { name: 'kolserdav', email: 'dasda', passwordRepeat: 'dasd', password: 'das',  results: ['token',] }} });
   };
 
   return (

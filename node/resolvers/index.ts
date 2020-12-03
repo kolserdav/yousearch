@@ -1,20 +1,19 @@
-import axios from "axios";
-import { IResolvers } from 'apollo-server-micro';
+import axios from 'axios';
+import Registration from './registration';
 import * as Types from '../../next-env';
+import { Resolver } from '../schemas';
 
-const resolvers: IResolvers<any, any> = {
+const resolvers: Resolver = {
   Query: {
-    getUsers: async (e: Error): Promise<Types.Schema.Values.User[]> => {
-      console.log(333, e)
+    getUsers: async (): Promise<Types.Schema.Values.User[]> => {
       const users = await axios.get("https://api.github.com/users");
       return users.data.map(({ id, login, avatar_url }: Types.Schema.Values.User) => ({
         id,
         login,
-        avatar_url
+        avatar_url,
       }));
     },
-    getUser: async (e: Error, args: Types.Schema.Params.User): Promise<Types.Schema.Values.User> => {
-      console.log(1,e)
+    getUser: async (args: Types.Schema.Params.User): Promise<Types.Schema.Values.User> => {
       const user: any = await axios.get(
         `https://api.github.com/users/${args.name}`
       )
@@ -22,10 +21,13 @@ const resolvers: IResolvers<any, any> = {
       return {
         id: user.data.id,
         login: user.data.login,
-        avatar_url: user.data.avatar_url
+        avatar_url: user.data.avatar_url,
       };
-    }
-  }
+    },
+  },
+  Mutation: {
+    registration: Registration,
+  },
 };
 
 export { resolvers };
