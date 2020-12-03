@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { IResolvers } from 'apollo-server-micro';
 import Registration from './registration';
 import * as Types from '../../next-env';
 import { Resolver } from '../schemas';
@@ -13,9 +14,9 @@ const resolvers: Resolver = {
         avatar_url,
       }));
     },
-    getUser: async (args: Types.Schema.Params.User): Promise<Types.Schema.Values.User> => {
+    getUser: async (_: any, args: Types.Schema.Params.User): Promise<Types.Schema.Values.User> => {
       const user: any = await axios.get(
-        `https://api.github.com/users/${args.name}`
+        `https://api.github.com/users/${args.input.name}`
       )
         .catch(e => e);
       return {

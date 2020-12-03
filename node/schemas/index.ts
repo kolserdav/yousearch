@@ -1,16 +1,33 @@
 import { gql } from 'apollo-server-micro';
 import * as Types from '../../next-env';
 
+export interface ServerResponse {
+  readonly [key: string]: {
+    result: Types.Result;
+    message: string;
+  };
+}
+
 export declare namespace Values {
-  type User = {
-    id?: number;
-    login?: string;
-    avatar_url?: string;
-  };
-  type Registration = {
-    token: string;
-  };
-  type All = User | Registration;
+  interface User extends ServerResponse {
+    getUser?: {
+      result: Types.Result;
+      message: string;
+      id?: number;
+      login?: string;
+      avatar_url?: string;
+    };
+  }
+
+  interface Registration {
+    result: Types.Result;
+    message: string;
+    token?: string;
+  }
+
+  export interface RegistrationRequest extends ServerResponse {
+    registration?: Registration;
+  }
 }
 
 export declare namespace Params {
@@ -31,12 +48,11 @@ export declare namespace Params {
     };
     results: RegistrationKeys[];
   };
-  type All = User | Registration;
 }
 
 export interface Query {
   getUsers: (_: any) => Promise<Values.User[]>;
-  getUser: (params: Params.User) => Promise<Values.User>;
+  getUser: (_, params: Params.User) => Promise<Values.User>;
 }
 
 export interface Mutation {
@@ -49,7 +65,15 @@ export interface Resolver {
 }
 
 export const typeDefs = gql`
+  enum Result {
+    error
+    warning
+    success
+  }
+
   type User {
+    result: Result!
+    message: String!
     id: ID
     login: String
     avatar_url: String
@@ -67,6 +91,8 @@ export const typeDefs = gql`
   }
 
   type Registration {
+    result: Result!
+    message: String!
     token: String
   }
 

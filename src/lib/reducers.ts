@@ -1,6 +1,9 @@
+/**
+ * Universal reducer for all cases of store
+ */
 import * as Types from '../../next-env';
 
-const initialState: Types.Reducer<Types.Schema.Values.All> = {
+const initialState: Types.Reducer<any> = {
   type: 'INITIAL',
   body: {
     type: 'INITIAL',
@@ -9,9 +12,9 @@ const initialState: Types.Reducer<Types.Schema.Values.All> = {
 };
 
 export default function reducer(
-  state: Types.Reducer<Types.Schema.Values.All> = initialState,
-  action: Types.Action<Types.Schema.Params.All>
-): Types.Reducer<Types.Schema.Values.All> {
+  state: Types.Reducer<any> = initialState,
+  action: Types.Action<any>
+): Types.Reducer<any> {
   state.type = action.type;
   return Object.assign(state, { [action.type]: action });
 }
