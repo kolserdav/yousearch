@@ -51,12 +51,12 @@ export declare namespace Params {
 }
 
 export interface Query {
-  getUsers: (_: any) => Promise<Values.User[]>;
-  getUser: (_, params: Params.User) => Promise<Values.User>;
+  getUsers: (parent: any) => Promise<Values.User[]>;
+  getUser: (parent, params: Params.User) => Promise<Values.User>;
 }
 
 export interface Mutation {
-  registration: (_: any, params: Params.Registration) => Promise<Values.Registration>;
+  registration: (parent: any, params: Params.Registration, context: any, info: any) => Promise<Values.Registration>;
 }
 
 export interface Resolver {

@@ -1,14 +1,14 @@
 /**
  * Saga middlewares
  */
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, Store } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import * as Types from '../../next-env';
 import reducer from '../lib/reducers';
 import * as sagas from './sagas';
 
 const sagaMiddleware = createSagaMiddleware();
-const store = createStore(reducer, applyMiddleware(sagaMiddleware));
+const store: Store<Types.Reducer<any>, Types.Action<any>> = createStore(reducer, applyMiddleware(sagaMiddleware));
 
 /**
  * After create API and Saga do add middleware to store

@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 import { NextPage, NextPageContext } from 'next';
 import { store, action } from '../src/store';
 import * as Types from '../next-env';
+import { Values } from '../node/schemas';
 
 const Home: NextPage = (props): React.ReactElement => {
   const [name, setName] = useState<string>('');
 
   store.subscribe(() => {
-    const state: Types.Reducer<Types.Schema.Values.RegistrationRequest> = store.getState();
-    const { body }: Types.Action<Types.Schema.Values.RegistrationRequest> = state[state.type];
+    const state = store.getState();
+    const { body }: Types.Action<Values.RegistrationRequest> = state[state.type];
     if (state.type === 'REGISTRATION') {
       const { registration } = body;
       if (!registration) {
@@ -31,6 +33,7 @@ const Home: NextPage = (props): React.ReactElement => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1>{name}</h1>
+      <Link href="/registration">Registration</Link>
       <button onClick={handleClick}>Send</button>
     </div>
   )

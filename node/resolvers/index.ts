@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { IResolvers } from 'apollo-server-micro';
-import Registration from './registration';
+import Registration from './user/registration';
 import * as Types from '../../next-env';
 import { Resolver } from '../schemas';
 
