@@ -34,3 +34,11 @@ export interface Request<T> {
 }
 
 export declare type Result = 'error' | 'warning' | 'success';
+
+export declare type ThemeProps = {
+  children: React.ReactElement | React.ReactElement[];
+};
+
+export declare type AppBarProps = {
+  children: React.ReactElement | React.ReactElement[];
+};
