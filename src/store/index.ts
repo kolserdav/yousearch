@@ -8,7 +8,10 @@ import reducer from '../lib/reducers';
 import * as sagas from './sagas';
 
 const sagaMiddleware = createSagaMiddleware();
-const store: Store<Types.Reducer<any>, Types.Action<any>> = createStore(reducer, applyMiddleware(sagaMiddleware));
+const store: Store<Types.Reducer<any>, Types.Action<any>> = createStore(
+  reducer,
+  applyMiddleware(sagaMiddleware)
+);
 
 /**
  * After create API and Saga do add middleware to store

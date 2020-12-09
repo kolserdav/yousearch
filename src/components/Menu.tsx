@@ -1,16 +1,16 @@
 import React from 'react';
+import Link from 'next/link';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import RegistrationIcon from '@material-ui/icons/ExitToApp';
+import SettingsIcon from '@material-ui/icons/Settings';
 import MenuIcon from '@material-ui/icons/Menu';
-import { IconButton } from '@material-ui/core';
+import { IconButton, MenuItem } from '@material-ui/core';
 
 const useStyles = makeStyles({
   list: {
@@ -25,7 +25,7 @@ type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
 const positions = ['left', 'right', 'top', 'bottom'];
 
-export default function Menu() {
+export default function Menu(): React.ReactElement {
   const classes = useStyles();
   const [state, setState] = React.useState({
     top: false,
@@ -57,21 +57,22 @@ export default function Menu() {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}>
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        <Link href="/settings">
+          <MenuItem>
+            <ListItemIcon>
+              <SettingsIcon />
+            </ListItemIcon>
+            <ListItemText>Settings</ListItemText>
+          </MenuItem>
+        </Link>
+        <Link href="/registration">
+          <MenuItem>
+            <ListItemIcon>
+              <RegistrationIcon />
+            </ListItemIcon>
+            <ListItemText>Registration</ListItemText>
+          </MenuItem>
+        </Link>
       </List>
     </div>
   );
