@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { NextPage, NextPageContext } from 'next';
+import AppBar from '../src/components/AppBar';
 import { store, action } from '../src/store';
 import * as Types from '../next-env';
 import { Values } from '../node/schemas';
@@ -33,8 +34,7 @@ const Home: NextPage = (props): React.ReactElement => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1>{name}</h1>
-      <Link href="/registration">Registration</Link>
-      <button onClick={handleClick}>Send</button>
+      <AppBar />
     </div>
   )
 }

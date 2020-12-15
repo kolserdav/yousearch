@@ -1,45 +1,33 @@
-import React from 'react';
-import { AppBar as Bar, Slide, useScrollTrigger, Toolbar, Typography, Container, Box } from '@material-ui/core';
-import Menu from './Menu';
-import * as Types from '../../next-env';
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import clsx from 'clsx';
+import { motion } from 'framer-motion';
+import { NextComponentType } from 'next';
 
-interface Props {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window?: () => Window;
-  children: React.ReactElement;
-}
-
-function HideOnScroll(props: Props) {
-  const { children, window } = props;
-  // Note that you normally won't need to set the window ref as useScrollTrigger
-  // will default to window.
-  // This is only being set here because the demo is in an iframe.
-  const trigger = useScrollTrigger({ target: window ? window() : undefined });
-
+const AppBar: NextComponentType<any, any, any> = () => {
+  const [cls, setCls] = useState<string[]>(['app-bar']);
+  useEffect(() => {
+    setTimeout(() => {
+      setCls(['app-bar', 'hidden']);
+    }, 3000)
+  }, []);
   return (
-    <Slide appear={false} direction="down" in={!trigger}>
-      {children}
-    </Slide>
+    <div className={clsx(cls)}></div>
   );
 }
-
-export default function AppBar(props: Types.AppBarProps): React.ReactElement {
-  const { children } = props;
-  return (
-    <div>
-      <HideOnScroll {...props}>
-        <Bar>
-          <Toolbar>
-            <Menu />
-            <Typography variant="h6">Scroll to Hide App Bar</Typography>
-          </Toolbar>
-        </Bar>
-      </HideOnScroll>
-      <Toolbar />
-      <Container>{children}</Container>
-    </div>
-  );
+// <Container className="app-bar" show={show}></Container>
+interface ContainerProps {
+  show: boolean;
 }
+
+const Container = styled.div<ContainerProps>`
+  position: fixed;
+  top: ${(props) =>
+    props.show ? '0px' : 'calc(-1 * (60px + (80 - 60) * ((100vw - 1200px) / (1920 - 1200))))'};
+  left: 0;
+  height: calc(60px + (80 - 60) * ((100vw - 1200px) / (1920 - 1200)));
+  width: 100%;
+  background-color: purple;
+`;
+
+export default AppBar;

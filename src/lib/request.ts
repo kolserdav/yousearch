@@ -10,23 +10,41 @@ import {
   InMemoryCache,
   QueryOptions,
   MutationOptions,
+  createHttpLink
 } from '@apollo/client';
 import { concatPagination } from '@apollo/client/utilities';
 import * as Types from '../../next-env';
+import { setContext } from '@apollo/client/link/context';
 
 const dev = process.env.NODE_ENV === 'development';
 const serverApi = process.env.NEXT_PUBLIC_SERVER_API;
 const server = typeof window === 'undefined';
+
+const httpLink = createHttpLink({
+  uri: serverApi,
+  credentials: 'include',
+  fetchOptions: {
+    mode: 'cors'
+  },
+});
+
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      authorization: 'Bearer L8qq9PZyRg6ieKGEKhZolGC0vJWLw8iEJ88DRdyOg'
+    },
+  }
+});
 
 /**
  * Apollo server micro client
  */
 const client = new ApolloClient({
   ssrMode: server,
-  link: new HttpLink({
-    uri: serverApi,
-    credentials: 'same-origin',
-  }),
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache({
     typePolicies: {
       Query: {
