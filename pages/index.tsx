@@ -5,12 +5,12 @@ import styled from 'styled-components';
 import { NextPage, NextPageContext } from 'next';
 import AppBar from '../src/components/AppBar';
 import { store, action } from '../src/store';
+import Theme from '../src/components/Theme';
 import * as Types from '../next-env';
 import { Values } from '../node/schemas';
 
 const Home: NextPage = (props): React.ReactElement => {
   const [name, setName] = useState<string>('');
-
   store.subscribe(() => {
     const state = store.getState();
     const { body }: Types.Action<Values.RegistrationRequest> = state[state.type];
@@ -29,7 +29,7 @@ const Home: NextPage = (props): React.ReactElement => {
   };
 
   return (
-    <div className="container">
+    <Theme>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
@@ -139,7 +139,7 @@ Fusce viverra accumsan tempus. In nec turpis tempor turpis laoreet semper nec vi
 
 Ut tincidunt arcu id sem semper iaculis. Nullam vitae viverra elit, non mollis risus. Cras placerat commodo congue. Etiam at mattis libero. Duis ullamcorper, felis vitae lacinia dignissim, elit neque finibus tellus, nec placerat mi urna ut tellus. Donec scelerisque malesuada augue in finibus. Duis et laoreet est. Donec nec tortor ac arcu vehicula blandit in et eros. Sed gravida libero mollis, aliquam neque in, rutrum odio. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nullam in neque nec orci auctor ornare sit amet sit amet libero. Pellentesque posuere erat nulla. Integer non lacinia neque, in varius neque. Ut eu odio cursus, ornare erat vel, consequat enim.
 </ Paragraph>
-    </div>
+    </Theme>
   )
 }
 

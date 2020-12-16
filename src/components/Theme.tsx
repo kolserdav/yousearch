@@ -3,7 +3,8 @@ import { ThemeProvider } from 'styled-components';
 import * as Types from '../../next-env';
 
 const theme = {
-  main: 'black',
+  main: 'purple',
+  bg: 'rgba(0, 0, 0, 0.1)',
 };
 
 export default function Theme(props: Types.ThemeProps): React.ReactElement {

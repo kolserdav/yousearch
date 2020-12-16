@@ -42,3 +42,40 @@ export declare type ThemeProps = {
 export declare type AppBarProps = {
   children: React.ReactElement | React.ReactElement[];
 };
+
+declare type LanguageName = 'русский' | 'english';
+export declare type LanguageValue = 'ru' | 'en';
+
+export declare interface Language {
+  name: LanguageName;
+  value: LanguageValue;
+  name1: LanguageName;
+  value1: LanguageValue;
+  interface: {
+    settings: string;
+    registration: string;
+    select_lang: string;
+    login: string;
+    icon: string;
+    email: string;
+    password: string;
+    passwordRepeat: string;
+    name: string;
+  };
+}
+
+export declare type StaticContext = {
+  locales: LanguageValue[];
+  locale: LanguageValue;
+  defaultLocale: LanguageValue;
+};
+
+export declare interface Props {
+  t: Language;
+}
+
+export declare interface StaticProps {
+  props: {
+    t: Language;
+  };
+}

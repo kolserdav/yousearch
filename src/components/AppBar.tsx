@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { NextComponentType } from 'next';
+import { Props } from '../../next-env';
 import Menu from './Menu';
 
 let oldY = 0;
 
-const AppBar: NextComponentType<any, any, any> = () => {
+const AppBar: NextComponentType<any, any, Props> = (props) => {
+  const { t } = props;
   const container: React.Ref<any> = useRef();
   const [show, setShow] = useState<boolean>(true);
   const hideOnScroll = () => {
@@ -25,9 +27,11 @@ const AppBar: NextComponentType<any, any, any> = () => {
     };
   }, []);
   return (
-    <Container ref={container} show={show}>
-      <Menu />
-    </Container>
+    <Wrapper>
+      <Container ref={container} show={show}>
+        <Menu t={t} />
+      </Container>
+    </Wrapper>
   );
 };
 //  <div className={clsx(cls)}></div>
@@ -76,6 +80,13 @@ const Container = styled.div<ContainerProps>`
   display: flex;
   flex-direction: row;
   align-items: center;
+`;
+
+const Wrapper = styled.div`
+  position: relative;
+  top: 0;
+  width: 100%auto;
+  height: calc(80px + (220 - 80) * ((100vw - 1200px) / (7680 - 1200)));
 `;
 
 export default AppBar;

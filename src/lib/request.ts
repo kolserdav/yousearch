@@ -6,11 +6,10 @@
  */
 import {
   ApolloClient,
-  HttpLink,
   InMemoryCache,
   QueryOptions,
   MutationOptions,
-  createHttpLink
+  createHttpLink,
 } from '@apollo/client';
 import { concatPagination } from '@apollo/client/utilities';
 import * as Types from '../../next-env';
