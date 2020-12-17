@@ -15,6 +15,8 @@ const t: Language = {
     email: 'почта',
     password: 'пароль',
     passwordRepeat: 'повтор пароля',
+    home: 'главная',
+    send: 'отправить',
   },
 };
 export default t;

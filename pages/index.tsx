@@ -2,14 +2,26 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import styled from 'styled-components';
-import { NextPage, NextPageContext } from 'next';
+import { NextComponentType } from 'next';
 import AppBar from '../src/components/AppBar';
 import { store, action } from '../src/store';
+import * as lib from '../src/lib';
 import Theme from '../src/components/Theme';
 import * as Types from '../next-env';
 import { Values } from '../node/schemas';
+import { StaticContext, StaticProps, Props } from '../next-env';
 
-const Home: NextPage = (props): React.ReactElement => {
+export const getStaticProps = ({ locale }: StaticContext): StaticProps => {
+  const lang = lib.getLang(locale);
+  return {
+    props: {
+      t: lang,
+    },
+  };
+};
+
+const Home: NextComponentType<any, any, Props> = (props): React.ReactElement => {
+  const { t } = props;
   const [name, setName] = useState<string>('');
   store.subscribe(() => {
     const state = store.getState();
@@ -35,7 +47,7 @@ const Home: NextPage = (props): React.ReactElement => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1>{name}</h1>
-      <AppBar />
+      <AppBar t={t}/>
         <Paragraph>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi a lorem in mi tincidunt scelerisque. Integer venenatis in mauris et laoreet. Pellentesque a elit sit amet arcu varius pharetra id id ligula. Nullam vitae enim sit amet est feugiat aliquam ut eu arcu. Integer bibendum ex sit amet est sollicitudin, dignissim maximus leo feugiat. Etiam pharetra pellentesque magna, vestibulum condimentum dolor porttitor ut. Phasellus in consectetur odio. Quisque eleifend urna vel nisl sollicitudin tempor. Praesent tempus purus at mi ultricies, ac facilisis neque accumsan. Aliquam ornare tincidunt lorem, placerat egestas ante tristique lobortis. Quisque condimentum, libero non lacinia ultricies, justo lectus dignissim magna, quis elementum nisl augue posuere metus. Pellentesque efficitur mauris ac nisl venenatis suscipit.
 
 Sed blandit rhoncus pulvinar. Proin sit amet tempus ipsum, lacinia tristique diam. Sed quis diam a quam egestas rhoncus. Aliquam eu blandit ipsum. Vestibulum at urna non ipsum consectetur rhoncus. Praesent justo neque, convallis id mi in, tristique molestie mauris. Vivamus ut eros quam. Etiam dapibus odio laoreet scelerisque venenatis. Quisque venenatis sodales semper. Praesent sagittis purus eu blandit venenatis. Proin sed felis et ligula feugiat pharetra. Nam eu nunc pharetra, fringilla libero id, accumsan sem.

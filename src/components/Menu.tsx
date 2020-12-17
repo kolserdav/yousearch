@@ -17,6 +17,9 @@ const Menu: NextComponentType<any, any, Props> = (props) => {
   const [_show, _setShow] = useState<boolean>(false);
   const router = useRouter();
   const { pathname } = router;
+  const closeMenu = () => {
+    setShow(false);
+  };
   return (
     <MenuWrapper>
       <MenuIcon
@@ -25,20 +28,31 @@ const Menu: NextComponentType<any, any, Props> = (props) => {
           _setShow(true);
         }}
       />
+      <LangSelect>
+        <LangSelectItem selected={true}>{t.name}</LangSelectItem>
+        <LangSelectItem selected={false}>&nbsp;|&nbsp;</LangSelectItem>
+        <Link href={router.pathname} locale={t.value1}>
+          <LangSelectItem selected={false}>{t.name1}</LangSelectItem>
+        </Link>
+      </LangSelect>
       {_show ? (
         <MenuBody show={show}>
-          <MenuItem
-            selected={false}
-            onClick={() => {
-              setShow(false);
-              setTimeout(() => {
-                _setShow(false);
-              }, duration);
-            }}>
+          <MenuItem selected={false} onClick={closeMenu}>
             <MenuItemIcon src="/img/ui/close-black-36dp.svg" alt="close icon" />
           </MenuItem>
+          <Divider />
+          <Link href="/">
+            <MenuItem onClick={closeMenu} selected={pathname === '/'}>
+              <MenuItemIcon
+                src="/img/ui/home-black-36dp.svg"
+                alt={`${t.interface.home} ${t.interface.icon}`}
+              />
+              <MenuItemText>{t.interface.home}</MenuItemText>
+            </MenuItem>
+          </Link>
+          <Divider />
           <Link href="/registration">
-            <MenuItem selected={pathname === '/registration'}>
+            <MenuItem onClick={closeMenu} selected={pathname === '/registration'}>
               <MenuItemIcon
                 src="/img/ui/how_to_reg-black-36dp.svg"
                 alt={`${t.interface.registration} ${t.interface.icon}`}
@@ -47,7 +61,7 @@ const Menu: NextComponentType<any, any, Props> = (props) => {
             </MenuItem>
           </Link>
           <Link href="/login">
-            <MenuItem selected={pathname === '/login'}>
+            <MenuItem onClick={closeMenu} selected={pathname === '/login'}>
               <MenuItemIcon
                 src="/img/ui/login-black-36dp.svg"
                 alt={`${t.interface.login} ${t.interface.icon}`}
@@ -76,18 +90,45 @@ const Menu: NextComponentType<any, any, Props> = (props) => {
   );
 };
 
+const LangSelect = styled.div`
+  margin: 0 20px 0 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+`;
+
+interface LangSelectItemProps {
+  selected: boolean;
+}
+
+const LangSelectItem = styled.div<LangSelectItemProps>`
+  cursor: pointer;
+  font-size: var(--h5-size);
+  color: ${(props) => props.theme.light};
+  text-transform: capitalize;
+  text-decoration: ${(props) => (props.selected ? 'underline' : 'none')};
+`;
+
+/**
+ * Close menu animation
+ */
 const fadeOut = keyframes`
   0% {
     left: 0;
   }
   100% {
-    left: calc(-1 * (300px + (1000 - 300) * ((100vw - 320px) / (7680 - 320))));
+    left: calc(-1 * var(--menu-body-width));
   }
 `;
 
+/**
+ * Open menu animation
+ */
 const fadeIn = keyframes`
   0% {
-    left: calc(-1 * (300px + (1000 - 300) * ((100vw - 320px) / (7680 - 320))));
+    left: calc(-1 * var(--menu-body-width));
   }
   100% {
     left: 0;
@@ -100,6 +141,10 @@ interface MenuProps {
 
 const pulse = `0.${duration}s`;
 
+/**
+ * Open and cloese menu animation handler
+ * @param props {MenuProps}
+ */
 const animation = (props: MenuProps) =>
   css`
     ${pulse}
@@ -118,8 +163,8 @@ const MenuWrapper = styled.div`
 
 const MenuIcon = styled.div`
   cursor: pointer;
-  width: calc(40px + (200 - 40) * ((100vw - 320px) / (7680 - 320)));
-  height: calc(40px + (200 - 40) * ((100vw - 320px) / (7680 - 320)));
+  width: var(--icon-width);
+  height: var(--icon-width);
   margin: 12px;
   background: url('/img/ui/menu-white-36dp.svg');
   background-size: contain;
@@ -128,10 +173,13 @@ const MenuIcon = styled.div`
 
 const MenuItemIcon = styled.img`
   cursor: pointer;
-  width: calc(40px + (200 - 40) * ((100vw - 320px) / (7680 - 320)));
-  height: calc(40px + (200 - 40) * ((100vw - 320px) / (7680 - 320)));
+  width: var(--icon-width);
+  height: var(--icon-width);
 `;
 
+/**
+ * Close menu wrapper right
+ */
 const wrapperOut = keyframes`
   0% {
     opacity: 0.3;
@@ -141,6 +189,9 @@ const wrapperOut = keyframes`
   }
 `;
 
+/**
+ * Open menu wrapper right
+ */
 const wrapperIn = keyframes`
   0% {
     opacity: 0;
@@ -160,8 +211,8 @@ const animationWrapper = (props: MenuProps) =>
 const MenuOpenedWrapper = styled.div<MenuProps>`
   position: fixed;
   top: 0;
-  left: calc(300px + (1000 - 300) * ((100vw - 320px) / (7680 - 320)));
-  width: calc(100% - (300px + (1000 - 300) * ((100vw - 320px) / (7680 - 320))));
+  left: var(--menu-body-width);
+  width: calc(100% - var(--menu-body-width));
   height: 100%;
   background: rgba(0, 0, 0, 0.3);
   animation: ${animationWrapper};
@@ -172,10 +223,11 @@ const MenuBody = styled.div<MenuProps>`
   left: ${(props) =>
     props.show ? '0' : 'calc(-1 * (300px + (1000 - 300) * ((100vw - 320px) / (7680 - 320))))'};
   top: 0;
-  width: calc(300px + (1000 - 300) * ((100vw - 320px) / (7680 - 320)));
+  width: var(--menu-body-width);
   height: 100%;
   background: white;
   animation: ${animation};
+  overflow-y: auto;
 `;
 
 interface MenuItemProps {
@@ -188,7 +240,7 @@ const MenuItem = styled.div<MenuItemProps>`
   align-items: center;
   cursor: pointer;
   font-family: 'Roboto Condensed', sans-serif;
-  font-size: calc(14px + (100 - 14) * ((100vw - 320px) / (7680 - 320)));
+  font-size: var(--menu-item-size);
   padding: 20px;
   color: ${(props) => props.theme.main};
   background: ${(props) => (props.selected ? props.theme.bg : 'inherit')};
@@ -200,6 +252,16 @@ const MenuItem = styled.div<MenuItemProps>`
 const MenuItemText = styled.span`
   margin-left: 15px;
   text-transform: uppercase;
+`;
+
+const Divider = styled.div`
+  position: relative;
+  width: calc(100% - 40px);
+  border-radius: 1px;
+  margin: 0 20px 0 20px;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
 `;
 
 export default Menu;

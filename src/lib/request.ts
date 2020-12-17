@@ -21,10 +21,7 @@ const server = typeof window === 'undefined';
 
 const httpLink = createHttpLink({
   uri: serverApi,
-  credentials: 'include',
-  fetchOptions: {
-    mode: 'cors'
-  },
+  credentials: 'same-origin',
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -74,6 +71,7 @@ const requestQuery = (
           resolve(result.data);
         })
         .catch((e: Error) => {
+          if (dev) console.error(e);
           resolve(e.message);
         });
     });
@@ -99,6 +97,7 @@ const requestMutate = (
           resolve(result.data);
         })
         .catch((e: Error) => {
+          if (dev) console.error(e);
           resolve(e.message);
         });
     });

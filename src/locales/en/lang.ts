@@ -15,6 +15,8 @@ const t: Language = {
     email: 'email',
     password: 'password',
     passwordRepeat: 'password repeat',
+    home: 'home',
+    send: 'send',
   },
 };
 

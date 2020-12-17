@@ -5,6 +5,7 @@ export default async function Registration(
   params: Schema.Params.Registration,
   context: any
 ): Promise<Schema.Values.Registration> {
+  console.log(params)
   return {
     result: 'success',
     message: 'Success',

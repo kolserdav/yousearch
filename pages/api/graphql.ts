@@ -17,7 +17,7 @@ const apolloServer: ApolloServer = new ApolloServer({
     return {
       headers: req.headers,
     };
-  }
+  },
 });
 
 export const config = {

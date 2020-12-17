@@ -41,7 +41,6 @@ export declare namespace Params {
   };
   type Registration = {
     input: {
-      name?: string;
       email: string;
       pasword: string;
       passwordRepeat: string;
@@ -85,7 +84,6 @@ export const typeDefs = gql`
 
   input RegistrationInput {
     email: String!
-    name: String
     password: String!
     passwordRepeat: String!
   }

@@ -61,6 +61,8 @@ export declare interface Language {
     password: string;
     passwordRepeat: string;
     name: string;
+    home: string;
+    send: string;
   };
 }
 
