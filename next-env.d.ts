@@ -8,12 +8,14 @@
 import * as Schema from './node/schemas'; // Import requests types
 export { Schema };
 
-export declare type ActionTypesUserFetch = 'USER_FETCH_REQUEST' | 'USER_FETCH';
-export declare type ActionTypesTypesRegistration = 'REGISTRATION_REQUEST' | 'REGISTRATION';
-export declare type ActionTypes = ActionTypesUserFetch | ActionTypesTypesRegistration | 'INITIAL';
+export declare namespace ActionTypes {
+  export declare type UserFetch = 'USER_FETCH_REQUEST' | 'USER_FETCH';
+  export declare type Registration = 'REGISTRATION_REQUEST' | 'REGISTRATION';
+  export declare type All = ActionTypesUserFetch | ActionTypesTypesRegistration | 'INITIAL';
+}
 
 export type Action<T> = {
-  type: ActionTypes;
+  type: ActionTypes.All;
   body: T;
 };
 
@@ -22,7 +24,7 @@ export type Resolvers = {
 };
 
 export type Reducer<T> = {
-  type: ActionTypes;
+  type: ActionTypes.All;
   body: Action<T>;
 };
 
@@ -80,4 +82,13 @@ export declare interface StaticProps {
   props: {
     t: Language;
   };
+}
+
+
+export declare interface RequestHandler<T, U> {
+  (parent: any, params: T, context: any, info: any): Promise<U>;
+}
+
+export declare interface RequestInterface {
+  [route: string]: RequestHandler<any, any>;
 }

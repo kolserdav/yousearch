@@ -1,61 +1,69 @@
 import { gql } from 'apollo-server-micro';
+import { Schema } from 'inspector';
 import * as Types from '../../next-env';
 
-export interface ServerResponse {
-  readonly [key: string]: {
+declare interface ServerResponse {
+  readonly [key: string /** Handler name */]: { 
     result: Types.Result;
     message: string;
   };
 }
 
 export declare namespace Values {
-  interface User extends ServerResponse {
-    getUser?: {
-      result: Types.Result;
-      message: string;
-      id?: number;
-      login?: string;
-      avatar_url?: string;
-    };
+  /** User values */
+  interface User {
+    result: Types.Result;
+    message: string;
+    id?: number;
+    login?: string;
+    avatar_url?: string;
   }
-
+  interface UserRequest extends ServerResponse {
+    getUser?: User;
+  }
+  /** Registration values */
   interface Registration {
     result: Types.Result;
     message: string;
     token?: string;
   }
-
-  export interface RegistrationRequest extends ServerResponse {
+  interface RegistrationRequest extends ServerResponse {
     registration?: Registration;
   }
 }
 
 export declare namespace Params {
+  /** User params */
   type UserKeys = keyof Values.User;
-  type RegistrationKeys = keyof Values.Registration;
   type User = {
     input: {
       name: string;
     };
     results: UserKeys[];
   };
+  /** Registration params */
+  type RegistrationKeys = keyof Values.Registration;
   type Registration = {
     input: {
       email: string;
-      pasword: string;
+      password: string;
       passwordRepeat: string;
     };
     results: RegistrationKeys[];
   };
+
 }
 
-export interface Query {
-  getUsers: (parent: any) => Promise<Values.User[]>;
-  getUser: (parent, params: Params.User) => Promise<Values.User>;
+
+
+export interface Query extends Types.RequestInterface {
+  getUsers: Types.RequestHandler<Params.User, Values.User[]>
+  getUser: Types.RequestHandler<Params.User, Values.User>
 }
 
-export interface Mutation {
-  registration: (parent: any, params: Params.Registration, context: any, info: any) => Promise<Values.Registration>;
+
+export interface Mutation extends Types.RequestInterface {
+  registration: Types.RequestHandler<Params.Registration, Values.Registration>;
 }
 
 export interface Resolver {

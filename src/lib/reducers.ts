@@ -16,5 +16,6 @@ export default function reducer(
   action: Types.Action<any>
 ): Types.Reducer<any> {
   state.type = action.type;
+  state.body = action.body;
   return Object.assign(state, { [action.type]: action });
 }

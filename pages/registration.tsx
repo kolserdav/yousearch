@@ -19,28 +19,40 @@ export const getStaticProps = ({ locale }: StaticContext): StaticProps => {
   };
 };
 
+/**
+ * 
+ * @param props 
+ */
 const Registration: NextComponentType<any, any, Props> = (props): React.ReactElement => {
   const { t } = props;
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [passwordRepeat, setPasswordRepeat] = useState<string>('');
-  const registration = () => {
-    action({type: 'REGISTRATION_REQUEST',
+  const registration = (): void => {
+    action<Types.Schema.Params.Registration>({
+      type: 'REGISTRATION_REQUEST',
       body: {
         input: {
           email,
           password,
           passwordRepeat,
         },
-        results: ['token'],
+        results: ['token', 'message'],
       },
     });
   };
   useEffect(() => {
     const storeSubs = store.subscribe(() => {
-      const state: Types.Reducer<Types.Schema.Values.Registration> = store.getState();
-      console.log(state.REGISTRATION.body);
-      //TODO
+      const state: Types.Action<any> = store.getState();
+      if (state.type === 'REGISTRATION') {
+        const { body }: Types.Action<Types.Schema.Values.RegistrationRequest> = state;
+        const { registration } = body;
+        if (!registration) {
+          console.error(body);
+          return 1;
+        }
+        console.log(232, registration.token)
+      }
     });
     return () => {
       storeSubs();

@@ -1,10 +1,16 @@
-import * as Schema from '../../schemas';
+import * as Types from '../../../next-env';
 
-export default async function Registration(
+/**
+ * 
+ * @param parent parent route
+ * @param params request params
+ * @param context 
+ */
+const Registration: Types.RequestHandler<Types.Schema.Params.Registration, Types.Schema.Values.Registration> = async (
   parent,
-  params: Schema.Params.Registration,
-  context: any
-): Promise<Schema.Values.Registration> {
+  params,
+  context
+) => {
   console.log(params)
   return {
     result: 'success',
@@ -12,3 +18,5 @@ export default async function Registration(
     token: params.input.email,
   };
 }
+
+export default Registration;

@@ -19,6 +19,8 @@ const store: Store<Types.Reducer<any>, Types.Action<any>> = createStore(
 sagaMiddleware.run(sagas.mySaga);
 sagaMiddleware.run(sagas.registrationSaga);
 
-const action = (actionParams: Types.Action<any>): Types.Action<any> => store.dispatch(actionParams);
+function action<T>(actionParams: Types.Action<T>): void {
+  store.dispatch(actionParams);
+}
 
 export { store, action };
