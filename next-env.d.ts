@@ -66,6 +66,14 @@ export declare interface Language {
     home: string;
     send: string;
   };
+  server: {
+    user: {
+      errorGetByEmail: string;
+      warningAreRegistered: string;
+      errorRegistration: string;
+      successRegistration: string;
+    }
+  };
 }
 
 export declare type StaticContext = {
@@ -84,11 +92,32 @@ export declare interface StaticProps {
   };
 }
 
+export type Theme = {
+  main: string;
+  light: string;
+  dark: string;
+  error: string;
+  warning: string;
+  success: string;
+  bg: string;
+};
 
+/**
+ * Backend types
+ */
 export declare interface RequestHandler<T, U> {
   (parent: any, params: T, context: any, info: any): Promise<U>;
 }
 
 export declare interface RequestInterface {
   [route: string]: RequestHandler<any, any>;
+}
+
+type OrmResult<T> = {
+  error: 1 | 0;
+  data: T | string;
+};
+
+export declare interface OrmHandler<T, U> {
+  (params: T): Promise<OrmResult<U>>;
 }

@@ -4,4 +4,8 @@ module.exports = {
     locales: ['en', 'ru'],
     defaultLocale: 'en',
   },
+  serverRuntimeConfig: {
+    // backend environment variables
+    PROJECT_ROOT: __dirname,
+  },
 };

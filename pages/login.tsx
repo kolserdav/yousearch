@@ -2,7 +2,7 @@ import React from 'react';
 import type { NextComponentType } from 'next';
 import Theme from '../src/components/Theme';
 import AppBar from '../src/components/AppBar';
-import * as lib from '../src/lib';
+import * as srv from '../services';
 import { StaticContext, StaticProps, Props } from '../next-env';
 
 const Login: NextComponentType<any, any, Props> = (props): React.ReactElement => {
@@ -16,7 +16,7 @@ const Login: NextComponentType<any, any, Props> = (props): React.ReactElement =>
 };
 
 export const getStaticProps = ({ locale }: StaticContext): StaticProps => {
-  const lang = lib.getLang(locale);
+  const lang = srv.getLang(locale);
   return {
     props: {
       t: lang,

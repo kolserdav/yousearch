@@ -4,6 +4,49 @@
 import { ApolloServer } from 'apollo-server-micro';
 import { typeDefs } from '../../node/schemas';
 import { resolvers } from '../../node/resolvers';
+import * as orm from '../../node/orm/index';
+
+/**
+ * Handle unhandled rejections
+ */
+process.on('unhandledRejection', (e) => {
+  console.error(`<${Date()}>`, '(SERVER_ERROR_UNHANDLED_REJECTION)', e);
+});
+
+/**
+ * Handle uncaught exceptions
+ */
+process.on('uncaughtException', (e) => {
+  console.error(`<${Date()}>`, '(SERVER_ERROR_UNCAUGHT_EXCEPTION)', e);
+});
+
+// If need recreate tables
+const drop = false;
+
+/**
+ * Create tables function, run while first running server after app starting
+ */
+const createTables = async () => {
+  // Create table users
+  const users = await orm.user.createTableUsers();
+  if (users.error) {
+    console.warn('WARNING: Table users not created', users.data);
+  } else {
+    console.info('INFO: Table users created!', users.data);
+  }
+};
+
+const dropTables = async () => {
+  // Drop table users
+  const users = await orm.user.dropTableUsers();
+  if (users.error) {
+    console.warn('WARNING: Table users not dropped', users.data);
+  } else {
+    console.info('INFO: Table users dropped!', users.data);
+  }
+};
+
+drop ? dropTables() : createTables();
 
 const dev = process.env.NODE_ENV === 'development';
 

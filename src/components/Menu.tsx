@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NextComponentType } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import styled, { keyframes, css } from 'styled-components';
+import Cookies from 'universal-cookie';
 import { Props } from '../../next-env';
+
+const cookies = new Cookies();
 
 const duration = 350;
 
@@ -16,14 +19,19 @@ const Menu: NextComponentType<any, any, Props> = (props) => {
   const [show, setShow] = useState<boolean>(false);
   const [_show, _setShow] = useState<boolean>(false);
   const router = useRouter();
-  const { pathname } = router;
+  const { pathname, locale } = router;
   const closeMenu = () => {
     setShow(false);
+    document.body.style.overflow = 'auto';
   };
+  useEffect(() => {
+    cookies.set('lang', locale);
+  }, []);
   return (
     <MenuWrapper>
       <MenuIcon
         onClick={() => {
+          document.body.style.overflow = 'hidden';
           setShow(true);
           _setShow(true);
         }}
@@ -75,12 +83,7 @@ const Menu: NextComponentType<any, any, Props> = (props) => {
       )}
       {show ? (
         <MenuOpenedWrapper
-          onClick={() => {
-            setShow(false);
-            setTimeout(() => {
-              _setShow(false);
-            }, duration);
-          }}
+          onClick={closeMenu}
           show={show}
         />
       ) : (
@@ -210,6 +213,7 @@ const animationWrapper = (props: MenuProps) =>
 
 const MenuOpenedWrapper = styled.div<MenuProps>`
   position: fixed;
+  overflow: hidden;
   top: 0;
   left: var(--menu-body-width);
   width: calc(100% - var(--menu-body-width));
@@ -236,12 +240,15 @@ interface MenuItemProps {
 
 const MenuItem = styled.div<MenuItemProps>`
   display: flex;
+  width: calc(100% - 40px);
+  margin: auto;
   flex-direction: row;
   align-items: center;
   cursor: pointer;
   font-family: 'Roboto Condensed', sans-serif;
   font-size: var(--menu-item-size);
-  padding: 20px;
+  padding-top: var(--item-padding);
+  padding-bottom: var(--item-padding);
   color: ${(props) => props.theme.main};
   background: ${(props) => (props.selected ? props.theme.bg : 'inherit')};
   &:hover {
@@ -250,7 +257,7 @@ const MenuItem = styled.div<MenuItemProps>`
 `;
 
 const MenuItemText = styled.span`
-  margin-left: 15px;
+  margin-left: 36px;
   text-transform: uppercase;
 `;
 
@@ -259,9 +266,8 @@ const Divider = styled.div`
   width: calc(100% - 40px);
   border-radius: 1px;
   margin: 0 20px 0 20px;
-  height: 2px;
-  background: rgba(0, 0, 0, 0.3);
-  box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+  height: 1px;
+  background: rgba(0, 0, 0, 0.5);
 `;
 
 export default Menu;

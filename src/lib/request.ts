@@ -14,7 +14,9 @@ import {
 import { concatPagination } from '@apollo/client/utilities';
 import * as Types from '../../next-env';
 import { setContext } from '@apollo/client/link/context';
+import Cookies from 'universal-cookie';
 
+const cookies = new Cookies();
 const dev = process.env.NODE_ENV === 'development';
 const serverApi = process.env.NEXT_PUBLIC_SERVER_API;
 const server = typeof window === 'undefined';
@@ -30,9 +32,10 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: 'Bearer L8qq9PZyRg6ieKGEKhZolGC0vJWLw8iEJ88DRdyOg'
+      authorization: 'Bearer L8qq9PZyRg6ieKGEKhZolGC0vJWLw8iEJ88DRdyOg',
+      lang: cookies.get('lang'),
     },
-  }
+  };
 });
 
 /**

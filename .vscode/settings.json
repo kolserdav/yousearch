@@ -1,0 +1,18 @@
+{
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "name": "You_database",
+      "group": "dbs",
+      "database": "${workspaceFolder:nextjs-graphql}/database/you.db"
+    },
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "name": "dsa",
+      "database": "${workspaceFolder:nextjs-graphql}/database/you.db"
+    }
+  ],
+  "sqltools.useNodeRuntime": true
+}

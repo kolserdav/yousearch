@@ -1,4 +1,4 @@
-import { Language } from '../../../next-env';
+import { Language } from '../../next-env';
 
 const t: Language = {
   name: 'english',
@@ -17,6 +17,14 @@ const t: Language = {
     passwordRepeat: 'password repeat',
     home: 'home',
     send: 'send',
+  },
+  server: {
+    user: {
+      errorGetByEmail: 'error while getting user by email',
+      warningAreRegistered: 'this email was registered earlier',
+      errorRegistration: 'error while added new user',
+      successRegistration: 'registration successfully',
+    },
   },
 };
 

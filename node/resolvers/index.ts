@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Registration from './user/registration';
+import Registration from './user/Registration';
 import * as Types from '../../next-env';
 import { Resolver } from '../schemas';
 
