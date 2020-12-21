@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import type { NextComponentType } from 'next';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
+import Cookies from 'universal-cookie';
 import Theme from '../src/components/Theme';
 import AppBar from '../src/components/AppBar';
 import * as srv from '../services';
@@ -11,6 +13,8 @@ import { store, action } from '../src/store';
 import * as Types from '../next-env';
 import IconButton from '../src/components/ui/IconButton';
 import Alert, { AlertProps } from '../src/components/ui/Alert';
+
+const cookies = new Cookies();
 
 export const getStaticProps = ({ locale }: StaticContext): StaticProps => {
   const lang = srv.getLang(locale);
@@ -27,6 +31,7 @@ export const getStaticProps = ({ locale }: StaticContext): StaticProps => {
  */
 const Registration: NextComponentType<any, any, Props> = (props): React.ReactElement => {
   const { t } = props;
+  const router = useRouter();
   const _alert: AlertProps = {
     open: false,
     status: 'info',
@@ -42,6 +47,7 @@ const Registration: NextComponentType<any, any, Props> = (props): React.ReactEle
   const [password, setPassword] = useState<string>('');
   const [passwordRepeat, setPasswordRepeat] = useState<string>('');
   const registration = (): void => {
+    setLoad(true);
     action<Types.Schema.Params.Registration>({
       type: 'REGISTRATION_REQUEST',
       body: {
@@ -61,11 +67,19 @@ const Registration: NextComponentType<any, any, Props> = (props): React.ReactEle
       if (state.type === 'REGISTRATION') {
         const { body }: Types.Action<Types.Schema.Values.RegistrationRequest> = state;
         const { registration } = body;
-        console.log(232, body)
+        setLoad(false);
         if (!registration) {
-          console.error(body);
+          setAlert({
+            open: true,
+            text: body.toString(),
+            status: 'error',
+            trigger: () => {
+              /** */
+            }
+          });
           return 1;
         }
+        console.log(registration)
         setAlert({
           open: true,
           text: registration.message,
@@ -79,12 +93,13 @@ const Registration: NextComponentType<any, any, Props> = (props): React.ReactEle
               }}
             />
           ),
-          trigger: () => {
-            setTimeout(() => {
-              setAlert(_alert);
-            }, 3000);
-          },
         });
+        if (registration.result === 'success') {
+          cookies.set('_qt', registration.token);
+          setTimeout(() => {
+            router.push('/');
+          }, 2000);
+        }
       }
     });
     return () => {
@@ -123,7 +138,9 @@ const Registration: NextComponentType<any, any, Props> = (props): React.ReactEle
             setPasswordRepeat(value);
           }}
         />
-        <Button type="submit" onClick={registration}>{t.interface.send}</Button>
+        <Button type="submit" onClick={registration}>
+          {t.interface.send}
+        </Button>
         <Alert
           trigger={alert.trigger}
           button={alert.button}
@@ -139,11 +156,13 @@ const Registration: NextComponentType<any, any, Props> = (props): React.ReactEle
 const H1 = styled.h1`
   text-transform: capitalize;
   font-size: var(--h1-size);
+  color: ${(props) => props.theme.dark};
 `;
 
 const Input = styled.input`
   margin: 15px;
   font-size: var(--input-size);
+  background-color: rgb(232, 240, 254) !important;
 `;
 
 export default Registration;

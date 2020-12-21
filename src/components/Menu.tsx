@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import styled, { keyframes, css } from 'styled-components';
 import Cookies from 'universal-cookie';
-import { Props } from '../../next-env';
+import * as Types from '../../next-env';
 
 const cookies = new Cookies();
 
@@ -12,9 +12,9 @@ const duration = 350;
 
 /**
  * Left menu element
- * @param props {Props}
+ * @param props {Types.Props}
  */
-const Menu: NextComponentType<any, any, Props> = (props) => {
+const Menu: NextComponentType<any, any, Types.Props> = (props) => {
   const { t } = props;
   const [show, setShow] = useState<boolean>(false);
   const [_show, _setShow] = useState<boolean>(false);
@@ -25,8 +25,10 @@ const Menu: NextComponentType<any, any, Props> = (props) => {
     document.body.style.overflow = 'auto';
   };
   useEffect(() => {
-    cookies.set('lang', locale);
+    //cookies.set('lang', locale);
   }, []);
+  const date = new Date();
+  date.setFullYear(date.getFullYear() + 12);
   return (
     <MenuWrapper>
       <MenuIcon
@@ -40,7 +42,14 @@ const Menu: NextComponentType<any, any, Props> = (props) => {
         <LangSelectItem selected={true}>{t.name}</LangSelectItem>
         <LangSelectItem selected={false}>&nbsp;|&nbsp;</LangSelectItem>
         <Link href={router.pathname} locale={t.value1}>
-          <LangSelectItem selected={false}>{t.name1}</LangSelectItem>
+          <LangSelectItem
+            value={t.value1}
+            onClick={(e: any) => {
+              cookies.set('lang', e.target.getAttribute('value'), { expires: date });
+            }}
+            selected={false}>
+            {t.name1}
+          </LangSelectItem>
         </Link>
       </LangSelect>
       {_show ? (
@@ -81,14 +90,7 @@ const Menu: NextComponentType<any, any, Props> = (props) => {
       ) : (
         ''
       )}
-      {show ? (
-        <MenuOpenedWrapper
-          onClick={closeMenu}
-          show={show}
-        />
-      ) : (
-        ''
-      )}
+      {show ? <MenuOpenedWrapper onClick={closeMenu} show={show} /> : ''}
     </MenuWrapper>
   );
 };
@@ -104,12 +106,15 @@ const LangSelect = styled.div`
 
 interface LangSelectItemProps {
   selected: boolean;
+  value?: Types.LanguageValue;
+  // eslint-disable-next-line no-unused-vars
+  onClick?: (e: React.MouseEvent<HTMLDivElement, React.MouseEvent>) => void;
 }
 
 const LangSelectItem = styled.div<LangSelectItemProps>`
   cursor: pointer;
   font-size: var(--h5-size);
-  color: ${(props) => props.theme.light};
+  color: ${(props) => props.theme.white};
   text-transform: capitalize;
   text-decoration: ${(props) => (props.selected ? 'underline' : 'none')};
 `;

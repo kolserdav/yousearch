@@ -14,9 +14,9 @@ export declare namespace Values {
   interface User {
     result: Types.Result;
     message: string;
-    id?: number;
-    login?: string;
-    avatar_url?: string;
+    id: number;
+    email: string;
+    password?: string;
   }
   interface UserRequest extends ServerResponse {
     getUser?: User;

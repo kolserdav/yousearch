@@ -113,7 +113,7 @@ const Container = styled.div<ContainerProps>`
   left: 0;
   height: var(--app-bar-height);
   width: 100%;
-  background-color: purple;
+  background-color: ${(props) => props.theme.main};
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   animation: ${animation};
   display: flex;

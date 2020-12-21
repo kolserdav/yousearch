@@ -1,11 +1,15 @@
+import jwt from 'jsonwebtoken';
 import * as Types from '../../../next-env';
 import * as orm from '../../orm';
-import * as srv from '../../../services'; 
+import * as srv from '../../../services';
+import getConfig from 'next/config';
+const { serverRuntimeConfig } = getConfig();
+const { MIN_PASSWORD_LENGTH, JWT_SECRET } = serverRuntimeConfig;
 
 /**
  * Registion route
  * @param parent parent route
- * @param params request params
+ * @param params {Types.Schema.Params.Registration} request params
  * @param context context (headers)
  */
 const Registration: Types.RequestHandler<
@@ -15,9 +19,30 @@ const Registration: Types.RequestHandler<
   const { headers } = context;
   const { lang } = headers;
   const t = srv.getLang(lang);
+  // Check params
+  const { input } = params;
+  if (!input) {
+    return {
+      result: 'warning',
+      message: t.server.user.warningInputParamsRegistrationNotSend,
+    };
+  }
+  if (!input.email) {
+    return {
+      result: 'warning',
+      message: t.server.user.warningEmailNotSend,
+    };
+  }
+  if (!srv.validateEmail(input.email)) {
+    return {
+      result: 'warning',
+      message: t.server.user.warningEmailNotValid,
+    };
+  }
   // Check if user exists
   const user = await orm.user.getByEmail(params);
   if (user.error) {
+    console.warn(headers);
     return {
       result: 'error',
       message: t.server.user.errorGetByEmail,
@@ -29,18 +54,66 @@ const Registration: Types.RequestHandler<
       message: t.server.user.warningAreRegistered,
     };
   }
+  // Check passwords
+  if (!input.password) {
+    return {
+      result: 'warning',
+      message: t.server.user.warningPasswordNotSend,
+    };
+  }
+  if (input.password.length < MIN_PASSWORD_LENGTH) {
+    return {
+      result: 'warning',
+      message: `${t.server.user.warningPasswordTooShort} ${t.server.user.infoMinimumPasswordLength} ${MIN_PASSWORD_LENGTH}`,
+    };
+  }
+  if (!input.passwordRepeat) {
+    return {
+      result: 'warning',
+      message: t.server.user.warningPasswordRepeatNotSend,
+    };
+  }
+  if (input.password !== input.passwordRepeat) {
+    return {
+      result: 'warning',
+      message: t.server.user.warningPasswordsNotMatch,
+    };
+  }
   // Add new user
   const newUser = await orm.user.createNew(params);
   if (newUser.error) {
+    console.warn(headers);
     return {
       result: 'error',
       message: t.server.user.errorRegistration,
     };
   }
+  const addedUser = await orm.user.getByEmail(params);
+  if (addedUser.error) {
+    return {
+      result: 'error',
+      message: t.server.user.errorGetByEmail,
+    };
+  }
+  if (addedUser.data === undefined) {
+    return {
+      result: 'warning',
+      message: t.server.user.warningGetUserData,
+    };
+  }
+  const { email, password, id } = addedUser.data;
+  const parsedToken: Types.ParsedToken = {
+    id,
+    email,
+    password,
+    userAgent: headers['user-agent'],
+  }
+  console.log(parsedToken)
+  const token = jwt.sign(parsedToken, JWT_SECRET);
   return {
     result: 'success',
     message: t.server.user.successRegistration,
-    token: params.input.email,
+    token,
   };
 }
 

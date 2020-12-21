@@ -14,10 +14,9 @@ const activeButton = keyframes`
  */
 const Button = styled.button`
   --color: ${(props) => props.theme.main};
-  --second-color: ${(props) => props.theme.light};
+  --second-color: ${(props) => props.theme.white};
   --padding-left: calc(20px + (100 - 20) * ((100vw - 320px) / (7680 - 320)));
   --padding-top: calc(10px + (50 - 10) * ((100vw - 320px) / (7680 - 320)));
-  --border-radius: calc(5px + (25 - 5) * ((100vw - 320px) / (7680 - 320)));
   margin: 20px;
   cursor: pointer;
   background-color: var(--color);

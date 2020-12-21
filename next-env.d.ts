@@ -72,7 +72,16 @@ export declare interface Language {
       warningAreRegistered: string;
       errorRegistration: string;
       successRegistration: string;
-    }
+      warningEmailNotSend: string;
+      warningEmailNotValid: string;
+      warningPasswordNotSend: string;
+      warningPasswordRepeatNotSend: string;
+      warningPasswordTooShort: string;
+      warningPasswordsNotMatch: string;
+      warningInputParamsRegistrationNotSend: string;
+      infoMinimumPasswordLength: string;
+      warningGetUserData: string;
+    };
   };
 }
 
@@ -100,6 +109,7 @@ export type Theme = {
   warning: string;
   success: string;
   bg: string;
+  white: string;
 };
 
 /**
@@ -115,9 +125,16 @@ export declare interface RequestInterface {
 
 type OrmResult<T> = {
   error: 1 | 0;
-  data: T | string;
+  data: T;
 };
 
 export declare interface OrmHandler<T, U> {
   (params: T): Promise<OrmResult<U>>;
+}
+
+export interface ParsedToken {
+  id: number;
+  email: string;
+  password: string;
+  userAgent: string;
 }

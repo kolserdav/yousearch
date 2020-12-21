@@ -3,12 +3,13 @@ import styled, { ThemeProvider } from 'styled-components';
 import * as Types from '../../next-env';
 
 const theme: Types.Theme = {
-  main: 'purple',
-  light: 'pink',
-  dark: 'blue',
-  error: 'red',
-  warning: 'orange',
-  success: 'greeen',
+  main: '#4285F4',
+  light: '#deeaee',
+  dark: '#3e4444',
+  error: '#EA4335',
+  warning: '#FBBC05',
+  success: '#34A853',
+  white: '#ffffff',
   bg: 'rgba(0, 0, 0, 0.1)',
 };
 
@@ -23,12 +24,16 @@ const GlobalVariables = styled.div`
   --icon-width: calc(30px + (100 - 30) * ((100vw - 320px) / (7680 - 320)));
   --item-padding: calc(5px + (20 - 5) * ((100vw - 320px) / (7680 - 320)));
   --progress-height: calc(4px + (15 - 4) * ((100vw - 320px) / (7680 - 320)));
+  --border-radius: calc(5px + (25 - 5) * ((100vw - 320px) / (7680 - 320)));
+  background-color: ${(props) => props.theme.light};
+  width: 100%;
+  height: 100%;
 `;
 
 export default function Theme(props: Types.ThemeProps): React.ReactElement {
   const { children } = props;
   return (
-    <GlobalVariables>
+    <GlobalVariables theme={theme}>
       <ThemeProvider theme={theme}>{children}</ThemeProvider>
     </GlobalVariables>
   );
