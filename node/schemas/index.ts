@@ -9,17 +9,18 @@ declare interface ServerResponse {
   };
 }
 
+/**
+ * Valuest types of requests
+ */
 export declare namespace Values {
-  /** User values */
-  interface User {
+  /** Login values */
+  type Login = {
     result: Types.Result;
     message: string;
-    id: number;
-    email: string;
-    password?: string;
-  }
-  interface UserRequest extends ServerResponse {
-    getUser?: User;
+    token?: string;
+  };
+  interface LoginRequest extends ServerResponse {
+    login?: Login;
   }
   /** Registration values */
   interface Registration {
@@ -32,14 +33,18 @@ export declare namespace Values {
   }
 }
 
+/**
+ * Params types of requests
+ */
 export declare namespace Params {
-  /** User params */
-  type UserKeys = keyof Values.User;
-  type User = {
+  /** Login params */
+  type LoginKeys = keyof Values.Login;
+  type Login = {
     input: {
-      name: string;
+      email: string;
+      password: string;
     };
-    results: UserKeys[];
+    results: LoginKeys[];
   };
   /** Registration params */
   type RegistrationKeys = keyof Values.Registration;
@@ -51,19 +56,18 @@ export declare namespace Params {
     };
     results: RegistrationKeys[];
   };
-
 }
-
-
 
 export interface Query extends Types.RequestInterface {
-  getUsers: Types.RequestHandler<Params.User, Values.User[]>
-  getUser: Types.RequestHandler<Params.User, Values.User>
+  
 }
 
-
+/**
+ * Mutation methods first set here
+ */
 export interface Mutation extends Types.RequestInterface {
   registration: Types.RequestHandler<Params.Registration, Values.Registration>;
+  login: Types.RequestHandler<Params.Login, Values.Login>;
 }
 
 export interface Resolver {
@@ -78,22 +82,15 @@ export const typeDefs = gql`
     success
   }
 
-  type User {
+  type Login {
     result: Result!
     message: String!
-    id: ID
-    login: String
-    avatar_url: String
+    token: String
   }
 
-  input UserInput {
-    name: String!
-  }
-
-  input RegistrationInput {
+  input LoginInput {
     email: String!
     password: String!
-    passwordRepeat: String!
   }
 
   type Registration {
@@ -102,12 +99,18 @@ export const typeDefs = gql`
     token: String
   }
 
+  input RegistrationInput {
+    email: String!
+    password: String!
+    passwordRepeat: String!
+  }
+
   type Query {
-    getUsers: [User]
-    getUser(input: UserInput!): User!
+    test: String
   }
 
   type Mutation {
     registration(input: RegistrationInput!): Registration!
+    login(input: LoginInput!): Login!
   }
 `;

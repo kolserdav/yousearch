@@ -9,9 +9,9 @@ import * as Schema from './node/schemas'; // Import requests types
 export { Schema };
 
 export declare namespace ActionTypes {
-  export declare type UserFetch = 'USER_FETCH_REQUEST' | 'USER_FETCH';
+  export declare type Login = 'LOGIN_REQUEST' | 'LOGIN';
   export declare type Registration = 'REGISTRATION_REQUEST' | 'REGISTRATION';
-  export declare type All = ActionTypesUserFetch | ActionTypesTypesRegistration | 'INITIAL';
+  export declare type All = Registration | Login | 'INITIAL';
 }
 
 export type Action<T> = {
@@ -81,6 +81,9 @@ export declare interface Language {
       warningInputParamsRegistrationNotSend: string;
       infoMinimumPasswordLength: string;
       warningGetUserData: string;
+      successLogin: string;
+      warningEmailNotRegister: string;
+      warningEmailOrPasswordNotMatch: string;
     };
   };
 }
@@ -123,9 +126,10 @@ export declare interface RequestInterface {
   [route: string]: RequestHandler<any, any>;
 }
 
-type OrmResult<T> = {
+export type OrmResult<T> = {
   error: 1 | 0;
-  data: T;
+  data?: T;
+  message?: string;
 };
 
 export declare interface OrmHandler<T, U> {
@@ -137,4 +141,14 @@ export interface ParsedToken {
   email: string;
   password: string;
   userAgent: string;
+}
+
+export declare namespace Orm {
+  type User = {
+    id: number;
+    email: string;
+    password: string;
+    created: Date;
+    updated: Date;
+  };
 }

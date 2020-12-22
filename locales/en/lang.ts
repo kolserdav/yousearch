@@ -33,6 +33,9 @@ const t: Language = {
       warningInputParamsRegistrationNotSend: 'input params registration not send',
       infoMinimumPasswordLength: 'Minimum length of password is: ',
       warningGetUserData: 'user data not received',
+      successLogin: 'success login',
+      warningEmailNotRegister: 'email not registered',
+      warningEmailOrPasswordNotMatch: 'email or password not match',
     },
   },
 };

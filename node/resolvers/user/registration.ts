@@ -1,10 +1,10 @@
-import jwt from 'jsonwebtoken';
 import * as Types from '../../../next-env';
 import * as orm from '../../orm';
 import * as srv from '../../../services';
+import * as lib from '../../lib';
 import getConfig from 'next/config';
 const { serverRuntimeConfig } = getConfig();
-const { MIN_PASSWORD_LENGTH, JWT_SECRET } = serverRuntimeConfig;
+const { MIN_PASSWORD_LENGTH } = serverRuntimeConfig;
 
 /**
  * Registion route
@@ -40,7 +40,7 @@ const Registration: Types.RequestHandler<
     };
   }
   // Check if user exists
-  const user = await orm.user.getByEmail(params);
+  const user = await orm.user.getByEmail(params.input.email);
   if (user.error) {
     console.warn(headers);
     return {
@@ -88,7 +88,7 @@ const Registration: Types.RequestHandler<
       message: t.server.user.errorRegistration,
     };
   }
-  const addedUser = await orm.user.getByEmail(params);
+  const addedUser = await orm.user.getByEmail(params.input.email);
   if (addedUser.error) {
     return {
       result: 'error',
@@ -101,15 +101,7 @@ const Registration: Types.RequestHandler<
       message: t.server.user.warningGetUserData,
     };
   }
-  const { email, password, id } = addedUser.data;
-  const parsedToken: Types.ParsedToken = {
-    id,
-    email,
-    password,
-    userAgent: headers['user-agent'],
-  }
-  console.log(parsedToken)
-  const token = jwt.sign(parsedToken, JWT_SECRET);
+  const token = lib.getParsedToken(user.data, headers)
   return {
     result: 'success',
     message: t.server.user.successRegistration,

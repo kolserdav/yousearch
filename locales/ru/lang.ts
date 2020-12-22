@@ -33,6 +33,9 @@ const t: Language = {
       warningInputParamsRegistrationNotSend: 'параметры при регистрации не переданы на сервер',
       infoMinimumPasswordLength: 'минимальная длина пароля: ',
       warningGetUserData: 'данные пользователя не получены',
+      successLogin: 'успешный вход',
+      warningEmailNotRegister: 'почта не зарегистреирована',
+      warningEmailOrPasswordNotMatch: 'почта или пароль не совпадают',
     },
   },
 };

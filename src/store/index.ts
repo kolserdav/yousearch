@@ -16,8 +16,8 @@ const store: Store<Types.Reducer<any>, Types.Action<any>> = createStore(
 /**
  * After create API and Saga do add middleware to store
  */
-sagaMiddleware.run(sagas.mySaga);
 sagaMiddleware.run(sagas.registrationSaga);
+sagaMiddleware.run(sagas.loginSaga);
 
 function action<T>(actionParams: Types.Action<T>): void {
   store.dispatch(actionParams);

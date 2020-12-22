@@ -68,29 +68,23 @@ export const dropTableUsers: Types.OrmHandler<void, any> = () => {
 /**
  * Get user by email
  */
-export const getByEmail: Types.OrmHandler<
-  Types.Schema.Params.Registration,
-  Types.Schema.Values.User
-> = (params) => {
+export const getByEmail: Types.OrmHandler<string, Types.Orm.User> = (email) => {
   return new Promise((resolve) => {
     db.serialize(() => {
-      db.get(
-        `SELECT * FROM users WHERE email="${params.input.email}"`,
-        (err: Error, row: Types.Schema.Values.User) => {
-          if (err) {
-            console.error(`<${Date()}> (ERROR_GET_BY_EMAIL)`, err);
-            resolve({
-              error: 1,
-              data: err.message,
-            });
-          } else {
-            resolve({
-              error: 0,
-              data: row,
-            });
-          }
+      db.get(`SELECT * FROM users WHERE email="${email}"`, (err: Error, row: Types.Orm.User) => {
+        if (err) {
+          console.error(`<${Date()}> (ERROR_GET_BY_EMAIL)`, err);
+          resolve({
+            error: 1,
+            message: err.message,
+          });
+        } else {
+          resolve({
+            error: 0,
+            data: row,
+          });
         }
-      );
+      });
     });
   });
 };
@@ -100,7 +94,7 @@ export const getByEmail: Types.OrmHandler<
  */
 export const createNew: Types.OrmHandler<
   Types.Schema.Params.Registration,
-  Types.Schema.Values.User | string
+  Types.Schema.Values.Registration | string
 > = (params) => {
   return new Promise((resolve) => {
     db.serialize(() => {
@@ -121,7 +115,7 @@ export const createNew: Types.OrmHandler<
           smtp.get(
             params.input.email,
             hash,
-            (err: Error, row: Types.Schema.Values.User | string) => {
+            (err: Error, row: Types.Schema.Values.Registration) => {
               if (err) {
                 console.error(`<${Date()}> (ERROR_INSERT_INTO_USERS)`, err);
                 resolve({

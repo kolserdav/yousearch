@@ -36,3 +36,20 @@ export const registration = requestMutate((context) => ({
     }
   `,
 }));
+
+/**
+ * User login
+ */
+export const login = requestMutate((context) => ({
+  variables: {
+    input: context.body.input,
+  },
+  mutation: gql`
+    mutation ($input: LoginInput!) {
+      login(input: $input) {
+        result,
+        ${context.body.results}
+      }
+    }
+  `,
+}));
