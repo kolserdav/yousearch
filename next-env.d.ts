@@ -11,7 +11,9 @@ export { Schema };
 export declare namespace ActionTypes {
   export declare type Login = 'LOGIN_REQUEST' | 'LOGIN';
   export declare type Registration = 'REGISTRATION_REQUEST' | 'REGISTRATION';
-  export declare type All = Registration | Login | 'INITIAL';
+  export declare type Subtitles = 'SUBTITLES_REQUEST' | 'SUBTITLES';
+  export declare type Captions = 'CAPTIONS_REQUEST' | 'CAPTIONS';
+  export declare type All = Registration | Login | Subtitles | Captions | 'INITIAL';
 }
 
 export type Action<T> = {
@@ -65,6 +67,7 @@ export declare interface Language {
     name: string;
     home: string;
     send: string;
+    search: string;
   };
   content: {
     siteName: string;
@@ -96,6 +99,9 @@ export declare interface Language {
       successReceived: string;
       warningVideoIDNotSend: string;
       warningSearchStringNotSend: string;
+      errorGettingVideoCaptions: string;
+      warningSubtitlesNotFound: string;
+      warningVideoNotFound: string;
     };
   };
 }

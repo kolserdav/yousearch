@@ -18,6 +18,8 @@ const store: Store<Types.Reducer<any>, Types.Action<any>> = createStore(
  */
 sagaMiddleware.run(sagas.registrationSaga);
 sagaMiddleware.run(sagas.loginSaga);
+sagaMiddleware.run(sagas.subtitlesSaga);
+sagaMiddleware.run(sagas.captionsSaga);
 
 function action<T>(actionParams: Types.Action<T>): void {
   store.dispatch(actionParams);

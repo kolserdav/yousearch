@@ -53,3 +53,37 @@ export const login = requestMutate((context) => ({
     }
   `,
 }));
+
+/**
+ * Search subtitles
+ */
+export const subtitles = requestMutate((context) => ({
+  variables: {
+    input: context.body.input,
+  },
+  mutation: gql`
+    mutation ($input: SubtitlesInput!) {
+      subtitles(input: $input) {
+        result,
+        ${context.body.results}
+      }
+    }
+  `,
+}));
+
+/**
+ * Get captions
+ */
+export const captions = requestMutate((context) => ({
+  variables: {
+    input: context.body.input,
+  },
+  mutation: gql`
+    mutation ($input: CaptionsInput!) {
+      captions(input: $input) {
+        result,
+        ${context.body.results}
+      }
+    }
+  `,
+}));

@@ -24,7 +24,7 @@ const Registration: Types.RequestHandler<
   if (!input) {
     return {
       result: 'warning',
-      message: t.server.user.warningInputParamsRegistrationNotSend,
+      message: t.server.user.warningInputParamsNotSend,
     };
   }
   if (!input.email) {

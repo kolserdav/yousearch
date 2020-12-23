@@ -46,10 +46,11 @@ const Search: Types.RequestHandler<Types.Schema.Params.Subtitles, Types.Schema.V
       resolve(captions);
     });
   });
+  console.log(items)
   return {
     result: 'success',
     message: t.server.subtitles.successReceived,
-    items,
+    items: [{start: 'sd', text: 'ds'}],
   };
 };
 

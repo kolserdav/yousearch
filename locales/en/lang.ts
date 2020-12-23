@@ -17,6 +17,7 @@ const t: Language = {
     passwordRepeat: 'password repeat',
     home: 'home',
     send: 'send',
+    search: 'search',
   },
   content: {
     siteName: 'Youtube subtitle search',
@@ -46,9 +47,12 @@ const t: Language = {
       warningEmailOrPasswordNotMatch: 'email or password not match',
     },
     subtitles: {
-      successReceived: 'subtitles received',
+      successReceived: 'subtitles found',
       warningSearchStringNotSend: 'search string not send',
       warningVideoIDNotSend: 'video ID not send',
+      errorGettingVideoCaptions: 'error getting video captions',
+      warningSubtitlesNotFound: 'subtitles not found',
+      warningVideoNotFound: 'video not found',
     },
   },
 };

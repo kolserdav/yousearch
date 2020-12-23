@@ -17,6 +17,7 @@ const t: Language = {
     passwordRepeat: 'повтор пароля',
     home: 'главная',
     send: 'отправить',
+    search: 'поиск',
   },
   content: {
     siteName: 'поиск в субтитрах Youtube',
@@ -45,9 +46,12 @@ const t: Language = {
       warningEmailOrPasswordNotMatch: 'почта или пароль не совпадают',
     },
     subtitles: {
-      successReceived: 'субтитры получены',
+      successReceived: 'субтитры найдены',
       warningSearchStringNotSend: 'строка поиска не передана',
       warningVideoIDNotSend: 'ИД видео не передан',
+      errorGettingVideoCaptions: 'ошибка при получении списка субтитров видео',
+      warningSubtitlesNotFound: 'субтитры не найдены',
+      warningVideoNotFound: 'видео не найдено',
     },
   },
 };

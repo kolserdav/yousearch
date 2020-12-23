@@ -14,10 +14,7 @@ function* registration(action: Types.Action<Types.Schema.Params.Registration>) {
   });
 }
 export function* registrationSaga(): Generator {
-  yield takeEvery<Types.Action<Types.Schema.Params.Registration>>(
-    'REGISTRATION_REQUEST',
-    registration
-  );
+  yield takeEvery<Types.ActionTypes.Registration>('REGISTRATION_REQUEST', registration);
 }
 
 /**
@@ -31,5 +28,33 @@ function* login(action: Types.Action<Types.Schema.Params.Login>) {
   });
 }
 export function* loginSaga(): Generator {
-  yield takeEvery<Types.Action<Types.Schema.Params.Login>>('LOGIN_REQUEST', login);
+  yield takeEvery<Types.ActionTypes.Login>('LOGIN_REQUEST', login);
+}
+
+/**
+ * Search subtitles
+ */
+function* subtitles(action: Types.Action<Types.Schema.Params.Subtitles>) {
+  const body = yield call(Api.subtitles, action);
+  yield put<Types.Action<Types.Schema.Values.SubtitlesRequest>>({
+    type: 'SUBTITLES',
+    body,
+  });
+}
+export function* subtitlesSaga(): Generator {
+  yield takeEvery<Types.ActionTypes.Subtitles>('SUBTITLES_REQUEST', subtitles);
+}
+
+/**
+ * Search subtitles
+ */
+function* captions(action: Types.Action<Types.Schema.Params.Captions>) {
+  const body = yield call(Api.captions, action);
+  yield put<Types.Action<Types.Schema.Values.CaptionsRequest>>({
+    type: 'CAPTIONS',
+    body,
+  });
+}
+export function* captionsSaga(): Generator {
+  yield takeEvery<Types.ActionTypes.Captions>('CAPTIONS_REQUEST', captions);
 }

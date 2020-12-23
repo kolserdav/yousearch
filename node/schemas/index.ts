@@ -40,10 +40,23 @@ export declare namespace Values {
   type Subtitles = {
     result: Types.Result;
     message: string;
-    items: SubtitlesItem[];
+    items?: SubtitlesItem[];
   };
   interface SubtitlesRequest extends ServerResponse {
     subtitles?: Subtitles;
+  }
+  /** Caption values */
+  type CaptionsItem = {
+    lang: string;
+    type: string;
+  };
+  type Captions = {
+    result: Types.Result;
+    message: string;
+    items?: CaptionsItem[];
+  };
+  interface CaptionsRequest extends ServerResponse {
+    captions?: Captions;
   }
 }
 
@@ -78,6 +91,15 @@ export declare namespace Params {
       videoID: string;
       lang: string;
     };
+    results: Array<SubtitlesKeys[] | string>;
+  };
+  /** Captions params */
+  type CaptionsKeys = keyof Values.Captions;
+  type Captions = {
+    input: {
+      videoID: string;
+    };
+    results: Array<CaptionsKeys[] | string>;
   };
 }
 
@@ -91,6 +113,8 @@ export interface Query extends Types.RequestInterface {
 export interface Mutation extends Types.RequestInterface {
   registration: Types.RequestHandler<Params.Registration, Values.Registration>;
   login: Types.RequestHandler<Params.Login, Values.Login>;
+  subtitles: Types.RequestHandler<Params.Subtitles, Values.Subtitles>;
+  captions: Types.RequestHandler<Params.Captions, Values.Captions>;
 }
 
 export interface Resolver {
@@ -137,13 +161,28 @@ export const typeDefs = gql`
   type Subtitles {
     result: Result!
     message: String!
-    subtitles: SubtitlesItem[]
+    items: [SubtitlesItem]
   }
 
-  input SubtitleInput {
+  input SubtitlesInput {
     search: String!
     videoID: String!
     lang: String!
+  }
+
+  type CaptionsItem {
+    lang: String!
+    type: String!
+  }
+
+  type Captions {
+    result: Result!
+    message: String!
+    items: [CaptionsItem]
+  }
+
+  input CaptionsInput {
+    videoID: String!
   }
 
   type Query {
@@ -153,6 +192,7 @@ export const typeDefs = gql`
   type Mutation {
     registration(input: RegistrationInput!): Registration!
     login(input: LoginInput!): Login!
-    subtitles(input: SubtitlesItem!): Subtitles!
+    subtitles(input: SubtitlesInput!): Subtitles!
+    captions(input: CaptionsInput!): Captions!
   }
 `;
