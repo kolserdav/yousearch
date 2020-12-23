@@ -15,9 +15,15 @@ export interface AlertProps {
 const Alert: NextComponentType<any, any, AlertProps> = (props) => {
   const { open, status, text, button, trigger } = props;
   const Button = () => (button ? button : <div />);
+  const Trigger =
+    typeof trigger === 'function'
+      ? trigger
+      : () => {
+          /**1 */
+        };
   useEffect(() => {
-    if (trigger) trigger();
-  }, []);
+    Trigger();
+  }, [trigger]);
   return (
     <Wrapper open={open}>
       <Grid direction="row" align="center">

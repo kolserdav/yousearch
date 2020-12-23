@@ -11,7 +11,7 @@ import Button from '../src/components/ui/Button';
 import { store, action } from '../src/store';
 import * as Types from '../next-env';
 import IconButton from '../src/components/ui/IconButton';
-import H1 from '../src/components/ui/H1';
+import { H1 } from '../src/components/ui/Typography';
 import Input from '../src/components/ui/Input';
 import Alert, { AlertProps } from '../src/components/ui/Alert';
 

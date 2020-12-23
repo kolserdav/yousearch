@@ -66,6 +66,13 @@ export declare interface Language {
     home: string;
     send: string;
   };
+  content: {
+    siteName: string;
+    siteDescription: string;
+  };
+  messages: {
+    linkNotValid: string;
+  };
   server: {
     user: {
       errorGetByEmail: string;
@@ -78,12 +85,17 @@ export declare interface Language {
       warningPasswordRepeatNotSend: string;
       warningPasswordTooShort: string;
       warningPasswordsNotMatch: string;
-      warningInputParamsRegistrationNotSend: string;
+      warningInputParamsNotSend: string;
       infoMinimumPasswordLength: string;
       warningGetUserData: string;
       successLogin: string;
       warningEmailNotRegister: string;
       warningEmailOrPasswordNotMatch: string;
+    };
+    subtitles: {
+      successReceived: string;
+      warningVideoIDNotSend: string;
+      warningSearchStringNotSend: string;
     };
   };
 }

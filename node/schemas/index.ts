@@ -23,13 +23,27 @@ export declare namespace Values {
     login?: Login;
   }
   /** Registration values */
-  interface Registration {
+  type Registration = {
     result: Types.Result;
     message: string;
     token?: string;
-  }
+  };
   interface RegistrationRequest extends ServerResponse {
     registration?: Registration;
+  }
+  /** Subtitle values */
+  type SubtitlesItem = {
+    start: string;
+    dur: string;
+    text: string;
+  };
+  type Subtitles = {
+    result: Types.Result;
+    message: string;
+    items: SubtitlesItem[];
+  };
+  interface SubtitlesRequest extends ServerResponse {
+    subtitles?: Subtitles;
   }
 }
 
@@ -55,6 +69,15 @@ export declare namespace Params {
       passwordRepeat: string;
     };
     results: RegistrationKeys[];
+  };
+  /** Subtitles params */
+  type SubtitlesKeys = keyof Values.Subtitles;
+  type Subtitles = {
+    input: {
+      search: string;
+      videoID: string;
+      lang: string;
+    };
   };
 }
 
@@ -105,6 +128,24 @@ export const typeDefs = gql`
     passwordRepeat: String!
   }
 
+  type SubtitlesItem {
+    start: String!
+    dur: String!
+    text: String!
+  }
+
+  type Subtitles {
+    result: Result!
+    message: String!
+    subtitles: SubtitlesItem[]
+  }
+
+  input SubtitleInput {
+    search: String!
+    videoID: String!
+    lang: String!
+  }
+
   type Query {
     test: String
   }
@@ -112,5 +153,6 @@ export const typeDefs = gql`
   type Mutation {
     registration(input: RegistrationInput!): Registration!
     login(input: LoginInput!): Login!
+    subtitles(input: SubtitlesItem!): Subtitles!
   }
 `;

@@ -26,7 +26,7 @@ const Login: Types.RequestHandler<Types.Schema.Params.Login, Types.Schema.Values
   if (!input) {
     return {
       result: 'warning',
-      message: t.server.user.warningInputParamsRegistrationNotSend,
+      message: t.server.user.warningInputParamsNotSend,
     };
   }
   if (!input.email) {

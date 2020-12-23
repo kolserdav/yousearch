@@ -18,6 +18,14 @@ const t: Language = {
     home: 'home',
     send: 'send',
   },
+  content: {
+    siteName: 'Youtube subtitle search',
+    siteDescription:
+      'provide a link to the video and search in its subtitles directly from your phone',
+  },
+  messages: {
+    linkNotValid: 'link not valid',
+  },
   server: {
     user: {
       errorGetByEmail: 'error while getting user by email',
@@ -30,12 +38,17 @@ const t: Language = {
       warningPasswordRepeatNotSend: 'password repeat not send',
       warningPasswordTooShort: 'password too short',
       warningPasswordsNotMatch: 'passwords not match',
-      warningInputParamsRegistrationNotSend: 'input params registration not send',
+      warningInputParamsNotSend: 'input params not send',
       infoMinimumPasswordLength: 'Minimum length of password is: ',
       warningGetUserData: 'user data not received',
       successLogin: 'success login',
       warningEmailNotRegister: 'email not registered',
       warningEmailOrPasswordNotMatch: 'email or password not match',
+    },
+    subtitles: {
+      successReceived: 'subtitles received',
+      warningSearchStringNotSend: 'search string not send',
+      warningVideoIDNotSend: 'video ID not send',
     },
   },
 };

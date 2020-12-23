@@ -25,6 +25,8 @@ const GlobalVariables = styled.div`
   --item-padding: calc(5px + (20 - 5) * ((100vw - 320px) / (7680 - 320)));
   --progress-height: calc(4px + (15 - 4) * ((100vw - 320px) / (7680 - 320)));
   --border-radius: calc(5px + (25 - 5) * ((100vw - 320px) / (7680 - 320)));
+  --input-width: calc(300px + (1000 - 300) * ((100vw - 320px) / (7680 - 320)));
+  --input-height: calc(20px + (80 - 20) * ((100vw - 320px) / (7680 - 320)));
   background-color: ${(props) => props.theme.light};
   width: 100%;
   height: 100%;

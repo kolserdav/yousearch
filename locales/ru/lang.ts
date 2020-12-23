@@ -18,6 +18,13 @@ const t: Language = {
     home: 'главная',
     send: 'отправить',
   },
+  content: {
+    siteName: 'поиск в субтитрах Youtube',
+    siteDescription: 'укажите ссылку на видео и ищите в его субтитрах прямо с телефонa',
+  },
+  messages: {
+    linkNotValid: 'ссылка имеет неверный формат',
+  },
   server: {
     user: {
       errorGetByEmail: 'ошибка при получении пользователя по емайл',
@@ -30,12 +37,17 @@ const t: Language = {
       warningPasswordRepeatNotSend: 'повтор пароля не передан',
       warningPasswordTooShort: 'пароль слишком короткий',
       warningPasswordsNotMatch: 'пароли не совпадают',
-      warningInputParamsRegistrationNotSend: 'параметры при регистрации не переданы на сервер',
+      warningInputParamsNotSend: 'параметры не переданы на сервер',
       infoMinimumPasswordLength: 'минимальная длина пароля: ',
       warningGetUserData: 'данные пользователя не получены',
       successLogin: 'успешный вход',
       warningEmailNotRegister: 'почта не зарегистреирована',
       warningEmailOrPasswordNotMatch: 'почта или пароль не совпадают',
+    },
+    subtitles: {
+      successReceived: 'субтитры получены',
+      warningSearchStringNotSend: 'строка поиска не передана',
+      warningVideoIDNotSend: 'ИД видео не передан',
     },
   },
 };

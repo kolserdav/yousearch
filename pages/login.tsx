@@ -6,7 +6,7 @@ import Theme from '../src/components/Theme';
 import AppBar from '../src/components/AppBar';
 import * as srv from '../services';
 import { action, store } from '../src/store/index';
-import H1 from '../src/components/ui/H1';
+import { H1 } from '../src/components/ui/Typography';
 import Input from '../src/components/ui/Input';
 import Alert, { AlertProps } from '../src/components/ui/Alert';
 import Grid from '../src/components/ui/Grid';
@@ -14,6 +14,10 @@ import IconButton from '../src/components/ui/IconButton';
 import Button from '../src/components/ui/Button';
 import * as Types from '../next-env';
 
+/**
+ * Login page component
+ * @param props {Types.Props}
+ */
 const Login: NextComponentType<any, any, Types.Props> = (props): React.ReactElement => {
   const router = useRouter();
   const { t } = props;
