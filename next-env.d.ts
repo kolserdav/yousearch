@@ -134,6 +134,7 @@ export type Theme = {
   success: string;
   bg: string;
   white: string;
+  info: string;
 };
 
 /**
