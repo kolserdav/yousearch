@@ -26,7 +26,7 @@ date.setFullYear(date.getFullYear() + 12);
 let _videoID: string;
 
 /**
- * Get time in format hh:mm:ss
+ * Get time in format h:mm:ss
  * @param seconds {string}
  */
 const getBeautiTime = (seconds: string): string => {
@@ -39,6 +39,10 @@ const getBeautiTime = (seconds: string): string => {
   return `${h}:${m}:${s}`;
 };
 
+/**
+ * Home page
+ * @param props {Props}
+ */
 const Home: NextComponentType<any, any, Props> = (props): React.ReactElement => {
   const { t } = props;
   const router = useRouter();
@@ -169,6 +173,9 @@ const Home: NextComponentType<any, any, Props> = (props): React.ReactElement => 
         setEmbedLink(v);
       }
     }
+    /**
+     * Subscribe to storage
+     */
     const storeSubs = store.subscribe(() => {
       const state: Types.Action<any> = store.getState();
       /**
@@ -241,7 +248,9 @@ const Home: NextComponentType<any, any, Props> = (props): React.ReactElement => 
       }
     });
     return () => {
+      // Ubsubscribe from storage
       storeSubs();
+      // Terminate comlink worker
       comlinkWorkerRef.current?.terminate();
     };
   }, [v]);
@@ -363,8 +372,11 @@ const Home: NextComponentType<any, any, Props> = (props): React.ReactElement => 
 
 interface TimeProps {
   selected: boolean;
-};
+}
 
+/**
+ * Item time of search results
+ */
 const Time = styled.div<TimeProps>`
   cursor: pointer;
   min-width: 50px;

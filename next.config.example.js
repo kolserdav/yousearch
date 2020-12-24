@@ -12,7 +12,7 @@ module.exports = {
     MIN_PASSWORD_LENGTH: 6,
     HASH_SALT_LENGTH: 10,
     JWT_SECRET: 'any secret phrase',
-    API_KEY: 'You google api key',
+    API_KEY: 'You (YouTube Data API v3) key',
   },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     if (!isServer) {
