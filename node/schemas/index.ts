@@ -40,6 +40,7 @@ export declare namespace Values {
   type Subtitles = {
     result: Types.Result;
     message: string;
+    lang?: string;
     items?: SubtitlesItem[];
   };
   interface SubtitlesRequest extends ServerResponse {
@@ -87,7 +88,6 @@ export declare namespace Params {
   type SubtitlesKeys = keyof Values.Subtitles;
   type Subtitles = {
     input: {
-      search: string;
       videoID: string;
       lang: string;
     };
@@ -161,11 +161,11 @@ export const typeDefs = gql`
   type Subtitles {
     result: Result!
     message: String!
+    lang: String
     items: [SubtitlesItem]
   }
 
   input SubtitlesInput {
-    search: String!
     videoID: String!
     lang: String!
   }

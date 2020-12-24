@@ -9,6 +9,7 @@ const theme: Types.Theme = {
   error: '#EA4335',
   warning: '#FBBC05',
   success: '#34A853',
+  info: '#00d2ff',
   white: '#ffffff',
   bg: 'rgba(0, 0, 0, 0.1)',
 };

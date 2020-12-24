@@ -10,11 +10,10 @@ import { getSubtitles } from 'youtube-captions-scraper';
  * @param params {Types.Schema.Params.Subtitles} request params
  * @param context context (headers)
  */
-const Search: Types.RequestHandler<Types.Schema.Params.Subtitles, Types.Schema.Values.Subtitles> = async (
-  _parent,
-  params,
-  context
-) => {
+const Search: Types.RequestHandler<
+  Types.Schema.Params.Subtitles,
+  Types.Schema.Values.Subtitles
+> = async (_parent, params, context) => {
   const { headers } = context;
   const { lang } = headers;
   const t = srv.getLang(lang);
@@ -25,32 +24,26 @@ const Search: Types.RequestHandler<Types.Schema.Params.Subtitles, Types.Schema.V
       message: t.server.user.warningInputParamsNotSend,
     };
   }
-  const { videoID, search } = input;
+  const { videoID } = input;
   if (!videoID) {
     return {
       result: 'warning',
       message: t.server.subtitles.warningVideoIDNotSend,
     };
   }
-  if (!search) {
-    return {
-      result: 'warning',
-      message: t.server.subtitles.warningSearchStringNotSend,
-    };
-  }
   const items = await new Promise<Types.Schema.Values.SubtitlesItem[]>((resolve) => {
     getSubtitles({
       videoID,
-      lang: 'ru',
+      lang: input.lang,
     }).then((captions) => {
       resolve(captions);
     });
   });
-  console.log(items)
   return {
     result: 'success',
     message: t.server.subtitles.successReceived,
-    items: [{start: 'sd', text: 'ds'}],
+    lang: input.lang,
+    items,
   };
 };
 

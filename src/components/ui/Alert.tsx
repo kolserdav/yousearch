@@ -22,8 +22,10 @@ const Alert: NextComponentType<any, any, AlertProps> = (props) => {
           /**1 */
         };
   useEffect(() => {
-    Trigger();
-  }, [trigger]);
+    setTimeout(() => {
+      Trigger();
+    }, 3000);
+  }, [open]);
   return (
     <Wrapper open={open}>
       <Grid direction="row" align="center">
@@ -58,7 +60,7 @@ interface WraperProps {
   open: boolean;
 }
 
-const pulse = '0.25s';
+const pulse = '0.300s';
 
 const animation = (props: WraperProps) =>
   css`
@@ -94,6 +96,8 @@ const AlertStyled = styled.div<AlertStyledProps>`
       return theme.warning;
     } else if (status === 'success') {
       return theme.success;
+    } else if (status === 'info') {
+      return theme.info;
     }
   }};
   &:first-letter {

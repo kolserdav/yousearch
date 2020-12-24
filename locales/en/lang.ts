@@ -18,11 +18,13 @@ const t: Language = {
     home: 'home',
     send: 'send',
     search: 'search',
+    setLink: 'set link or video ID',
+    selectLang: 'select lang of needed subtitles',
+    subtitlesAreExists: 'previously saved subtitles found',
   },
   content: {
     siteName: 'Youtube subtitle search',
-    siteDescription:
-      'provide a link to the video and search in its subtitles directly from your phone',
+    siteDescription: 'provide a link to the video and search in its subtitles',
   },
   messages: {
     linkNotValid: 'link not valid',
@@ -47,8 +49,8 @@ const t: Language = {
       warningEmailOrPasswordNotMatch: 'email or password not match',
     },
     subtitles: {
-      successReceived: 'subtitles found',
-      warningSearchStringNotSend: 'search string not send',
+      successFound: 'subtitles found',
+      successReceived: 'subtitles received',
       warningVideoIDNotSend: 'video ID not send',
       errorGettingVideoCaptions: 'error getting video captions',
       warningSubtitlesNotFound: 'subtitles not found',

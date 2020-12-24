@@ -63,7 +63,7 @@ const loaded = keyframes`
 
 const LinearProgress = styled.div`
   background: ${(props) => props.theme.main};
-  z-index: 4;
+  z-index: 11;
   position: fixed;
   top: 0;
   height: var(--progress-height);

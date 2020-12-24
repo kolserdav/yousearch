@@ -4,7 +4,7 @@
 declare module 'youtube-captions-scraper' {
   interface GetSubtitlesOptions {
     videoID: string;
-    lang: 'en' | 'de' | 'fr' | 'ru' | void;
+    lang: string;
   }
   interface SubtitlesItem {
     start: string;

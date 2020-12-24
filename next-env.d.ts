@@ -68,6 +68,9 @@ export declare interface Language {
     home: string;
     send: string;
     search: string;
+    setLink: string;
+    selectLang: string;
+    subtitlesAreExists: string;
   };
   content: {
     siteName: string;
@@ -96,9 +99,9 @@ export declare interface Language {
       warningEmailOrPasswordNotMatch: string;
     };
     subtitles: {
+      successFound: string;
       successReceived: string;
       warningVideoIDNotSend: string;
-      warningSearchStringNotSend: string;
       errorGettingVideoCaptions: string;
       warningSubtitlesNotFound: string;
       warningVideoNotFound: string;

@@ -10,6 +10,9 @@ const cookies = new Cookies();
 
 const duration = 350;
 
+const date = new Date();
+date.setFullYear(date.getFullYear() + 12);
+
 /**
  * Left menu element
  * @param props {Types.Props}
@@ -25,10 +28,8 @@ const Menu: NextComponentType<any, any, Types.Props> = (props) => {
     document.body.style.overflow = 'auto';
   };
   useEffect(() => {
-    //cookies.set('lang', locale);
-  }, []);
-  const date = new Date();
-  date.setFullYear(date.getFullYear() + 12);
+    cookies.set('lang', locale, { expires: date, path: '*', sameSite: 'strict' });
+  }, [locale]);
   return (
     <MenuWrapper>
       <MenuIcon
@@ -42,12 +43,7 @@ const Menu: NextComponentType<any, any, Types.Props> = (props) => {
         <LangSelectItem selected={true}>{t.name}</LangSelectItem>
         <LangSelectItem selected={false}>&nbsp;|&nbsp;</LangSelectItem>
         <Link href={router.pathname} locale={t.value1}>
-          <LangSelectItem
-            value={t.value1}
-            onClick={(e: any) => {
-              cookies.set('lang', e.target.getAttribute('value'), { expires: date });
-            }}
-            selected={false}>
+          <LangSelectItem value={t.value1} selected={false}>
             {t.name1}
           </LangSelectItem>
         </Link>

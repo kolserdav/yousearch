@@ -45,6 +45,7 @@ const client = new ApolloClient({
   ssrMode: server,
   link: authLink.concat(httpLink),
   cache: new InMemoryCache({
+    addTypename: false,
     typePolicies: {
       Query: {
         fields: {

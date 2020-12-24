@@ -72,7 +72,7 @@ const Captions: Types.RequestHandler<
   const captions = await new Promise<Types.OrmResult<CaptionsInterface>>((resolve) => {
     axios
       .get(
-        `https://www.googleapis.com/youtube/v3/captions?key=${API_KEY}&videoId=${videoID}&part=snippet`
+        `https://www.googleapis.com/youtube/v3/captions?key=${API_KEY}&videoId=${videoID}&part=snippet` //TODO &userIP=${headers['x-forvarded-for']}
       )
       .then((response) => {
         resolve({
@@ -81,7 +81,8 @@ const Captions: Types.RequestHandler<
         });
       })
       .catch((e) => {
-        console.error(`<${Date()}> (GET_CAPTIONS_ERROR)`, e.toJSON());
+        const is404 = e.message.toString().match(/404$/);
+        if (!is404) console.error(`<${Date()}> (GET_CAPTIONS_ERROR)`, e.toJSON());
         resolve({
           error: 1,
           data: e.message,
@@ -89,8 +90,8 @@ const Captions: Types.RequestHandler<
       });
   });
   if (captions.error) {
-    console.warn(headers);
     const is404 = captions.data.toString().match(/404$/);
+    if (!is404) console.warn(headers);
     const errMess = is404
       ? t.server.subtitles.warningVideoNotFound
       : t.server.subtitles.errorGettingVideoCaptions;
@@ -113,7 +114,7 @@ const Captions: Types.RequestHandler<
   });
   return {
     result: 'success',
-    message: t.server.subtitles.successReceived,
+    message: t.server.subtitles.successFound,
     items: langs,
   };
 };

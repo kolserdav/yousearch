@@ -18,10 +18,13 @@ const t: Language = {
     home: 'главная',
     send: 'отправить',
     search: 'поиск',
+    setLink: 'указать ссылку или идентификатор видео',
+    selectLang: 'выбрать язык субтитров',
+    subtitlesAreExists: 'найдены сохраненные ранее субтитры',
   },
   content: {
     siteName: 'поиск в субтитрах Youtube',
-    siteDescription: 'укажите ссылку на видео и ищите в его субтитрах прямо с телефонa',
+    siteDescription: 'укажите ссылку на видео и ищите в его субтитрах',
   },
   messages: {
     linkNotValid: 'ссылка имеет неверный формат',
@@ -46,8 +49,8 @@ const t: Language = {
       warningEmailOrPasswordNotMatch: 'почта или пароль не совпадают',
     },
     subtitles: {
-      successReceived: 'субтитры найдены',
-      warningSearchStringNotSend: 'строка поиска не передана',
+      successFound: 'субтитры найдены',
+      successReceived: 'субтитры получены',
       warningVideoIDNotSend: 'ИД видео не передан',
       errorGettingVideoCaptions: 'ошибка при получении списка субтитров видео',
       warningSubtitlesNotFound: 'субтитры не найдены',

@@ -21,3 +21,14 @@ export const Description = styled.p`
     text-transform: capitalize;
   }
 `;
+
+/**
+ * Label styled element
+ */
+export const Label = styled.p`
+  font-size: var(--p-size);
+  color: ${(props) => props.theme.dark};
+  &:first-letter {
+    text-transform: capitalize;
+  }
+`;
