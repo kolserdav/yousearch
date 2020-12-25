@@ -107,6 +107,8 @@ export declare interface Language {
       errorGettingVideoCaptions: string;
       warningSubtitlesNotFound: string;
       warningVideoNotFound: string;
+      errorGettingVideoSubtitles: string;
+      warningLangOfSubtitlesNotSend: string;
     };
   };
 }

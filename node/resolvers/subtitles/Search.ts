@@ -31,19 +31,38 @@ const Search: Types.RequestHandler<
       message: t.server.subtitles.warningVideoIDNotSend,
     };
   }
-  const items = await new Promise<Types.Schema.Values.SubtitlesItem[]>((resolve) => {
-    getSubtitles({
-      videoID,
-      lang: input.lang,
-    }).then((captions) => {
-      resolve(captions);
-    });
-  });
+  const resSubs = await new Promise<Types.OrmResult<Types.Schema.Values.SubtitlesItem[]>>(
+    (resolve) => {
+      getSubtitles({
+        videoID,
+        lang: input.lang,
+      })
+        .then((captions) => {
+          resolve({
+            error: 0,
+            data: captions,
+          });
+        })
+        .catch((e) => {
+          console.error(`<${Date()}> (ERROR_GET_SUBTITLES)`, e.message);
+          resolve({
+            error: 1,
+            message: e.message,
+          });
+        });
+    }
+  );
+  if (resSubs.error) {
+    return {
+      result: 'error',
+      message: t.server.subtitles.errorGettingVideoSubtitles,
+    };
+  }
   return {
     result: 'success',
     message: t.server.subtitles.successReceived,
     lang: input.lang,
-    items,
+    items: resSubs.data,
   };
 };
 

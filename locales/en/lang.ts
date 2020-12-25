@@ -57,6 +57,8 @@ const t: Language = {
       errorGettingVideoCaptions: 'error getting video captions',
       warningSubtitlesNotFound: 'subtitles not found',
       warningVideoNotFound: 'video not found',
+      errorGettingVideoSubtitles: 'error getting video subtitles',
+      warningLangOfSubtitlesNotSend: 'lang of subtitles not send',
     },
   },
 };

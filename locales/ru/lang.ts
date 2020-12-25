@@ -57,6 +57,8 @@ const t: Language = {
       errorGettingVideoCaptions: 'ошибка при получении списка субтитров видео',
       warningSubtitlesNotFound: 'субтитры не найдены',
       warningVideoNotFound: 'видео не найдено',
+      errorGettingVideoSubtitles: 'ошибка при получении субтитров видео',
+      warningLangOfSubtitlesNotSend: 'язык нужных субтитров не передан',
     },
   },
 };
