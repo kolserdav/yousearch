@@ -71,6 +71,8 @@ export declare interface Language {
     setLink: string;
     selectLang: string;
     subtitlesAreExists: string;
+    minimum3Symbols: string;
+    noResults: string;
   };
   content: {
     siteName: string;

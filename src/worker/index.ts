@@ -48,6 +48,15 @@ export const search: Search = async (subtitles, search) => {
       }
     }
   }
+  result.sort((a, b) => {
+    const reg = /<b>[\w\s]+<\/b>/g;
+    const lengthA = ((a.text || '').match(reg) || []).length;
+    const lengthB = ((b.text || '').match(reg) || []).length;
+    if (lengthA > lengthB) {
+      return -1;
+    }
+    return 1;
+  });
   return result;
 };
 

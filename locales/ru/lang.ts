@@ -21,6 +21,8 @@ const t: Language = {
     setLink: 'указать ссылку или идентификатор видео',
     selectLang: 'выбрать язык субтитров',
     subtitlesAreExists: 'найдены сохраненные ранее субтитры',
+    minimum3Symbols: 'минимальная длина запроса это 3 символа',
+    noResults: 'по запросу ничего не найдено',
   },
   content: {
     siteName: 'поиск в субтитрах Youtube',

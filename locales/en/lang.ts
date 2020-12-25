@@ -21,6 +21,8 @@ const t: Language = {
     setLink: 'set link or video ID',
     selectLang: 'select lang of needed subtitles',
     subtitlesAreExists: 'previously saved subtitles found',
+    minimum3Symbols: 'minimum request length is 3 characters',
+    noResults: 'no results found',
   },
   content: {
     siteName: 'Youtube subtitle search',

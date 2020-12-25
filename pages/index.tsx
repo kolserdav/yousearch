@@ -20,6 +20,11 @@ import type { WorkerApi } from '../src/worker';
 
 const cookies = new Cookies();
 
+const scrollSettings = {
+  alignToTop: 'start',
+  behavior: 'smooth',
+};
+
 const date = new Date();
 date.setFullYear(date.getFullYear() + 12);
 
@@ -49,6 +54,7 @@ const Home: NextComponentType<any, any, Props> = (props): React.ReactElement => 
   const { v, s }: any = router.query;
   const searchRef = useRef<any>();
   const playerRef = useRef<any>();
+  const searchValueRef = useRef<string>('');
   const [link, setLink] = useState<string>('');
   const [linkValue, setLinkValue] = useState<string>('');
   const [lang, setLang] = useState<string>('');
@@ -121,11 +127,27 @@ const Home: NextComponentType<any, any, Props> = (props): React.ReactElement => 
    * Search subtitles into session storage with web worker
    */
   const searchSubtitles = async () => {
+    if (searchValueRef.current?.length < 3) {
+      setAlert({
+        open: true,
+        status: 'warning',
+        text: t.interface.minimum3Symbols,
+      });
+      return;
+    }
     setLoad(true);
     const subsStr = window.sessionStorage.getItem('_subtitles');
     const subsObj = JSON.parse(subsStr);
-    const r = await comlinkWorkerApiRef.current?.search(subsObj, search);
+    const r = await comlinkWorkerApiRef.current?.search(subsObj, searchValueRef.current);
     setLoad(false);
+    if (r.length === 0) {
+      setAlert({
+        open: true,
+        status: 'warning',
+        text: t.interface.noResults,
+      });
+      return;
+    }
     setSubtitles(r);
   };
   /**
@@ -161,7 +183,13 @@ const Home: NextComponentType<any, any, Props> = (props): React.ReactElement => 
       },
     });
   };
+  const keyDownListener = (e: any) => {
+    if (searchRef.current === document.activeElement && e.code === 'Enter') {
+      searchSubtitles();
+    }
+  };
   useEffect(() => {
+    window.addEventListener('keydown', keyDownListener);
     // Get comlink web worker
     comlinkWorkerRef.current = new Worker('../src/worker', { type: 'module' });
     comlinkWorkerApiRef.current = Comlink.wrap<WorkerApi>(comlinkWorkerRef.current);
@@ -252,6 +280,8 @@ const Home: NextComponentType<any, any, Props> = (props): React.ReactElement => 
       storeSubs();
       // Terminate comlink worker
       comlinkWorkerRef.current?.terminate();
+      // Remove window event listener
+      window.removeEventListener('keydown', keyDownListener);
     };
   }, [v]);
   return (
@@ -303,6 +333,7 @@ const Home: NextComponentType<any, any, Props> = (props): React.ReactElement => 
               onChange={(e: any) => {
                 const { value } = e.target;
                 setSearch(value);
+                searchValueRef.current = value;
               }}
               value={search}
               placeholder={t.interface.search}
@@ -324,10 +355,7 @@ const Home: NextComponentType<any, any, Props> = (props): React.ReactElement => 
                         router.push(`/?v=${v}&s=${_start}`);
                         setAuto(true);
                         setEmbedLink(_videoID, _start);
-                        playerRef.current.scrollIntoView({
-                          alignToTop: 'start',
-                          behavior: 'smooth',
-                        });
+                        playerRef.current.scrollIntoView(scrollSettings);
                       }}>
                       {beautiTime}
                     </Time>
@@ -366,6 +394,13 @@ const Home: NextComponentType<any, any, Props> = (props): React.ReactElement => 
           status={alert.status}
         />
       </Grid>
+      <IconArrow
+        onClick={() => {
+          searchRef.current.scrollIntoView(scrollSettings);
+        }}
+        src="/img/ui/keyboard_arrow_up-white-36dp.svg"
+        alt="arrow up"
+      />
     </Theme>
   );
 };
@@ -423,6 +458,20 @@ const LangSelect = styled.select`
 `;
 const LangOption = styled.option`
   height: var(--input-height);
+`;
+
+const IconArrow = styled.img`
+  cursor: pointer;
+  z-index: 10;
+  position: fixed;
+  left: calc(100vw - var(--icon-width) * 1.6);
+  top: calc(100vh - var(--icon-width) * 2);
+  width: var(--icon-width);
+  height: var(--icon-width);
+  &:hover {
+    border: 2px solid ${(props) => props.theme.main};
+    border-radius: calc(var(--icon-width));
+  }
 `;
 
 export const getStaticProps = ({ locale }: StaticContext): StaticProps => {
