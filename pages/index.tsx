@@ -97,16 +97,16 @@ const Home: NextComponentType<any, any, Props> = (props): React.ReactElement => 
     /**
      * Check a different link types
      */
-    let newLink: any = link.match(/watch\?v=[a-zA-Z0-9_]{11}/);
+    let newLink: any = link.match(/watch\?v=[a-zA-Z0-9_-]{11}/);
     newLink = newLink ? newLink[0] : null;
     let id: any = newLink ? newLink.replace('watch?v=', '') : null;
     if (!newLink) {
-      newLink = link.match(/.be\/[a-zA-Z0-9_]{11}$/);
+      newLink = link.match(/.be\/[a-zA-Z0-9_-]{11}$/);
       newLink = newLink ? newLink[0] : null;
       id = newLink ? newLink.replace('.be/', '') : null;
     }
     if (!newLink) {
-      newLink = link.match(/^[a-zA-Z0-9_]{11}$/);
+      newLink = link.match(/^[a-zA-Z0-9_-]{11}$/);
       newLink = newLink ? newLink[0] : null;
       id = newLink;
     }
