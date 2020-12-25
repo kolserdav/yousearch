@@ -19,6 +19,7 @@ Then setup file next.config.js
   i18n: {
     locales: ['en', 'ru'],
     defaultLocale: 'en',
+    localeDetection: false,
   },
   serverRuntimeConfig: {
     PROJECT_ROOT: __dirname,
@@ -32,4 +33,4 @@ Then setup file next.config.js
 ```
 
 
-Demo: http://next.uyem.ru
+Demo: https://next.uyem.ru
