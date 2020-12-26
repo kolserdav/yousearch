@@ -101,7 +101,7 @@ const Registration: Types.RequestHandler<
       message: t.server.user.warningGetUserData,
     };
   }
-  const token = lib.getParsedToken(user.data, headers)
+  const token = lib.getParsedToken(addedUser.data, headers);
   return {
     result: 'success',
     message: t.server.user.successRegistration,

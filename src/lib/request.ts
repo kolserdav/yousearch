@@ -110,6 +110,7 @@ const requestMutate = (
         .then((result) => {
           if ((result.errors && dev) || (result.errors && server)) {
             console.error(`<${Date()}>`, '[Error mutation]', result.errors);
+            resolve(result.errors[0].message);
           }
           resolve(result.data);
         })
