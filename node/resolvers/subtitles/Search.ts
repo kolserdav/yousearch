@@ -31,6 +31,12 @@ const Search: Types.RequestHandler<
       message: t.server.subtitles.warningVideoIDNotSend,
     };
   }
+  if (!input.lang) {
+    return {
+      result: 'warning',
+      message: t.server.subtitles.warningLangOfSubtitlesNotSend,
+    };
+  }
   const resSubs = await new Promise<Types.OrmResult<Types.Schema.Values.SubtitlesItem[]>>(
     (resolve) => {
       getSubtitles({

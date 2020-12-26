@@ -31,6 +31,10 @@ const t: Language = {
   messages: {
     linkNotValid: 'ссылка имеет неверный формат',
   },
+  meta: {
+    keywords: 'поиск в субтитрах, ютуб, ютюб, youtube, по субтитрам, субтитры, поиск',
+    description: 'бесплатный сервис для поиска ключевых слов по субтитрам видео Youtube',
+  },
   server: {
     user: {
       errorGetByEmail: 'ошибка при получении пользователя по емайл',

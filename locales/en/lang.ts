@@ -31,6 +31,10 @@ const t: Language = {
   messages: {
     linkNotValid: 'link not valid',
   },
+  meta: {
+    keywords: 'subtitle search, youtube, youtube, youtube, subtitle, subtitle, search',
+    description: 'free service for searching keywords by subtitles of Youtube videos',
+  },
   server: {
     user: {
       errorGetByEmail: 'error while getting user by email',

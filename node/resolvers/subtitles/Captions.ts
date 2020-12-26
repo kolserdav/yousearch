@@ -72,7 +72,7 @@ const Captions: Types.RequestHandler<
   const captions = await new Promise<Types.OrmResult<CaptionsInterface>>((resolve) => {
     axios
       .get(
-        `https://www.googleapis.com/youtube/v3/captions?key=${API_KEY}&videoId=${videoID}&part=snippet` //TODO &userIP=${headers['x-forvarded-for']}
+        `https://www.googleapis.com/youtube/v3/captions?key=${API_KEY}&videoId=${videoID}&part=snippet&userIP=${headers['x-forwarded-for']}`
       )
       .then((response) => {
         resolve({

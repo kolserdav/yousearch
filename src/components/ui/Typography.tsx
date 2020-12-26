@@ -17,6 +17,7 @@ export const H1 = styled.h1`
 export const Description = styled.p`
   font-size: var(--h5-size);
   color: ${(props) => props.theme.dark};
+  margin: 12px;
   &:first-letter {
     text-transform: capitalize;
   }

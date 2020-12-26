@@ -81,6 +81,10 @@ export declare interface Language {
   messages: {
     linkNotValid: string;
   };
+  meta: {
+    keywords: string;
+    description: string;
+  };
   server: {
     user: {
       errorGetByEmail: string;

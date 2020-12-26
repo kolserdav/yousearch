@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { NextComponentType } from 'next';
 import Grid from './Grid';
@@ -12,6 +12,10 @@ export interface AlertProps {
   trigger?: () => void;
 }
 
+/**
+ * Alert message component
+ * @param props {AlertProps}
+ */
 const Alert: NextComponentType<any, any, AlertProps> = (props) => {
   const { open, status, text, button, trigger } = props;
   const Button = () => (button ? button : <div />);
@@ -29,10 +33,12 @@ const Alert: NextComponentType<any, any, AlertProps> = (props) => {
   return (
     <Wrapper open={open}>
       <Grid direction="row" align="center">
-        <AlertStyled status={status}>
-          {text}
-          <Button />
-        </AlertStyled>
+        {text && (
+          <AlertStyled status={status}>
+            {text}
+            <Button />
+          </AlertStyled>
+        )}
       </Grid>
     </Wrapper>
   );

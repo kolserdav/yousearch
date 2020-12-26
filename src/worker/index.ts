@@ -6,10 +6,9 @@ import * as Comlink from 'comlink';
 import * as Types from '../../next-env';
 
 interface Search {
-  (
-    subtitles: Types.Schema.Values.SubtitlesItem[],
-    search: string
-  ): Promise<Types.Schema.Values.SubtitlesItem[]>;
+  (subtitles: Types.Schema.Values.SubtitlesItem[], search: string): Promise<
+    Types.Schema.Values.SubtitlesItem[]
+  >;
 }
 /**
  * Capitalize first letter
@@ -21,38 +20,47 @@ function capitalize(string: string): string {
 
 export const search: Search = async (subtitles, search) => {
   const words = search.split(' ');
-  const result = [];
+  // Get entry for all words
   for (let n = 0; words[n]; n++) {
     const word = words[n];
     const wordReg = new RegExp(word);
     const wordRegCap = new RegExp(capitalize(word));
     const wordRegUp = new RegExp(word.toUpperCase());
     const wordRegLow = new RegExp(word.toLowerCase());
+    // Mark each word
     for (let i = 0; subtitles[i]; i++) {
       const sbt = subtitles[i];
       if (wordReg.test(sbt.text)) {
         sbt.text = sbt.text.replace(wordReg.exec(sbt.text)[0], `<b>${word}</b>`);
-        result.push(sbt);
       } else if (wordRegCap.test(sbt.text)) {
         const wordCap = wordRegCap.exec(sbt.text)[0];
         sbt.text = sbt.text.replace(wordCap, `<b>${wordCap}</b>`);
-        result.push(sbt);
       } else if (wordRegUp.test(sbt.text)) {
         const wordUp = wordRegUp.exec(sbt.text)[0];
         sbt.text = sbt.text.replace(wordUp, `<b>${wordUp}</b>`);
-        result.push(sbt);
       } else if (wordRegLow.test(sbt.text)) {
         const wordLow = wordRegLow.exec(sbt.text)[0];
         sbt.text = sbt.text.replace(wordLow, `<b>${wordLow}</b>`);
-        result.push(sbt);
       }
     }
   }
+  const reg = /<b>[a-zA-Zа-яА-Я0-9\s]+<\/b>/g;
+  // Filter matches
+  const result = subtitles.filter((item) => reg.test(item.text));
+  // Sort is match several words
   result.sort((a, b) => {
-    const reg = /<b>[\w\s]+<\/b>/g;
     const lengthA = ((a.text || '').match(reg) || []).length;
     const lengthB = ((b.text || '').match(reg) || []).length;
     if (lengthA > lengthB) {
+      return -1;
+    }
+    return 1;
+  });
+  // Sort when full match
+  const boldWords = words.map((item) => `<b>${item}</b>`);
+  const fullReg = new RegExp(boldWords.join(' '));
+  result.sort((a, b) => {
+    if (fullReg.test(a.text) && !fullReg.test(b.text)) {
       return -1;
     }
     return 1;
