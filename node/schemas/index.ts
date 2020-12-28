@@ -59,6 +59,24 @@ export declare namespace Values {
   interface CaptionsRequest extends ServerResponse {
     captions?: Captions;
   }
+  /** Info values */
+  type Info = {
+    result: Types.Result;
+    message: string;
+    title?: string;
+  };
+  interface InfoRequest extends ServerResponse {
+    info?: Info;
+  }
+  /** Auth values */
+  type Auth = {
+    result: Types.Result;
+    message: string;
+    role?: Types.UserRoles;
+  };
+  interface AuthRequest extends ServerResponse {
+    auth?: Auth;
+  }
 }
 
 /**
@@ -104,7 +122,7 @@ export declare namespace Params {
 }
 
 export interface Query extends Types.RequestInterface {
-  
+  auth: Types.RequestHandler<void, Values.Auth>;
 }
 
 /**
@@ -115,6 +133,7 @@ export interface Mutation extends Types.RequestInterface {
   login: Types.RequestHandler<Params.Login, Values.Login>;
   subtitles: Types.RequestHandler<Params.Subtitles, Values.Subtitles>;
   captions: Types.RequestHandler<Params.Captions, Values.Captions>;
+  info: Types.RequestHandler<Params.Captions, Values.Info>;
 }
 
 export interface Resolver {
@@ -185,8 +204,20 @@ export const typeDefs = gql`
     videoID: String!
   }
 
+  type Info {
+    result: Result!
+    message: String!
+    title: String
+  }
+
+  type Auth {
+    result: Result!
+    message: String!
+    role: String
+  }
+
   type Query {
-    test: String
+    auth: Auth!
   }
 
   type Mutation {
@@ -194,5 +225,6 @@ export const typeDefs = gql`
     login(input: LoginInput!): Login!
     subtitles(input: SubtitlesInput!): Subtitles!
     captions(input: CaptionsInput!): Captions!
+    info(input: CaptionsInput!): Info!
   }
 `;

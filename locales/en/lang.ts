@@ -23,6 +23,11 @@ const t: Language = {
     subtitlesAreExists: 'previously saved subtitles found',
     minimum3Symbols: 'minimum request length is 3 characters',
     noResults: 'no results found',
+    logout: 'logout',
+    needLogout: 'you need logout',
+    link: 'link',
+    createAndCopyLink: 'create and copy link',
+    more: 'more',
   },
   content: {
     siteName: 'Youtube subtitle search',
@@ -30,6 +35,11 @@ const t: Language = {
   },
   messages: {
     linkNotValid: 'link not valid',
+    linkCreatedAndCopied: 'link created and copied',
+    warnigTimePointNotSelect: 'time point not selected',
+    warningSearchValueNotSet: 'search value not typed',
+    warningSubtitlesLangNotSet: 'subtitles language not set',
+    warningVideoIDNotSet: 'video ID not set',
   },
   meta: {
     keywords: 'subtitle search, youtube, youtube, youtube, subtitle, subtitle, search',
@@ -63,6 +73,9 @@ const t: Language = {
       warningVideoNotFound: 'video not found',
       errorGettingVideoSubtitles: 'error getting video subtitles',
       warningLangOfSubtitlesNotSend: 'lang of subtitles not send',
+      errorGettingVideoInfo: 'error getting video info',
+      warningVideoInfoNotFound: 'video info not found',
+      successVideoInfoReceived: 'video info received',
     },
   },
 };

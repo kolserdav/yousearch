@@ -6,7 +6,7 @@ import { NextComponentType } from 'next';
 import { useRouter } from 'next/router';
 import * as Comlink from 'comlink';
 import AppBar from '../src/components/AppBar';
-import { store, action } from '../src/store';
+import { store, action, userStore } from '../src/store';
 import * as srv from '../services';
 import Theme from '../src/components/Theme';
 import * as Types from '../next-env';
@@ -44,16 +44,32 @@ const getBeautiTime = (seconds: string): string => {
   return `${h}:${m}:${s}`;
 };
 
+// TODO check
+async function checkOldBrowser() {
+  return await new Promise((resolve) => {
+    const img = new Image();
+    img.onload = function() { resolve(false); };
+    img.onerror = function() { resolve(true); };
+    img.src = '/img/webp.webp';
+  });
+}
+
+interface HomeProps extends Props {
+  t: Types.Language;
+  title: string;
+}
+
 /**
  * Home page
  * @param props {Props}
  */
-const Home: NextComponentType<any, any, Props> = (props): React.ReactElement => {
-  const { t } = props;
+const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement => {
+  const { t, title } = props;
   const router = useRouter();
   const { v, s, se, ch, l }: any = router.query;
   const searchRef = useRef<any>();
   const playerRef = useRef<any>();
+  const subtitlesRef = useRef<Types.Schema.Values.SubtitlesItem[]>();
   const chunksRef = useRef<Types.Schema.Values.SubtitlesItem[][]>();
   const searchValueRef = useRef<string>('');
   const [link, setLink] = useState<string>('');
@@ -65,7 +81,8 @@ const Home: NextComponentType<any, any, Props> = (props): React.ReactElement => 
   const [subtitles, setSubtitles] = useState<Types.Schema.Values.SubtitlesItem[]>([]);
   const [auto, setAuto] = useState<boolean>(true);
   const [showMore, setShowMore] = useState<boolean>(false);
-  // TODO dynamically Meta values
+  // User state
+  const [role, setRole] = useState<Types.UserRoles>('guest');
   // For comlink
   const comlinkWorkerRef = React.useRef<Worker>();
   const comlinkWorkerApiRef = React.useRef<Comlink.Remote<WorkerApi>>();
@@ -79,9 +96,6 @@ const Home: NextComponentType<any, any, Props> = (props): React.ReactElement => 
   const alertTrigger = () => {
     if (alert.open) setAlert({ open: false, text: alert.text, status: alert.status });
   };
-  const alertButton = (
-    <IconButton src="/img/ui/close-white-36dp.svg" alt="close icon" onClick={alertTrigger} />
-  );
   /**
    * Create video player link
    * @param id {string} - video ID
@@ -140,9 +154,10 @@ const Home: NextComponentType<any, any, Props> = (props): React.ReactElement => 
     router.push(`?v=${v}&l=${l}&se=${searchValueRef.current}${chunk}${start}`);
     setSubtitles([]);
     setLoad(true);
-    const subsStr = window.sessionStorage.getItem('_subtitles');
-    const subsObj = JSON.parse(subsStr);
-    let res = await comlinkWorkerApiRef.current?.search(subsObj, searchValueRef.current);
+    let res = await comlinkWorkerApiRef.current?.search(
+      subtitlesRef.current,
+      searchValueRef.current
+    );
     setLoad(false);
     if (res.length === 0) {
       setAlert({
@@ -227,6 +242,14 @@ const Home: NextComponentType<any, any, Props> = (props): React.ReactElement => 
         setSearch(se);
       }
     }
+    const userStoreSubs = userStore.subscribe(() => {
+      const state: Types.Action<any> = userStore.getState();
+      if (state.type === 'SET_USER') {
+        const { body }: Types.Action<Types.Schema.Values.AuthRequest> = state;
+        const { auth } = body;
+        setRole(auth.role);
+      }
+    });
     /**
      * Subscribe to storage
      */
@@ -255,7 +278,7 @@ const Home: NextComponentType<any, any, Props> = (props): React.ReactElement => 
         if (subtitles.result === 'success') {
           const { items } = subtitles;
           // Save all subtitles of video in sessionStorage
-          window.sessionStorage.setItem('_subtitles', JSON.stringify(items));
+          subtitlesRef.current = items;
           if (se) {
             if (se === search || search === '') {
               searchValueRef.current = se;
@@ -314,6 +337,8 @@ const Home: NextComponentType<any, any, Props> = (props): React.ReactElement => 
       }
     });
     return () => {
+      // Uns from use store
+      userStoreSubs();
       // Ubsubscribe from storage
       storeSubs();
       // Terminate comlink worker
@@ -336,14 +361,14 @@ const Home: NextComponentType<any, any, Props> = (props): React.ReactElement => 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:image" content="" />
         {/**<meta name="twitter:site" content="@DeedPanas" />*/}
-        <meta name="twitter:title" content={t.content.siteName} />
+        <meta name="twitter:title" content={title || t.content.siteName} />
         <meta name="twitter:description" content={t.meta.description} />
         <meta property="og:image" content="" />
         <meta name="twitter:image:src" content="" />
         <meta property="og:image:width" content="" />
         <meta property="og:image:height" content="" />
         <meta property="og:description" content={t.meta.description} />
-        <meta property="og:title" content={t.content.siteName} />
+        <meta property="og:title" content={title || t.content.siteName} />
         <meta property="og:url" content="https://next.uyem.ru/" />
         <meta property="og:updated_time" content="1608949224609" />
       </Head>
@@ -466,20 +491,15 @@ const Home: NextComponentType<any, any, Props> = (props): React.ReactElement => 
             allowFullScreen={true}
           />
         </Player>
-        <Alert
-          open={alert.open}
-          text={alert.text}
-          button={alertButton}
-          trigger={alertTrigger}
-          status={alert.status}
-        />
+        <Alert open={alert.open} text={alert.text} trigger={alertTrigger} status={alert.status} />
       </Grid>
       <IconArrow
         onClick={() => {
           searchRef.current.scrollIntoView(scrollSettings);
         }}
         src="/img/ui/keyboard_arrow_up-white-36dp.svg"
-        alt="arrow up"
+        alt={`${t.interface.more} ${t.interface.icon}`}
+        title={t.interface.more}
       />
     </Theme>
   );
@@ -566,7 +586,8 @@ const IconMore = styled.img`
   height: var(--icon-width);
 `;
 
-export const getStaticProps = ({ locale }: StaticContext): StaticProps => {
+export const getStaticProps = (ctx: StaticContext): StaticProps => {
+  const { locale } = ctx;
   const lang = srv.getLang(locale);
   return {
     props: {

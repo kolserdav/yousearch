@@ -27,3 +27,21 @@ export const getParsedToken: GetParsedToken = (data, headers) => {
   };
   return jwt.sign(parsedToken, JWT_SECRET);
 };
+
+interface ParseToken {
+  // eslint-disable-next-line no-unused-vars
+  (token: string): Types.ParsedToken | null;
+}
+/**
+ * Get parsed token from jwt
+ * @param token {string} jwt token
+ */
+export const parseToken: ParseToken = (token) => {
+  let parsed = null;
+  try {
+    parsed = jwt.verify(token, JWT_SECRET);
+  } catch (e) {
+    console.log(`<${Date()}> (ERROR_PARSE_TOKEN)`, token);
+  }
+  return parsed;
+};

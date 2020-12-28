@@ -1,11 +1,9 @@
 import axios from 'axios';
 import * as Types from '../../../next-env';
-import * as orm from '../../orm';
-import * as lib from '../../lib';
 import * as srv from '../../../services';
 import getConfig from 'next/config';
 const { serverRuntimeConfig } = getConfig();
-const { API_KEY } = serverRuntimeConfig;
+const { API_KEY, API_URL } = serverRuntimeConfig;
 
 /**
  * Google REST api
@@ -72,7 +70,7 @@ const Captions: Types.RequestHandler<
   const captions = await new Promise<Types.OrmResult<CaptionsInterface>>((resolve) => {
     axios
       .get(
-        `https://www.googleapis.com/youtube/v3/captions?key=${API_KEY}&videoId=${videoID}&part=snippet&userIP=${headers['x-forwarded-for']}`
+        `${API_URL}/captions?key=${API_KEY}&videoId=${videoID}&part=snippet&userIP=${headers['x-forwarded-for']}`
       )
       .then((response) => {
         resolve({

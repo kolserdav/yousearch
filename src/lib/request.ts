@@ -26,14 +26,16 @@ const httpLink = createHttpLink({
   credentials: 'same-origin',
 });
 
-const authLink = setContext((_, { headers }) => {
+const authLink = setContext((_, ctx) => {
+  const { headers } = ctx;
   // get the authentication token from local storage if it exists
   // return the headers to the context so httpLink can read them
   return {
     headers: {
       ...headers,
       authorization: 'Bearer L8qq9PZyRg6ieKGEKhZolGC0vJWLw8iEJ88DRdyOg',
-      lang: cookies.get('lang'),
+      lang: cookies.get('lang') || 'en',
+      _qt: cookies.get('_qt') || '',
     },
   };
 });

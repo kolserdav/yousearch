@@ -34,6 +34,13 @@ const createTables = async () => {
   } else {
     console.info('INFO: Table users created!', users.data);
   }
+  // Create table links
+  const links = await orm.link.createTableLinks();
+  if (links.error) {
+    console.warn('WARNING: Table links not created', links.data);
+  } else {
+    console.info('INFO: Table links created!', links.data);
+  }
 };
 
 const dropTables = async () => {
@@ -43,6 +50,13 @@ const dropTables = async () => {
     console.warn('WARNING: Table users not dropped', users.data);
   } else {
     console.info('INFO: Table users dropped!', users.data);
+  }
+  // Drop table links
+  const links = await orm.link.dropTableLinks();
+  if (links.error) {
+    console.warn('WARNING: Table links not dropped', links.data);
+  } else {
+    console.info('INFO: Table links dropped!', links.data);
   }
 };
 

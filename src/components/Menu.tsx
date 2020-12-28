@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { NextComponentType } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { action, store, userStore } from '../store';
 import styled, { keyframes, css } from 'styled-components';
 import Cookies from 'universal-cookie';
+import IconButton from './ui/IconButton';
+import Alert, { AlertProps } from './ui/Alert';
 import * as Types from '../../next-env';
 
 const cookies = new Cookies();
@@ -21,23 +24,111 @@ const Menu: NextComponentType<any, any, Types.Props> = (props) => {
   const { t } = props;
   const [show, setShow] = useState<boolean>(false);
   const [_show, _setShow] = useState<boolean>(false);
+  const [role, setRole] = useState<Types.UserRoles>('guest');
+  // Alert
+  const _alert: AlertProps = {
+    open: false,
+    text: '',
+    status: 'info',
+  };
+  const [alert, setAlert] = useState<AlertProps>(_alert);
+  const alertTrigger = () => {
+    setTimeout(() => {
+      setAlert(_alert);
+    }, 3000);
+  };
   const router = useRouter();
   const { pathname, locale } = router;
   const closeMenu = () => {
     setShow(false);
     document.body.style.overflow = 'auto';
   };
+  const auth = () => {
+    action({
+      type: 'AUTH_REQUEST',
+      body: {},
+    });
+  };
   useEffect(() => {
+    auth();
+    const storeSubs = store.subscribe(() => {
+      const state: Types.Action<any> = store.getState();
+      if (state.type === 'AUTH') {
+        const { body }: Types.Action<Types.Schema.Values.AuthRequest> = state;
+        const { auth } = body;
+        setRole(auth.role);
+        userStore.dispatch({
+          type: 'SET_USER',
+          body: {
+            auth: {
+              role: auth.role,
+            },
+          },
+        });
+      }
+    });
     cookies.set('lang', locale, { expires: date, path: '*', sameSite: 'strict' });
+    return () => {
+      storeSubs();
+    };
   }, [locale]);
   return (
     <MenuWrapper>
       <MenuIcon
+        src="/img/ui/menu-white-36dp.svg"
         onClick={() => {
           document.body.style.overflow = 'hidden';
           setShow(true);
           _setShow(true);
         }}
+      />
+      <IconButton
+        src="/img/ui/link-white-36dp.svg"
+        alt={`${t.interface.link} ${t.interface.icon}`}
+        title={t.interface.createAndCopyLink}
+        onClick={() => {
+          const { query } = router;
+          const { v, se, l, s } = query;
+          if (!v) {
+            setAlert({
+              open: true,
+              text: t.messages.warningVideoIDNotSet,
+              status: 'warning',
+            });
+            return;
+          }
+          if (!l) {
+            setAlert({
+              open: true,
+              text: t.messages.warningSubtitlesLangNotSet,
+              status: 'warning',
+            });
+            return;
+          }
+          if (!se) {
+            setAlert({
+              open: true,
+              text: t.messages.warningSearchValueNotSet,
+              status: 'warning',
+            });
+            return;
+          }
+          if (!s) {
+            setAlert({
+              open: true,
+              text: t.messages.warnigTimePointNotSelect,
+              status: 'warning',
+            });
+            return;
+          }
+        }}
+      />
+      <Alert
+        open={alert.open}
+        status={alert.status}
+        text={alert.text}
+        trigger={alertTrigger}
+        relative={true}
       />
       <LangSelect>
         <LangSelectItem selected={true}>{t.name}</LangSelectItem>
@@ -64,24 +155,39 @@ const Menu: NextComponentType<any, any, Types.Props> = (props) => {
             </MenuItem>
           </Link>
           <Divider />
-          <Link href="/registration">
-            <MenuItem onClick={closeMenu} selected={pathname === '/registration'}>
-              <MenuItemIcon
-                src="/img/ui/how_to_reg-black-36dp.svg"
-                alt={`${t.interface.registration} ${t.interface.icon}`}
-              />
-              <MenuItemText>{t.interface.registration}</MenuItemText>
-            </MenuItem>
-          </Link>
-          <Link href="/login">
-            <MenuItem onClick={closeMenu} selected={pathname === '/login'}>
-              <MenuItemIcon
-                src="/img/ui/login-black-36dp.svg"
-                alt={`${t.interface.login} ${t.interface.icon}`}
-              />
-              <MenuItemText>{t.interface.login}</MenuItemText>
-            </MenuItem>
-          </Link>
+          {role === 'guest' && (
+            <Link href="/registration">
+              <MenuItem onClick={closeMenu} selected={pathname === '/registration'}>
+                <MenuItemIcon
+                  src="/img/ui/how_to_reg-black-36dp.svg"
+                  alt={`${t.interface.registration} ${t.interface.icon}`}
+                />
+                <MenuItemText>{t.interface.registration}</MenuItemText>
+              </MenuItem>
+            </Link>
+          )}
+          {role === 'guest' && (
+            <Link href="/login">
+              <MenuItem onClick={closeMenu} selected={pathname === '/login'}>
+                <MenuItemIcon
+                  src="/img/ui/login-black-36dp.svg"
+                  alt={`${t.interface.login} ${t.interface.icon}`}
+                />
+                <MenuItemText>{t.interface.login}</MenuItemText>
+              </MenuItem>
+            </Link>
+          )}
+          {role === 'user' && (
+            <Link href="/logout">
+              <MenuItem onClick={closeMenu} selected={pathname === '/logout'}>
+                <MenuItemIcon
+                  src="/img/ui/exit_to_app-black-36dp.svg"
+                  alt={`${t.interface.logout} ${t.interface.icon}`}
+                />
+                <MenuItemText>{t.interface.logout}</MenuItemText>
+              </MenuItem>
+            </Link>
+          )}
         </MenuBody>
       ) : (
         ''
@@ -165,14 +271,11 @@ const MenuWrapper = styled.div`
   align-items: center;
 `;
 
-const MenuIcon = styled.div`
+const MenuIcon = styled.img`
   cursor: pointer;
   width: var(--icon-width);
   height: var(--icon-width);
   margin: 12px;
-  background: url('/img/ui/menu-white-36dp.svg');
-  background-size: contain;
-  background-repeat: no-repeat;
 `;
 
 const MenuItemIcon = styled.img`
@@ -224,6 +327,7 @@ const MenuOpenedWrapper = styled.div<MenuProps>`
 `;
 
 const MenuBody = styled.div<MenuProps>`
+  z-index: 12;
   position: fixed;
   left: ${(props) =>
     props.show ? '0' : 'calc(-1 * (300px + (1000 - 300) * ((100vw - 320px) / (7680 - 320))))'};

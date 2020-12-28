@@ -17,6 +17,7 @@ export const createTableUsers: Types.OrmHandler<void, any> = () => {
       db.run(
         'CREATE TABLE IF NOT EXISTS users (\
           id INTEGER PRIMARY KEY AUTOINCREMENT,\
+          confirm BOOLEAN DEFAULT FALSE,\
           email TEXT,\
           password TEXT,\
           created DATETIME DEFAULT CURRENT_TIMESTAMP,\
@@ -74,6 +75,30 @@ export const getByEmail: Types.OrmHandler<string, Types.Orm.User> = (email) => {
       db.get(`SELECT * FROM users WHERE email="${email}"`, (err: Error, row: Types.Orm.User) => {
         if (err) {
           console.error(`<${Date()}> (ERROR_GET_BY_EMAIL)`, err);
+          resolve({
+            error: 1,
+            message: err.message,
+          });
+        } else {
+          resolve({
+            error: 0,
+            data: row,
+          });
+        }
+      });
+    });
+  });
+};
+
+/**
+ * Get user by id
+ */
+export const getById: Types.OrmHandler<number, Types.Orm.User> = (id) => {
+  return new Promise((resolve) => {
+    db.serialize(() => {
+      db.get(`SELECT * FROM users WHERE id="${id}"`, (err: Error, row: Types.Orm.User) => {
+        if (err) {
+          console.error(`<${Date()}> (ERROR_GET_USER_BY_ID)`, err);
           resolve({
             error: 1,
             message: err.message,

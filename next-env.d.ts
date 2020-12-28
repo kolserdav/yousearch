@@ -13,7 +13,18 @@ export declare namespace ActionTypes {
   export declare type Registration = 'REGISTRATION_REQUEST' | 'REGISTRATION';
   export declare type Subtitles = 'SUBTITLES_REQUEST' | 'SUBTITLES';
   export declare type Captions = 'CAPTIONS_REQUEST' | 'CAPTIONS';
-  export declare type All = Registration | Login | Subtitles | Captions | 'INITIAL';
+  export declare type Info = 'INFO_REQUEST' | 'INFO';
+  export declare type Auth = 'AUTH_REQUEST' | 'AUTH';
+  export declare type USer = 'SET_USER';
+  export declare type All =
+    | User
+    | Registration
+    | Login
+    | Subtitles
+    | Captions
+    | Info
+    | Auth
+    | 'INITIAL';
 }
 
 export type Action<T> = {
@@ -73,6 +84,11 @@ export declare interface Language {
     subtitlesAreExists: string;
     minimum3Symbols: string;
     noResults: string;
+    logout: string;
+    needLogout: string;
+    link: string;
+    createAndCopyLink: string;
+    more: string;
   };
   content: {
     siteName: string;
@@ -80,6 +96,11 @@ export declare interface Language {
   };
   messages: {
     linkNotValid: string;
+    linkCreatedAndCopied: string;
+    warningVideoIDNotSet: string;
+    warningSubtitlesLangNotSet: string;
+    warningSearchValueNotSet: string;
+    warnigTimePointNotSelect: string;
   };
   meta: {
     keywords: string;
@@ -113,9 +134,14 @@ export declare interface Language {
       warningVideoNotFound: string;
       errorGettingVideoSubtitles: string;
       warningLangOfSubtitlesNotSend: string;
+      errorGettingVideoInfo: string;
+      warningVideoInfoNotFound: string;
+      successVideoInfoReceived: string;
     };
   };
 }
+
+export declare type UserRoles = 'user' | 'guest';
 
 export declare type StaticContext = {
   locales: LanguageValue[];
@@ -174,11 +200,11 @@ export interface ParsedToken {
 }
 
 export declare namespace Orm {
-  type User = {
+  interface User {
     id: number;
     email: string;
     password: string;
     created: Date;
     updated: Date;
-  };
+  }
 }

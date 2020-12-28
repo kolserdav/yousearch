@@ -87,3 +87,35 @@ export const captions = requestMutate((context) => ({
     }
   `,
 }));
+
+/**
+ * Get video info
+ *  */
+export const info = requestMutate((context) => ({
+  variables: {
+    input: context.body.input,
+  },
+  mutation: gql`
+    mutation ($input: CaptionsInput!) {
+      info(input: $input) {
+        result,
+        ${context.body.results}
+      }
+    }
+  `,
+}));
+
+/**
+ * Get auth
+ *  */
+export const auth = requestQuery((context) => ({
+  query: gql`
+    query {
+      auth {
+        result
+        message
+        role
+      }
+    }
+  `,
+}));

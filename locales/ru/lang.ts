@@ -23,6 +23,11 @@ const t: Language = {
     subtitlesAreExists: 'найдены сохраненные ранее субтитры',
     minimum3Symbols: 'минимальная длина запроса это 3 символа',
     noResults: 'по запросу ничего не найдено',
+    logout: 'выход',
+    needLogout: 'хотите выйти',
+    link: 'ссылка',
+    createAndCopyLink: 'создать и скопировать ссылку',
+    more: 'ещё',
   },
   content: {
     siteName: 'поиск в субтитрах Youtube',
@@ -30,6 +35,11 @@ const t: Language = {
   },
   messages: {
     linkNotValid: 'ссылка имеет неверный формат',
+    linkCreatedAndCopied: 'ссылка создана и скопирована',
+    warnigTimePointNotSelect: 'точка времени не выбрана',
+    warningSearchValueNotSet: 'поисковой запрос не указан',
+    warningSubtitlesLangNotSet: 'яхык субтитров не обозначен',
+    warningVideoIDNotSet: 'идентификатор видео не указан',
   },
   meta: {
     keywords: 'поиск в субтитрах, ютуб, ютюб, youtube, по субтитрам, субтитры, поиск',
@@ -63,6 +73,9 @@ const t: Language = {
       warningVideoNotFound: 'видео не найдено',
       errorGettingVideoSubtitles: 'ошибка при получении субтитров видео',
       warningLangOfSubtitlesNotSend: 'язык нужных субтитров не передан',
+      errorGettingVideoInfo: 'ошибка получения информации о видео',
+      warningVideoInfoNotFound: 'информация о видео не найдена',
+      successVideoInfoReceived: 'информация о видео получена',
     },
   },
 };

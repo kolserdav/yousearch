@@ -20,9 +20,16 @@ sagaMiddleware.run(sagas.registrationSaga);
 sagaMiddleware.run(sagas.loginSaga);
 sagaMiddleware.run(sagas.subtitlesSaga);
 sagaMiddleware.run(sagas.captionsSaga);
+sagaMiddleware.run(sagas.infoSaga);
+sagaMiddleware.run(sagas.authSaga);
 
 function action<T>(actionParams: Types.Action<T>): void {
   store.dispatch(actionParams);
 }
 
-export { store, action };
+/**
+ * User store
+ */
+const userStore: Store<Types.Reducer<any>, Types.Action<any>> = createStore(reducer);
+
+export { store, action, userStore };

@@ -58,3 +58,31 @@ function* captions(action: Types.Action<Types.Schema.Params.Captions>) {
 export function* captionsSaga(): Generator {
   yield takeEvery<Types.ActionTypes.Captions>('CAPTIONS_REQUEST', captions);
 }
+
+/**
+ * Get video info saga
+ */
+function* info(action: Types.Action<Types.Schema.Params.Captions>) {
+  const body = yield call(Api.info, action);
+  yield put<Types.Action<Types.Schema.Values.InfoRequest>>({
+    type: 'INFO',
+    body,
+  });
+}
+export function* infoSaga(): Generator {
+  yield takeEvery<Types.ActionTypes.Info>('INFO_REQUEST', info);
+}
+
+/**
+ * Auth user
+ */
+function* auth(action: Types.Action<void>) {
+  const body = yield call(Api.auth, action);
+  yield put<Types.Action<Types.Schema.Values.AuthRequest>>({
+    type: 'AUTH',
+    body,
+  });
+}
+export function* authSaga(): Generator {
+  yield takeEvery<Types.ActionTypes.Auth>('AUTH_REQUEST', auth);
+}

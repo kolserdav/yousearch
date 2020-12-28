@@ -8,8 +8,8 @@ const IconButton = styled.img`
   cursor: pointer;
   vertical-align: middle;
   margin: auto var(--item-padding);
-  width: var(--p-size);
-  height: var(--p-size);
+  width: var(--icon-width);
+  height: var(--icon-width);
 `;
 
 export default IconButton;
