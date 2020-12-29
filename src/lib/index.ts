@@ -1,11 +1,7 @@
-/* eslint-disable no-unused-vars */
-/**
- * Webworker file
- */
-import * as Comlink from 'comlink';
 import * as Types from '../../next-env';
 
-interface Search {
+export interface Search {
+  // eslint-disable-next-line no-unused-vars
   (subtitles: Types.Schema.Values.SubtitlesItem[], search: string): Promise<
     Types.Schema.Values.SubtitlesItem[]
   >;
@@ -21,6 +17,7 @@ function capitalize(string: string): string {
 export const search: Search = async (subtitles, search) => {
   const words = search.split(' ');
   // Get entry for all words
+  const newS = JSON.parse(JSON.stringify(subtitles));
   for (let n = 0; words[n]; n++) {
     const word = words[n];
     const wordReg = new RegExp(word);
@@ -28,8 +25,8 @@ export const search: Search = async (subtitles, search) => {
     const wordRegUp = new RegExp(word.toUpperCase());
     const wordRegLow = new RegExp(word.toLowerCase());
     // Mark each word
-    for (let i = 0; subtitles[i]; i++) {
-      const sbt = subtitles[i];
+    for (let i = 0; newS[i]; i++) {
+      const sbt = newS[i];
       if (wordReg.test(sbt.text)) {
         sbt.text = sbt.text.replace(wordReg.exec(sbt.text)[0], `<b>${word}</b>`);
       } else if (wordRegCap.test(sbt.text)) {
@@ -46,7 +43,7 @@ export const search: Search = async (subtitles, search) => {
   }
   const reg = /<b>[a-zA-Zа-яА-Я0-9\s]+<\/b>/g;
   // Filter matches
-  const result = subtitles.filter((item) => reg.test(item.text));
+  const result = newS.filter((item) => reg.test(item.text));
   // Sort is match several words
   result.sort((a, b) => {
     const lengthA = ((a.text || '').match(reg) || []).length;
@@ -67,13 +64,3 @@ export const search: Search = async (subtitles, search) => {
   });
   return result;
 };
-
-export interface WorkerApi {
-  search: Search;
-}
-
-const workerApi: WorkerApi = {
-  search,
-};
-
-Comlink.expose(workerApi);

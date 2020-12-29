@@ -115,7 +115,7 @@ export const getById: Types.OrmHandler<number, Types.Orm.User> = (id) => {
 };
 
 /**
- * Get user by email
+ * Create new user
  */
 export const createNew: Types.OrmHandler<
   Types.Schema.Params.Registration,

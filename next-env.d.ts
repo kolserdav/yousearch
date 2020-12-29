@@ -15,7 +15,7 @@ export declare namespace ActionTypes {
   export declare type Captions = 'CAPTIONS_REQUEST' | 'CAPTIONS';
   export declare type Info = 'INFO_REQUEST' | 'INFO';
   export declare type Auth = 'AUTH_REQUEST' | 'AUTH';
-  export declare type USer = 'SET_USER';
+  export declare type Link = 'LINK_REQUEST' | 'LINK';
   export declare type All =
     | User
     | Registration
@@ -24,6 +24,7 @@ export declare namespace ActionTypes {
     | Captions
     | Info
     | Auth
+    | Link
     | 'INITIAL';
 }
 
@@ -39,6 +40,7 @@ export type Resolvers = {
 export type Reducer<T> = {
   type: ActionTypes.All;
   body: Action<T>;
+  [key: string]: Action<T>;
 };
 
 export type RequestCallback<T, U> = (context: Types.Action<T>, ...args: any[]) => U;
@@ -89,6 +91,7 @@ export declare interface Language {
     link: string;
     createAndCopyLink: string;
     more: string;
+    close: string;
   };
   content: {
     siteName: string;
@@ -101,6 +104,7 @@ export declare interface Language {
     warningSubtitlesLangNotSet: string;
     warningSearchValueNotSet: string;
     warnigTimePointNotSelect: string;
+    browserNotAccepted: string;
   };
   meta: {
     keywords: string;
@@ -137,6 +141,12 @@ export declare interface Language {
       errorGettingVideoInfo: string;
       warningVideoInfoNotFound: string;
       successVideoInfoReceived: string;
+    };
+    link: {
+      errorCreate: string;
+      successCreated: string;
+      errorGettingLink: string;
+      warningLinkNotFound: string;
     };
   };
 }
@@ -204,7 +214,15 @@ export declare namespace Orm {
     id: number;
     email: string;
     password: string;
+    confirm: boolean;
     created: Date;
     updated: Date;
+  }
+  interface Link {
+    id: number;
+    user_id: number;
+    link: string;
+    description: string;
+    created: Date;
   }
 }

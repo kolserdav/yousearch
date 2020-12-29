@@ -106,6 +106,23 @@ export const info = requestMutate((context) => ({
 }));
 
 /**
+ * Create new link
+ *  */
+export const link = requestMutate((context) => ({
+  variables: {
+    input: context.body.input,
+  },
+  mutation: gql`
+    mutation ($input: LinkInput!) {
+      link(input: $input) {
+        result,
+        ${context.body.results}
+      }
+    }
+  `,
+}));
+
+/**
  * Get auth
  *  */
 export const auth = requestQuery((context) => ({

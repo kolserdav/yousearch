@@ -21,14 +21,15 @@ const getInfo = (id: string): void => {
       input: {
         videoID: id,
       },
-      results: ['message', 'title'],
+      results: ['message', 'title', 'image {url, width, height}'],
     },
   });
 };
 
 export async function getServerSideProps(ctx) {
   const { locale, query } = ctx;
-  const { v } = query;
+  const { v, i, s, se } = query;
+  console.log(query)
   const info = await new Promise<Types.Schema.Values.Info>((resolve) => {
     const storeSubs = store.subscribe(() => {
       const state: Types.Action<any> = store.getState();
@@ -53,6 +54,8 @@ export async function getServerSideProps(ctx) {
     props: {
       t: lang,
       title: info.title,
+      image: info.image,
+      description: link.description,
     },
   };
 }

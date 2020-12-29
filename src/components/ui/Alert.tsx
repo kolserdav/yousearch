@@ -27,8 +27,9 @@ const Alert: NextComponentType<any, any, AlertProps> = (props) => {
           /**1 */
         };
   useEffect(() => {
-    setTimeout(() => {
+    const t = setTimeout(() => {
       Trigger();
+      clearTimeout(t);
     }, 3000);
   }, [open]);
   return (
@@ -78,6 +79,7 @@ const animation = (props: WraperProps) =>
   `;
 
 const Wrapper = styled.div<WraperProps>`
+  z-index: 19;
   position: ${(props) => (props.relative ? 'relative' : 'fixed')};
   bottom: ${(props) => {
     if (!props.relative) {

@@ -28,6 +28,7 @@ const t: Language = {
     link: 'link',
     createAndCopyLink: 'create and copy link',
     more: 'more',
+    close: 'close',
   },
   content: {
     siteName: 'Youtube subtitle search',
@@ -40,6 +41,7 @@ const t: Language = {
     warningSearchValueNotSet: 'search value not typed',
     warningSubtitlesLangNotSet: 'subtitles language not set',
     warningVideoIDNotSet: 'video ID not set',
+    browserNotAccepted: 'in current time this browser not accepted',
   },
   meta: {
     keywords: 'subtitle search, youtube, youtube, youtube, subtitle, subtitle, search',
@@ -76,6 +78,12 @@ const t: Language = {
       errorGettingVideoInfo: 'error getting video info',
       warningVideoInfoNotFound: 'video info not found',
       successVideoInfoReceived: 'video info received',
+    },
+    link: {
+      errorCreate: 'error create link',
+      successCreated: 'link created',
+      errorGettingLink: 'error link received',
+      warningLinkNotFound: 'link not found',
     },
   },
 };

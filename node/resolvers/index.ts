@@ -1,16 +1,17 @@
-import axios from 'axios';
 import Registration from './user/Registration';
 import Login from './user/Login';
-import * as Types from '../../next-env';
 import { Resolver } from '../schemas';
 import Search from './video/Subtitles';
 import Captions from './video/Captions';
 import Info from './video/Info';
 import Auth from './user/Auth';
+import Create from './link/Create';
+import GetLink from './link/Get';
 
 const resolvers: Resolver = {
   Query: {
     auth: Auth,
+    link: GetLink,
   },
   Mutation: {
     registration: Registration,
@@ -18,6 +19,7 @@ const resolvers: Resolver = {
     subtitles: Search,
     captions: Captions,
     info: Info,
+    link: Create,
   },
 };
 

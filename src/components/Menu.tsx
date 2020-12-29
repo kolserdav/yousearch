@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { NextComponentType } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { action, store, userStore } from '../store';
+import { action, store } from '../store';
 import styled, { keyframes, css } from 'styled-components';
 import Cookies from 'universal-cookie';
-import IconButton from './ui/IconButton';
 import Alert, { AlertProps } from './ui/Alert';
+import IconButton from './ui/IconButton';
 import * as Types from '../../next-env';
+import { subtitles } from '../store/Api';
 
 const cookies = new Cookies();
 
@@ -30,13 +31,12 @@ const Menu: NextComponentType<any, any, Types.Props> = (props) => {
     open: false,
     text: '',
     status: 'info',
+    trigger: () => {
+      setAlert(_alert);
+    },
+    button: <div />
   };
   const [alert, setAlert] = useState<AlertProps>(_alert);
-  const alertTrigger = () => {
-    setTimeout(() => {
-      setAlert(_alert);
-    }, 3000);
-  };
   const router = useRouter();
   const { pathname, locale } = router;
   const closeMenu = () => {
@@ -49,21 +49,132 @@ const Menu: NextComponentType<any, any, Types.Props> = (props) => {
       body: {},
     });
   };
+  /**
+   * Create link handler
+   */
+  const createLink = () => {
+    const { query } = router;
+    const { v, se, l, s, ch } = query;
+    if (!v) {
+      setAlert({
+        open: true,
+        text: t.messages.warningVideoIDNotSet,
+        status: 'warning',
+        trigger: alert.trigger,
+      });
+      return;
+    }
+    if (!l) {
+      setAlert({
+        open: true,
+        text: t.messages.warningSubtitlesLangNotSet,
+        status: 'warning',
+        trigger: alert.trigger,
+      });
+      return;
+    }
+    if (!se) {
+      setAlert({
+        open: true,
+        text: t.messages.warningSearchValueNotSet,
+        status: 'warning',
+        trigger: alert.trigger,
+      });
+      return;
+    }
+    if (!s) {
+      setAlert({
+        open: true,
+        text: t.messages.warnigTimePointNotSelect,
+        status: 'warning',
+        trigger: alert.trigger,
+      });
+      return;
+    }
+    const chQ = ch ? `&ch=${ch}` : '';
+    const link = `/${v}?l=${l}&se=${se}${chQ}&s=${s}`;
+    const { body }: Types.Action<Types.Schema.Values.SubtitlesRequest> = store.getState().SUBTITLES;
+    const { subtitles } = body;
+    if (!subtitles) {
+      setAlert({
+        open: true,
+        text: t.server.subtitles.warningSubtitlesNotFound,
+        status: 'error',
+        trigger: alert.trigger,
+      });
+      return;
+    }
+    let description = '';
+    const sReg = new RegExp(`^${s}\\.\\d*$`);
+    const { items } = subtitles;
+    items.map((item, index) => {
+      if (sReg.test(item.start)) {
+        description = `${item.text} ${items[index + 1].text} ${items[index + 2].text}`.replace(
+          /[<>(/b)]+/g,
+          ''
+        );
+      }
+    });
+    action<Types.Schema.Params.Link>({
+      type: 'LINK_REQUEST',
+      body: {
+        input: {
+          link,
+          description,
+        },
+        results: ['message', 'link']
+      },
+    });
+  };
   useEffect(() => {
-    auth();
+    if (role === 'guest') auth();
     const storeSubs = store.subscribe(() => {
       const state: Types.Action<any> = store.getState();
+      if (state.type === 'INFO') {
+        const { body }: Types.Action<Types.Schema.Values.InfoRequest> = state;
+        const { info } = body;
+        console.log(info) //TODO
+      }
       if (state.type === 'AUTH') {
         const { body }: Types.Action<Types.Schema.Values.AuthRequest> = state;
         const { auth } = body;
-        setRole(auth.role);
-        userStore.dispatch({
-          type: 'SET_USER',
-          body: {
-            auth: {
-              role: auth.role,
-            },
+        let _role: Types.UserRoles = 'guest';
+        if (auth) {
+          _role = auth.role;
+        }
+        setRole(_role);
+      }
+      if (state.type === 'LINK') {
+        const { body }: Types.Action<Types.Schema.Values.LinkRequest> = state;
+        const { link } = body;
+        if (!link) {
+          setAlert({
+            status: 'error',
+            text: body.toString(),
+            open: true,
+            trigger: alert.trigger,
+          });
+          return;
+        }
+        let mess = link.message;
+        if (link.result === 'success') {
+          mess = `${mess}: ${window.origin}${link.link}`;
+        }
+        setAlert({
+          open: true,
+          text: mess,
+          status: link.result,
+          trigger: () => {
+            /** */
           },
+          button: (
+            <IconButton
+              src="/img/ui/close-white-36dp.svg"
+              alt={`${t.interface.close} ${t.interface.icon}`}
+              title={t.interface.close}
+              onClick={alert.trigger}
+            />
+          ),
         });
       }
     });
@@ -82,52 +193,20 @@ const Menu: NextComponentType<any, any, Types.Props> = (props) => {
           _setShow(true);
         }}
       />
-      <IconButton
-        src="/img/ui/link-white-36dp.svg"
-        alt={`${t.interface.link} ${t.interface.icon}`}
-        title={t.interface.createAndCopyLink}
-        onClick={() => {
-          const { query } = router;
-          const { v, se, l, s } = query;
-          if (!v) {
-            setAlert({
-              open: true,
-              text: t.messages.warningVideoIDNotSet,
-              status: 'warning',
-            });
-            return;
-          }
-          if (!l) {
-            setAlert({
-              open: true,
-              text: t.messages.warningSubtitlesLangNotSet,
-              status: 'warning',
-            });
-            return;
-          }
-          if (!se) {
-            setAlert({
-              open: true,
-              text: t.messages.warningSearchValueNotSet,
-              status: 'warning',
-            });
-            return;
-          }
-          if (!s) {
-            setAlert({
-              open: true,
-              text: t.messages.warnigTimePointNotSelect,
-              status: 'warning',
-            });
-            return;
-          }
-        }}
-      />
+      {role === 'user' && (
+        <MenuIconButton
+          src="/img/ui/link-white-36dp.svg"
+          alt={`${t.interface.link} ${t.interface.icon}`}
+          title={t.interface.createAndCopyLink}
+          onClick={createLink}
+        />
+      )}
       <Alert
         open={alert.open}
         status={alert.status}
         text={alert.text}
-        trigger={alertTrigger}
+        trigger={alert.trigger}
+        button={alert.button}
         relative={true}
       />
       <LangSelect>
@@ -196,6 +275,15 @@ const Menu: NextComponentType<any, any, Types.Props> = (props) => {
     </MenuWrapper>
   );
 };
+
+const MenuIconButton = styled.img`
+  position: relative;
+  cursor: pointer;
+  vertical-align: middle;
+  margin: auto var(--item-padding);
+  width: var(--icon-width);
+  height: var(--icon-width);
+`;
 
 const LangSelect = styled.div`
   margin: 0 20px 0 auto;

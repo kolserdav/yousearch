@@ -86,3 +86,17 @@ function* auth(action: Types.Action<void>) {
 export function* authSaga(): Generator {
   yield takeEvery<Types.ActionTypes.Auth>('AUTH_REQUEST', auth);
 }
+
+/**
+ * Create link
+ */
+function* link(action: Types.Action<void>) {
+  const body = yield call(Api.link, action);
+  yield put<Types.Action<Types.Schema.Values.LinkRequest>>({
+    type: 'LINK',
+    body,
+  });
+}
+export function* linkSaga(): Generator {
+  yield takeEvery<Types.ActionTypes.Link>('LINK_REQUEST', link);
+}

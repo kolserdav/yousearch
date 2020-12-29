@@ -60,10 +60,12 @@ const Info: Types.RequestHandler<Types.Schema.Params.Captions, Types.Schema.Valu
       message: t.server.subtitles.warningVideoInfoNotFound,
     };
   }
+  const item = info.data.items[0].snippet;
   return {
     result: 'success',
-    message: 'ds',
-    title: info.data.items[0].snippet.title,
+    message: t.server.subtitles.successVideoInfoReceived,
+    title: item.title,
+    image: item.thumbnails.high,
   };
 };
 

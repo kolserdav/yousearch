@@ -18,7 +18,9 @@ import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 const dev = process.env.NODE_ENV === 'development';
-const serverApi = process.env.NEXT_PUBLIC_SERVER_API;
+const serverApiLocal = process.env.NEXT_PUBLIC_SERVER_API;
+const serverApiRemote = process.env.NEXT_PUBLIC_SERVER_API_REMOTE;
+const serverApi = dev ? serverApiLocal : serverApiRemote;
 const server = typeof window === 'undefined';
 
 const httpLink = createHttpLink({

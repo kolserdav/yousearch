@@ -2,17 +2,18 @@ import { gql } from 'apollo-server-micro';
 import { Schema } from 'inspector';
 import * as Types from '../../next-env';
 
-declare interface ServerResponse {
-  readonly [key: string /** Handler name */]: { 
-    result: Types.Result;
-    message: string;
-  };
-}
-
 /**
  * Valuest types of requests
  */
 export declare namespace Values {
+  /** Global interfaces */
+  interface Response {
+    result: Types.Result;
+    message: string;
+  }
+  interface ServerResponse {
+    readonly [key: string /** Handler name */]: Response; 
+  }
   /** Login values */
   type Login = {
     result: Types.Result;
@@ -60,10 +61,16 @@ export declare namespace Values {
     captions?: Captions;
   }
   /** Info values */
+  type Image = {
+    url: string;
+    width: string;
+    height: string;
+  };
   type Info = {
     result: Types.Result;
     message: string;
     title?: string;
+    image?: Image;
   };
   interface InfoRequest extends ServerResponse {
     info?: Info;
@@ -77,12 +84,27 @@ export declare namespace Values {
   interface AuthRequest extends ServerResponse {
     auth?: Auth;
   }
+  /** Link values */
+  type Link = {
+    result: Types.Result;
+    message: string;
+    link?: string;
+  };
+  interface LinkRequest extends ServerResponse {
+    link?: Link;
+  }
 }
 
 /**
  * Params types of requests
  */
 export declare namespace Params {
+  /** Global params */
+  type ID = {
+    input: {
+      id: number;
+    };
+  };
   /** Login params */
   type LoginKeys = keyof Values.Login;
   type Login = {
@@ -119,10 +141,21 @@ export declare namespace Params {
     };
     results: Array<CaptionsKeys[] | string>;
   };
+  /** Link params */
+  type LinkKeys = keyof Values.Response;
+  type Link = {
+    input: {
+      link: string;
+      userId?: number;
+      description: string;
+    };
+    results: Array<LinkKeys[] | string>;
+  };
 }
 
 export interface Query extends Types.RequestInterface {
   auth: Types.RequestHandler<void, Values.Auth>;
+  link: Types.RequestHandler<Params.ID, Values.Link>;
 }
 
 /**
@@ -134,6 +167,7 @@ export interface Mutation extends Types.RequestInterface {
   subtitles: Types.RequestHandler<Params.Subtitles, Values.Subtitles>;
   captions: Types.RequestHandler<Params.Captions, Values.Captions>;
   info: Types.RequestHandler<Params.Captions, Values.Info>;
+  link: Types.RequestHandler<Params.Link, Values.Link>;
 }
 
 export interface Resolver {
@@ -146,6 +180,15 @@ export const typeDefs = gql`
     error
     warning
     success
+  }
+
+  input ID {
+    id: Int!
+  }
+
+  type Response {
+    result: Result!
+    message: String!
   }
 
   type Login {
@@ -204,10 +247,17 @@ export const typeDefs = gql`
     videoID: String!
   }
 
+  type Image {
+    url: String!
+    width: Int!
+    height: Int!
+  }
+
   type Info {
     result: Result!
     message: String!
     title: String
+    image: Image
   }
 
   type Auth {
@@ -216,8 +266,21 @@ export const typeDefs = gql`
     role: String
   }
 
+  input LinkInput {
+    link: String!
+    description: String!
+  }
+
+  type Link {
+    result: Result!
+    message: String!
+    link: String
+    description: String
+  }
+
   type Query {
     auth: Auth!
+    link(input: ID): Link!
   }
 
   type Mutation {
@@ -226,5 +289,6 @@ export const typeDefs = gql`
     subtitles(input: SubtitlesInput!): Subtitles!
     captions(input: CaptionsInput!): Captions!
     info(input: CaptionsInput!): Info!
+    link(input: LinkInput!): Link!
   }
 `;

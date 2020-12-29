@@ -28,6 +28,7 @@ const t: Language = {
     link: 'ссылка',
     createAndCopyLink: 'создать и скопировать ссылку',
     more: 'ещё',
+    close: 'закрыть',
   },
   content: {
     siteName: 'поиск в субтитрах Youtube',
@@ -40,6 +41,7 @@ const t: Language = {
     warningSearchValueNotSet: 'поисковой запрос не указан',
     warningSubtitlesLangNotSet: 'яхык субтитров не обозначен',
     warningVideoIDNotSet: 'идентификатор видео не указан',
+    browserNotAccepted: 'в настоящее время этот браузер не поддерживается сайтом',
   },
   meta: {
     keywords: 'поиск в субтитрах, ютуб, ютюб, youtube, по субтитрам, субтитры, поиск',
@@ -76,6 +78,12 @@ const t: Language = {
       errorGettingVideoInfo: 'ошибка получения информации о видео',
       warningVideoInfoNotFound: 'информация о видео не найдена',
       successVideoInfoReceived: 'информация о видео получена',
+    },
+    link: {
+      errorCreate: 'ошибка создания ссылки',
+      successCreated: 'ссылка создана',
+      errorGettingLink: 'ошибка при получении ссылки',
+      warningLinkNotFound: 'ссылка не найдена',
     },
   },
 };

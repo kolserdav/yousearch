@@ -22,6 +22,7 @@ sagaMiddleware.run(sagas.subtitlesSaga);
 sagaMiddleware.run(sagas.captionsSaga);
 sagaMiddleware.run(sagas.infoSaga);
 sagaMiddleware.run(sagas.authSaga);
+sagaMiddleware.run(sagas.linkSaga);
 
 function action<T>(actionParams: Types.Action<T>): void {
   store.dispatch(actionParams);
@@ -30,6 +31,6 @@ function action<T>(actionParams: Types.Action<T>): void {
 /**
  * User store
  */
-const userStore: Store<Types.Reducer<any>, Types.Action<any>> = createStore(reducer);
+const subtitlesStore: Store<Types.Reducer<any>, Types.Action<any>> = createStore(reducer);
 
-export { store, action, userStore };
+export { store, action, subtitlesStore };

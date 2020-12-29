@@ -4,19 +4,30 @@ import styled from 'styled-components';
 import Cookies from 'universal-cookie';
 import { NextComponentType } from 'next';
 import { useRouter } from 'next/router';
-import * as Comlink from 'comlink';
+import * as lib from '../src/lib';
 import AppBar from '../src/components/AppBar';
-import { store, action, userStore } from '../src/store';
+import { store, action } from '../src/store';
 import * as srv from '../services';
 import Theme from '../src/components/Theme';
 import * as Types from '../next-env';
 import Alert, { AlertProps } from '../src/components/ui/Alert';
 import Grid from '../src/components/ui/Grid';
 import Button from '../src/components/ui/Button';
-import IconButton from '../src/components/ui/IconButton';
 import { StaticContext, StaticProps, Props } from '../next-env';
 import { H1, Description, Label } from '../src/components/ui/Typography';
-import type { WorkerApi } from '../src/worker';
+
+type Query = {
+  v: string;
+  l: string;
+  se: string;
+  ch: number;
+  s: string;
+  i: string;
+}
+interface UpdateQuery {
+  // eslint-disable-next-line no-unused-vars
+  (query: Query): void;
+}
 
 const cookies = new Cookies();
 
@@ -57,6 +68,7 @@ async function checkOldBrowser() {
 interface HomeProps extends Props {
   t: Types.Language;
   title: string;
+  image: Types.Schema.Values.Image;
 }
 
 /**
@@ -64,11 +76,13 @@ interface HomeProps extends Props {
  * @param props {Props}
  */
 const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement => {
-  const { t, title } = props;
+  const { t, title, image } = props;
   const router = useRouter();
-  const { v, s, se, ch, l }: any = router.query;
+  const { query }: any = router;
+  const { v, s, se, ch, l }: any = query;
   const searchRef = useRef<any>();
   const playerRef = useRef<any>();
+  const langRef = useRef<string>();
   const subtitlesRef = useRef<Types.Schema.Values.SubtitlesItem[]>();
   const chunksRef = useRef<Types.Schema.Values.SubtitlesItem[][]>();
   const searchValueRef = useRef<string>('');
@@ -81,11 +95,6 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
   const [subtitles, setSubtitles] = useState<Types.Schema.Values.SubtitlesItem[]>([]);
   const [auto, setAuto] = useState<boolean>(true);
   const [showMore, setShowMore] = useState<boolean>(false);
-  // User state
-  const [role, setRole] = useState<Types.UserRoles>('guest');
-  // For comlink
-  const comlinkWorkerRef = React.useRef<Worker>();
-  const comlinkWorkerApiRef = React.useRef<Comlink.Remote<WorkerApi>>();
   // Initial alert
   const _alert: AlertProps = {
     open: false,
@@ -105,6 +114,18 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
     // Create embed link
     const newLink = `https://www.youtube.com/embed/${id}?start=${start}`;
     setLinkValue(newLink);
+  };
+  /**
+   * 
+   * @param query {Query}
+   */
+  const updateQuery: UpdateQuery = (query) => {
+    const lQ = query.l ? `&l=${query.l}` : '';
+    const seQ = query.se ? `&se=${query.se}` : '';
+    const chQ = query.ch ? `&ch=${query.ch}` : '';
+    const sQ = query.s ? `&s=${query.s}` : '';
+    const iQ = query.i ? `&i=${query.i}` : '';
+    router.push(`?v=${query.v}${lQ}${seQ}${chQ}${sQ}${iQ}`);
   };
   /**
    * Get embed link
@@ -143,21 +164,20 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
     // Set new values
     getCaptions(id);
     setEmbedLink(id);
-    router.push(`?v=${id}`);
+    const newQ: Query = Object.assign({}, query);
+    newQ.v = id;
+    updateQuery(newQ);
   };
   /**
    * Search subtitles into session storage with web worker
    */
   const searchSubtitles = async () => {
-    const start = s ? `&s=${s}` : '';
-    const chunk = ch ? `&ch=${ch}` : '';
-    router.push(`?v=${v}&l=${l}&se=${searchValueRef.current}${chunk}${start}`);
+    const newQ: Query = Object.assign({}, query);
+    newQ.se = searchValueRef.current;
+    updateQuery(newQ);
     setSubtitles([]);
     setLoad(true);
-    let res = await comlinkWorkerApiRef.current?.search(
-      subtitlesRef.current,
-      searchValueRef.current
-    );
+    let res = await lib.search(subtitlesRef.current, searchValueRef.current);
     setLoad(false);
     if (res.length === 0) {
       setAlert({
@@ -225,9 +245,6 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
   };
   useEffect(() => {
     window.addEventListener('keydown', keyDownListener);
-    // Get comlink web worker
-    comlinkWorkerRef.current = new Worker('../src/worker', { type: 'module' });
-    comlinkWorkerApiRef.current = Comlink.wrap<WorkerApi>(comlinkWorkerRef.current);
     // Fill data from query string
     if (v) {
       if (v !== link) {
@@ -242,14 +259,6 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
         setSearch(se);
       }
     }
-    const userStoreSubs = userStore.subscribe(() => {
-      const state: Types.Action<any> = userStore.getState();
-      if (state.type === 'SET_USER') {
-        const { body }: Types.Action<Types.Schema.Values.AuthRequest> = state;
-        const { auth } = body;
-        setRole(auth.role);
-      }
-    });
     /**
      * Subscribe to storage
      */
@@ -311,38 +320,35 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
           const { items } = captions;
           // Set default lang from cookie
           const cookie = cookies.get('dlang');
-          let _lang: string;
           items.forEach((i: Types.Schema.Values.CaptionsItem) => {
             if (!l) {
               if (i.lang === cookie) {
                 setLang(i.lang);
-                _lang = i.lang;
+                langRef.current = i.lang;
               }
             } else {
               setLang(l);
-              _lang = l;
+              langRef.current = l;
             }
           });
           // If default lang no match in captions
-          if (!_lang) {
-            _lang = items[0].lang;
+          if (!langRef.current) {
+            langRef.current = items[0].lang;
             setLang(items[0].lang);
           }
-          router.push(`?v=${v}&l=${_lang}`);
+          const newQ: Query = Object.assign({}, query);
+          newQ.l = langRef.current;
+          updateQuery(newQ);
           setLanguages(items);
           setTimeout(() => {
-            getSubtitles(_lang);
+            getSubtitles(langRef.current);
           }, 100);
         }
       }
     });
     return () => {
-      // Uns from use store
-      userStoreSubs();
       // Ubsubscribe from storage
       storeSubs();
-      // Terminate comlink worker
-      comlinkWorkerRef.current?.terminate();
       // Remove window event listener
       window.removeEventListener('keydown', keyDownListener);
     };
@@ -359,14 +365,14 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
         <meta name="keywords" content={t.meta.keywords} />
         <meta name="description" content={t.meta.description} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content="" />
+        <meta name="twitter:image" content={image?.url} />
         {/**<meta name="twitter:site" content="@DeedPanas" />*/}
         <meta name="twitter:title" content={title || t.content.siteName} />
         <meta name="twitter:description" content={t.meta.description} />
-        <meta property="og:image" content="" />
-        <meta name="twitter:image:src" content="" />
-        <meta property="og:image:width" content="" />
-        <meta property="og:image:height" content="" />
+        <meta property="og:image" content={image?.url} />
+        <meta name="twitter:image:src" content={image?.url} />
+        <meta property="og:image:width" content={image?.width} />
+        <meta property="og:image:height" content={image?.height} />
         <meta property="og:description" content={t.meta.description} />
         <meta property="og:title" content={title || t.content.siteName} />
         <meta property="og:url" content="https://next.uyem.ru/" />
@@ -398,10 +404,11 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
               onChange={(e: any) => {
                 const { value } = e.target;
                 cookies.set('dlang', value, { expires: date, sameSite: 'strict' });
+                langRef.current = value;
                 setLang(value);
-                const start = s ? `&s=${s}` : '';
-                const chunk = ch ? `&ch=${ch}` : '';
-                router.push(`?v=${v}&l=${value}&se=${searchValueRef.current}${chunk}${start}`);
+                const newQ: Query = Object.assign({}, query);
+                newQ.l = value;
+                updateQuery(newQ);
                 setTimeout(() => {
                   getSubtitles(value);
                 }, 150);
@@ -437,8 +444,9 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
                       selected={sReg.test(item.start)}
                       onClick={() => {
                         const _start = item.start.replace(/\.\d+/, '');
-                        const chunk = ch ? `&ch=${ch}` : '';
-                        router.push(`?v=${v}&l=${l}&se=${search}${chunk}&s=${_start}`);
+                        const newQ: Query = Object.assign({}, query);
+                        newQ.s = _start;
+                        updateQuery(newQ);
                         setAuto(true);
                         setEmbedLink(_videoID, _start);
                         playerRef.current.scrollIntoView(scrollSettings);
@@ -461,7 +469,9 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
                   const oldCh = parseInt(ch) || 0;
                   const chunk = chunksRef.current[oldCh + 1];
                   if (chunk) {
-                    router.push(`?v=${v}&l=${l}&se=${se}&ch=${oldCh + 1}&s=${s || ''}`);
+                    const newQ: Query = Object.assign({}, query);
+                    newQ.ch = oldCh + 1;
+                    updateQuery(newQ);
                     const res = subtitles.concat(chunk);
                     setSubtitles(res);
                   }
@@ -580,7 +590,7 @@ const IconArrow = styled.img`
 
 const IconMore = styled.img`
   cursor: pointer;
-  z-index: 10;
+  z-index: 0;
   position: relative;
   width: var(--icon-width);
   height: var(--icon-width);
