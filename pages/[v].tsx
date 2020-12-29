@@ -1,13 +1,13 @@
 import React from 'react';
 import { NextComponentType } from 'next';
 import { store, action } from '../src/store';
-import Home from './index';
+import Home, { HomeProps } from './index';
 import * as Types from '../next-env';
 import * as srv from '../services';
 
-const HomeId: NextComponentType<any, any, any> = (props): React.ReactElement => {
-  const { t, title } = props;
-  return <Home t={t} title={title} />;
+const HomeId: NextComponentType<any, any, HomeProps> = (props): React.ReactElement => {
+  const { t, title, description, image } = props;
+  return <Home t={t} title={title} image={image} description={description} />;
 }
 
 /**
@@ -55,7 +55,7 @@ export async function getServerSideProps(ctx) {
       t: lang,
       title: info.title,
       image: info.image,
-      description: link.description,
+      description: 'TODO',
     },
   };
 }

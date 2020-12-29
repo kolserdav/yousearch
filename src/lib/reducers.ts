@@ -3,10 +3,12 @@
  */
 import * as Types from '../../next-env';
 
+const initialType: Types.ActionTypes.All = 'INITIAL';
+
 const initialState: Types.Reducer<any> = {
-  type: 'INITIAL',
+  type: initialType,
   body: {
-    type: 'INITIAL',
+    type: initialType,
     body: {},
   },
 };

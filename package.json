@@ -1,6 +1,6 @@
 {
   "name": "youtube-search-subtitles",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -14,14 +14,10 @@
   },
   "dependencies": {
     "@apollo/client": "^3.3.2",
-    "@babel/plugin-transform-arrow-functions": "^7.12.1",
-    "@babel/polyfill": "^7.12.1",
     "apollo-server-micro": "^2.19.0",
     "axios": "^0.21.0",
     "bcrypt": "^5.0.0",
     "clsx": "^1.1.1",
-    "comlink": "^4.3.0",
-    "comlink-loader": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "next": "^10.0.0",
     "react": "16.13.1",
@@ -38,7 +34,6 @@
     "@types/axios": "^0.14.0",
     "@types/bcrypt": "^3.0.0",
     "@types/jsonwebtoken": "^8.5.0",
-    "@types/micro-cors": "^0.1.1",
     "@types/node": "^14.14.10",
     "@types/react": "^17.0.0",
     "@types/sass": "^1.16.0",

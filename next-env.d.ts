@@ -40,7 +40,7 @@ export type Resolvers = {
 export type Reducer<T> = {
   type: ActionTypes.All;
   body: Action<T>;
-  [key: string]: Action<T>;
+  [key?: string]: Action<T>;
 };
 
 export type RequestCallback<T, U> = (context: Types.Action<T>, ...args: any[]) => U;

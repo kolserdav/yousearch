@@ -65,10 +65,11 @@ async function checkOldBrowser() {
   });
 }
 
-interface HomeProps extends Props {
+export interface HomeProps extends Props {
   t: Types.Language;
   title: string;
   image: Types.Schema.Values.Image;
+  description: string;
 }
 
 /**
