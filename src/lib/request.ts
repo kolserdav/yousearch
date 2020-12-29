@@ -37,7 +37,7 @@ const authLink = setContext((_, ctx) => {
       ...headers,
       authorization: 'Bearer L8qq9PZyRg6ieKGEKhZolGC0vJWLw8iEJ88DRdyOg',
       lang: cookies.get('lang') || 'en',
-      _qt: cookies.get('_qt') || '',
+      xqt: cookies.get('_qt') || '',
     },
   };
 });
