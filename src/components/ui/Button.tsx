@@ -38,6 +38,13 @@ const Button = styled.button`
   &:hover {
     box-shadow: 1px 1px var(--border-radius) rgba(0, 0, 0, 0.5);
   }
+  &:disabled {
+    cursor: default;
+    background-color: ${(props) => props.theme.bg};
+  }
+  &:disabled:hover {
+    box-shadow: 0px 0px var(--border-radius) rgba(0, 0, 0, 0);
+  }
 `;
 
 export default Button;

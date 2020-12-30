@@ -23,6 +23,7 @@ sagaMiddleware.run(sagas.captionsSaga);
 sagaMiddleware.run(sagas.infoSaga);
 sagaMiddleware.run(sagas.authSaga);
 sagaMiddleware.run(sagas.linkSaga);
+sagaMiddleware.run(sagas.getLinkSaga);
 
 function action<T>(actionParams: Types.Action<T>): void {
   store.dispatch(actionParams);

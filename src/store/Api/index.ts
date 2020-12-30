@@ -125,13 +125,30 @@ export const link = requestMutate((context) => ({
 /**
  * Get auth
  *  */
-export const auth = requestQuery((context) => ({
+export const auth = requestQuery(() => ({
   query: gql`
     query {
       auth {
         result
         message
         role
+      }
+    }
+  `,
+}));
+
+/**
+ * Get link
+ *  */
+export const getLink = requestQuery((context) => ({
+  variables: {
+    input: context.body.input,
+  },
+  query: gql`
+    query($input: Id!) {
+      link(input: $input) {
+        result
+        ${context.body.results}
       }
     }
   `,

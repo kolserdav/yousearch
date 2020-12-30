@@ -89,6 +89,7 @@ export declare namespace Values {
     result: Types.Result;
     message: string;
     link?: string;
+    description?: string;
   };
   interface LinkRequest extends ServerResponse {
     link?: Link;
@@ -104,6 +105,7 @@ export declare namespace Params {
     input: {
       id: number;
     };
+    results: string[];
   };
   /** Login params */
   type LoginKeys = keyof Values.Login;
@@ -182,7 +184,7 @@ export const typeDefs = gql`
     success
   }
 
-  input ID {
+  input Id {
     id: Int!
   }
 
@@ -280,7 +282,7 @@ export const typeDefs = gql`
 
   type Query {
     auth: Auth!
-    link(input: ID): Link!
+    link(input: Id!): Link!
   }
 
   type Mutation {

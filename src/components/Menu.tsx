@@ -17,12 +17,16 @@ const duration = 350;
 const date = new Date();
 date.setFullYear(date.getFullYear() + 12);
 
+interface MenuProps extends Types.Props {
+  other: boolean;
+}
+
 /**
  * Left menu element
  * @param props {Types.Props}
  */
-const Menu: NextComponentType<any, any, Types.Props> = (props) => {
-  const { t } = props;
+const Menu: NextComponentType<any, any, MenuProps> = (props) => {
+  const { t, other } = props;
   const [show, setShow] = useState<boolean>(false);
   const [_show, _setShow] = useState<boolean>(false);
   const [role, setRole] = useState<Types.UserRoles>('guest');
@@ -130,11 +134,6 @@ const Menu: NextComponentType<any, any, Types.Props> = (props) => {
     if (role === 'guest') auth();
     const storeSubs = store.subscribe(() => {
       const state: Types.Action<any> = store.getState();
-      if (state.type === 'INFO') {
-        const { body }: Types.Action<Types.Schema.Values.InfoRequest> = state;
-        const { info } = body;
-        console.log(info) //TODO
-      }
       if (state.type === 'AUTH') {
         const { body }: Types.Action<Types.Schema.Values.AuthRequest> = state;
         const { auth } = body;
@@ -193,7 +192,7 @@ const Menu: NextComponentType<any, any, Types.Props> = (props) => {
           _setShow(true);
         }}
       />
-      {role === 'user' && (
+      {role === 'user' && !other && (
         <MenuIconButton
           src="/img/ui/link-white-36dp.svg"
           alt={`${t.interface.link} ${t.interface.icon}`}
@@ -209,15 +208,17 @@ const Menu: NextComponentType<any, any, Types.Props> = (props) => {
         button={alert.button}
         relative={true}
       />
-      <LangSelect>
-        <LangSelectItem selected={true}>{t.name}</LangSelectItem>
-        <LangSelectItem selected={false}>&nbsp;|&nbsp;</LangSelectItem>
-        <Link href={router.pathname} locale={t.value1}>
-          <LangSelectItem value={t.value1} selected={false}>
-            {t.name1}
-          </LangSelectItem>
-        </Link>
-      </LangSelect>
+      {!other && (
+        <LangSelect>
+          <LangSelectItem selected={true}>{t.name}</LangSelectItem>
+          <LangSelectItem selected={false}>&nbsp;|&nbsp;</LangSelectItem>
+          <Link href={router.pathname} locale={t.value1}>
+            <LangSelectItem value={t.value1} selected={false}>
+              {t.name1}
+            </LangSelectItem>
+          </Link>
+        </LangSelect>
+      )}
       {_show ? (
         <MenuBody show={show}>
           <MenuItem selected={false} onClick={closeMenu}>
@@ -333,7 +334,7 @@ const fadeIn = keyframes`
   }
 `;
 
-interface MenuProps {
+interface MenuStyledProps {
   show: boolean;
 }
 
@@ -341,9 +342,9 @@ const pulse = `0.${duration}s`;
 
 /**
  * Open and cloese menu animation handler
- * @param props {MenuProps}
+ * @param props {MenuStyledProps}
  */
-const animation = (props: MenuProps) =>
+const animation = (props: MenuStyledProps) =>
   css`
     ${pulse}
     ${props.show ? fadeIn : fadeOut} 
@@ -396,14 +397,14 @@ const wrapperIn = keyframes`
   }
 `;
 
-const animationWrapper = (props: MenuProps) =>
+const animationWrapper = (props: MenuStyledProps) =>
   css`
     ${pulse}
     ${props.show ? wrapperIn : wrapperOut} 
     ${props.show ? 'ease-in' : 'ease-out'}
   `;
 
-const MenuOpenedWrapper = styled.div<MenuProps>`
+const MenuOpenedWrapper = styled.div<MenuStyledProps>`
   position: fixed;
   overflow: hidden;
   top: 0;
@@ -414,7 +415,7 @@ const MenuOpenedWrapper = styled.div<MenuProps>`
   animation: ${animationWrapper};
 `;
 
-const MenuBody = styled.div<MenuProps>`
+const MenuBody = styled.div<MenuStyledProps>`
   z-index: 12;
   position: fixed;
   left: ${(props) =>

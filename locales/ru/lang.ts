@@ -84,6 +84,7 @@ const t: Language = {
       successCreated: 'ссылка создана',
       errorGettingLink: 'ошибка при получении ссылки',
       warningLinkNotFound: 'ссылка не найдена',
+      successReceived: 'ссылка получена',
     },
   },
 };

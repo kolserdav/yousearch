@@ -100,3 +100,17 @@ function* link(action: Types.Action<void>) {
 export function* linkSaga(): Generator {
   yield takeEvery<Types.ActionTypes.Link>('LINK_REQUEST', link);
 }
+
+/**
+ * Get link
+ */
+function* getLink(action: Types.Action<Types.Schema.Params.ID>) {
+  const body = yield call(Api.getLink, action);
+  yield put<Types.Action<Types.Schema.Values.LinkRequest>>({
+    type: 'GET_LINK',
+    body,
+  });
+}
+export function* getLinkSaga(): Generator {
+  yield takeEvery<Types.ActionTypes.GetLink>('GET_LINK_REQUEST', getLink);
+}

@@ -8,10 +8,11 @@ let oldY = 0;
 
 interface AppBarProps extends Props {
   load: boolean;
+  other: boolean;
 }
 
 const AppBar: NextComponentType<any, any, AppBarProps> = (props) => {
-  const { t, load } = props;
+  const { t, load, other } = props;
   const container: React.Ref<any> = useRef();
   const [show, setShow] = useState<boolean>(true);
   const hideOnScroll = () => {
@@ -33,7 +34,7 @@ const AppBar: NextComponentType<any, any, AppBarProps> = (props) => {
   return (
     <Wrapper>
       <Container ref={container} show={show}>
-        <Menu t={t} />
+        <Menu t={t} other={other} />
       </Container>
       {load ? (
         <LinearProgress>

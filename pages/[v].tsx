@@ -1,14 +1,14 @@
 import React from 'react';
-import { NextComponentType } from 'next';
+import { NextComponentType, GetServerSidePropsContext } from 'next';
 import { store, action } from '../src/store';
 import Home, { HomeProps } from './index';
 import * as Types from '../next-env';
 import * as srv from '../services';
 
 const HomeId: NextComponentType<any, any, HomeProps> = (props): React.ReactElement => {
-  const { t, title, description, image } = props;
-  return <Home t={t} title={title} image={image} description={description} />;
-}
+  const { t, title, description, image, other } = props;
+  return <Home t={t} title={title} image={image} description={description} other={other} />;
+};
 
 /**
  * Get video info handler for video by videoId
@@ -26,10 +26,62 @@ const getInfo = (id: string): void => {
   });
 };
 
-export async function getServerSideProps(ctx) {
-  const { locale, query } = ctx;
-  const { v, i, s, se } = query;
-  console.log(query)
+/**
+ * Get link handler
+ * @param id {number} videoId
+ */
+const getLink = (id: number): void => {
+  action<Types.Schema.Params.ID>({
+    type: 'GET_LINK_REQUEST',
+    body: {
+      input: {
+        id,
+      },
+      results: ['link', 'description'],
+    },
+  });
+};
+
+interface HomeServerSideProps {
+  props: HomeProps;
+}
+
+/**
+ * Page of created link
+ * @param ctx
+ */
+export async function getServerSideProps(
+  ctx: GetServerSidePropsContext
+): Promise<HomeServerSideProps> {
+  const { locale, query }: any = ctx;
+  const { v, i }: Types.Query = query;
+  /**
+   * Get link
+   */
+  const link = await new Promise<Types.Schema.Values.Link>((resolve) => {
+    const storeSubs = store.subscribe(() => {
+      const state: Types.Action<any> = store.getState();
+      if (state.type === 'GET_LINK') {
+        const { body }: Types.Action<Types.Schema.Values.LinkRequest> = state;
+        const { link } = body;
+        if (!link) {
+          resolve({
+            result: 'error',
+            message: body.toString(),
+          });
+        }
+        resolve(link);
+        storeSubs();
+      }
+    });
+    getLink(parseInt(i));
+  });
+  if (link === null) {
+    ctx.res.statusCode = 404;
+  }
+  /**
+   * Get video info
+   */
   const info = await new Promise<Types.Schema.Values.Info>((resolve) => {
     const storeSubs = store.subscribe(() => {
       const state: Types.Action<any> = store.getState();
@@ -40,7 +92,6 @@ export async function getServerSideProps(ctx) {
           resolve({
             result: 'error',
             message: body.toString(),
-            title: '',
           });
         }
         resolve(info);
@@ -55,7 +106,8 @@ export async function getServerSideProps(ctx) {
       t: lang,
       title: info.title,
       image: info.image,
-      description: 'TODO',
+      description: link.description,
+      other: true,
     },
   };
 }

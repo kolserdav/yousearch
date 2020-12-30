@@ -16,17 +16,10 @@ import Button from '../src/components/ui/Button';
 import { StaticContext, StaticProps, Props } from '../next-env';
 import { H1, Description, Label } from '../src/components/ui/Typography';
 
-type Query = {
-  v: string;
-  l: string;
-  se: string;
-  ch: number;
-  s: string;
-  i: string;
-}
+
 interface UpdateQuery {
   // eslint-disable-next-line no-unused-vars
-  (query: Query): void;
+  (query: Types.Query): void;
 }
 
 const cookies = new Cookies();
@@ -70,6 +63,7 @@ export interface HomeProps extends Props {
   title: string;
   image: Types.Schema.Values.Image;
   description: string;
+  other: boolean;
 }
 
 /**
@@ -77,7 +71,7 @@ export interface HomeProps extends Props {
  * @param props {Props}
  */
 const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement => {
-  const { t, title, image } = props;
+  const { t, title, image, description, other } = props;
   const router = useRouter();
   const { query }: any = router;
   const { v, s, se, ch, l }: any = query;
@@ -121,7 +115,13 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
    * @param query {Query}
    */
   const updateQuery: UpdateQuery = (query) => {
-    const lQ = query.l ? `&l=${query.l}` : '';
+    let lQ = query.l ? `&l=${query.l}` : '';
+    /**
+     * if this block is removed, then for some reason it disappears query.l ???
+     */
+    if (!query.l && langRef.current) {
+      lQ = `&l=${langRef.current}`;
+    }
     const seQ = query.se ? `&se=${query.se}` : '';
     const chQ = query.ch ? `&ch=${query.ch}` : '';
     const sQ = query.s ? `&s=${query.s}` : '';
@@ -165,7 +165,7 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
     // Set new values
     getCaptions(id);
     setEmbedLink(id);
-    const newQ: Query = Object.assign({}, query);
+    const newQ: Types.Query = Object.assign({}, query);
     newQ.v = id;
     updateQuery(newQ);
   };
@@ -173,7 +173,7 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
    * Search subtitles into session storage with web worker
    */
   const searchSubtitles = async () => {
-    const newQ: Query = Object.assign({}, query);
+    const newQ: Types.Query = Object.assign({}, query);
     newQ.se = searchValueRef.current;
     updateQuery(newQ);
     setSubtitles([]);
@@ -217,7 +217,7 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
       body: {
         input: {
           videoID: _videoID,
-          lang: lang,
+          lang,
         },
         results: ['message', 'lang', 'items {start, text}'],
       },
@@ -326,6 +326,8 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
               if (i.lang === cookie) {
                 setLang(i.lang);
                 langRef.current = i.lang;
+              } else {
+                langRef.current === null;
               }
             } else {
               setLang(l);
@@ -337,7 +339,7 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
             langRef.current = items[0].lang;
             setLang(items[0].lang);
           }
-          const newQ: Query = Object.assign({}, query);
+          const newQ: Types.Query = Object.assign({}, query);
           newQ.l = langRef.current;
           updateQuery(newQ);
           setLanguages(items);
@@ -357,35 +359,35 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
   return (
     <Theme>
       <Head>
-        <title>{t.content.siteName}</title>
+        <title>{title || t.content.siteName}</title>
         <link rel="icon" href="/favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
         {/**<meta property="fb:app_id" content="1377921982326538" />*/}
         <meta property="og:type" content="website" />
         <meta name="keywords" content={t.meta.keywords} />
-        <meta name="description" content={t.meta.description} />
+        <meta name="description" content={description || t.meta.description} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:image" content={image?.url} />
         {/**<meta name="twitter:site" content="@DeedPanas" />*/}
         <meta name="twitter:title" content={title || t.content.siteName} />
-        <meta name="twitter:description" content={t.meta.description} />
+        <meta name="twitter:description" content={description || t.meta.description} />
         <meta property="og:image" content={image?.url} />
         <meta name="twitter:image:src" content={image?.url} />
         <meta property="og:image:width" content={image?.width} />
         <meta property="og:image:height" content={image?.height} />
-        <meta property="og:description" content={t.meta.description} />
+        <meta property="og:description" content={description || t.meta.description} />
         <meta property="og:title" content={title || t.content.siteName} />
         <meta property="og:url" content="https://next.uyem.ru/" />
         <meta property="og:updated_time" content="1608949224609" />
       </Head>
-      <AppBar t={t} load={load} />
+      <AppBar t={t} load={load} other={other} />
       <Grid direction="column" align="center">
-        <H1>{t.content.siteName}</H1>
-        <Description>{t.content.siteDescription}.</Description>
+        <H1>{title || t.content.siteName}</H1>
+        <Description>{description || t.content.siteDescription}.</Description>
         {/** Get video ID */}
         <Input
-          disabled={load}
+          disabled={load || other}
           onChange={(e: any) => {
             const { value } = e.target;
             setLanguages([]);
@@ -400,14 +402,15 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
             <Label>{t.interface.selectLang}</Label>
             {/** Language subtitles select */}
             <LangSelect
-              disabled={load}
+              style={{ zIndex: 2 }}
+              disabled={load || other}
               value={lang}
               onChange={(e: any) => {
                 const { value } = e.target;
                 cookies.set('dlang', value, { expires: date, sameSite: 'strict' });
                 langRef.current = value;
                 setLang(value);
-                const newQ: Query = Object.assign({}, query);
+                const newQ: Types.Query = Object.assign({}, query);
                 newQ.l = value;
                 updateQuery(newQ);
                 setTimeout(() => {
@@ -422,7 +425,7 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
             </LangSelect>
             {/** Search by subtitles */}
             <Input
-              disabled={load}
+              disabled={load || other}
               onChange={(e: any) => {
                 const { value } = e.target;
                 setSearch(value);
@@ -432,7 +435,7 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
               placeholder={t.interface.search}
               ref={searchRef}
             />
-            <Button disabled={load} onClick={searchSubtitles}>
+            <Button disabled={load || other} onClick={searchSubtitles}>
               {t.interface.search}
             </Button>
             <Results>
@@ -442,15 +445,18 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
                 return (
                   <Grid key={`res-${index}`} direction="row" align="center">
                     <Time
+                      disabled={other}
                       selected={sReg.test(item.start)}
                       onClick={() => {
-                        const _start = item.start.replace(/\.\d+/, '');
-                        const newQ: Query = Object.assign({}, query);
-                        newQ.s = _start;
-                        updateQuery(newQ);
-                        setAuto(true);
-                        setEmbedLink(_videoID, _start);
-                        playerRef.current.scrollIntoView(scrollSettings);
+                        if (!other) {
+                          const _start = item.start.replace(/\.\d+/, '');
+                          const newQ: Types.Query = Object.assign({}, query);
+                          newQ.s = _start;
+                          updateQuery(newQ);
+                          setAuto(true);
+                          setEmbedLink(_videoID, _start);
+                          playerRef.current.scrollIntoView(scrollSettings);
+                        }
                       }}>
                       {beautiTime}
                     </Time>
@@ -470,7 +476,7 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
                   const oldCh = parseInt(ch) || 0;
                   const chunk = chunksRef.current[oldCh + 1];
                   if (chunk) {
-                    const newQ: Query = Object.assign({}, query);
+                    const newQ: Types.Query = Object.assign({}, query);
                     newQ.ch = oldCh + 1;
                     updateQuery(newQ);
                     const res = subtitles.concat(chunk);
@@ -518,13 +524,14 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
 
 interface TimeProps {
   selected: boolean;
+  disabled: boolean;
 }
 
 /**
  * Item time of search results
  */
 const Time = styled.div<TimeProps>`
-  cursor: pointer;
+  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
   min-width: 50px;
   color: ${(props) => (props.selected ? props.theme.main : props.theme.info)};
   padding: var(--item-padding);
@@ -533,7 +540,11 @@ const Time = styled.div<TimeProps>`
 
 const Results = styled.div``;
 
-const Content = styled.div<TimeProps>`
+interface ContentProps {
+  selected: boolean;
+}
+
+const Content = styled.div<ContentProps>`
   font-size: var(--p-size);
   margin-right: calc(var(--item-padding) / 2);
   padding: 2px;
@@ -544,7 +555,7 @@ const Content = styled.div<TimeProps>`
  * Video player
  */
 const Player = styled.div`
-  z-index: 11;
+  z-index: 6;
   width: 100%;
   height: calc(100vw / (1920 / 1080));
   @media (min-width: 2000px) {
@@ -567,11 +578,17 @@ const Input = styled.input`
  * Selector of subtitles language
  */
 const LangSelect = styled.select`
+  position: relative;
+  z-index: 2;
+  font-size: var(--p-size);
   margin: var(--item-padding);
   height: var(--input-height);
-  min-width: calc(var(--input-width / 2));
+  min-width: 100px;
 `;
 const LangOption = styled.option`
+  position: relative;
+  z-index: 2;
+  font-size: var(--p-size);
   height: var(--input-height);
 `;
 

@@ -16,6 +16,7 @@ export declare namespace ActionTypes {
   export declare type Info = 'INFO_REQUEST' | 'INFO';
   export declare type Auth = 'AUTH_REQUEST' | 'AUTH';
   export declare type Link = 'LINK_REQUEST' | 'LINK';
+  export declare type GetLink = 'GET_LINK_REQUEST' | 'GETE_LINK';
   export declare type All =
     | User
     | Registration
@@ -25,8 +26,18 @@ export declare namespace ActionTypes {
     | Info
     | Auth
     | Link
+    | GetLink
     | 'INITIAL';
 }
+
+export type Query = {
+  v: string;
+  l: string;
+  se: string;
+  ch: number;
+  s: string;
+  i: string;
+};
 
 export type Action<T> = {
   type: ActionTypes.All;
@@ -147,6 +158,7 @@ export declare interface Language {
       successCreated: string;
       errorGettingLink: string;
       warningLinkNotFound: string;
+      successReceived: string;
     };
   };
 }

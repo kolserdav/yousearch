@@ -121,7 +121,7 @@ export const createNew: Types.OrmHandler<Types.Schema.Params.Link, Types.Orm.Lin
 export const getById: Types.OrmHandler<number, Types.Orm.Link> = (id) => {
   return new Promise((resolve) => {
     db.serialize(() => {
-      db.get(`SELECT * FROM links WHERE id="${id}"`, (err: Error, row: Types.Orm.Link) => {
+      db.get(`SELECT * FROM links WHERE rowid="${id}"`, (err: Error, row: Types.Orm.Link) => {
         if (err) {
           console.error(`<${Date()}> (ERROR_GET_LINK_BY_ID)`, err);
           resolve({

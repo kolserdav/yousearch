@@ -84,6 +84,7 @@ const t: Language = {
       successCreated: 'link created',
       errorGettingLink: 'error link received',
       warningLinkNotFound: 'link not found',
+      successReceived: 'link received',
     },
   },
 };

@@ -15,9 +15,9 @@ const Create: Types.RequestHandler<Types.Schema.Params.Link, Types.Schema.Values
   context
 ) => {
   const { headers } = context;
-  const { lang, _qt } = headers;
+  const { lang, xqt } = headers;
   const t = srv.getLang(lang);
-  const parsedToken = lib.parseToken(_qt);
+  const parsedToken = lib.parseToken(xqt);
   const newParams: Types.Schema.Params.Link = Object.assign({}, params);
   newParams.input.userId = parsedToken.id;
   const createRes = await orm.link.createNew(newParams);

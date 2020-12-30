@@ -6,6 +6,7 @@
  */
 import {
   ApolloClient,
+  ApolloError,
   InMemoryCache,
   QueryOptions,
   MutationOptions,
@@ -91,8 +92,9 @@ const requestQuery = (
           }
           resolve(result.data);
         })
-        .catch((e: Error) => {
-          if (dev) console.error(e);
+        .catch((e: ApolloError) => {
+          // @ts-ignore
+          if (dev) console.error(`<${Date()}>`, '[Error query: catch]', e.networkError.result);
           resolve(e.message);
         });
     });
@@ -118,8 +120,9 @@ const requestMutate = (
           }
           resolve(result.data);
         })
-        .catch((e: Error) => {
-          if (dev) console.error(e);
+        .catch((e: ApolloError) => {
+          // @ts-ignore
+          if (dev) console.error(`<${Date()}>`, '[Error mutation: catch]', e.networkError.result);
           resolve(e.message);
         });
     });
