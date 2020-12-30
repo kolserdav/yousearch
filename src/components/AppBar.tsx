@@ -8,7 +8,7 @@ let oldY = 0;
 
 interface AppBarProps extends Props {
   load: boolean;
-  other: boolean;
+  other?: boolean;
 }
 
 const AppBar: NextComponentType<any, any, AppBarProps> = (props) => {

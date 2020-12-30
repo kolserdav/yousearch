@@ -18,7 +18,7 @@ const date = new Date();
 date.setFullYear(date.getFullYear() + 12);
 
 interface MenuProps extends Types.Props {
-  other: boolean;
+  other?: boolean;
 }
 
 /**
