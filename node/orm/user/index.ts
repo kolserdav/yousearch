@@ -161,3 +161,48 @@ export const createNew: Types.OrmHandler<
     });
   });
 };
+
+interface UpdateUserParams {
+  updated: Date | string;
+  id: number;
+}
+
+/**
+ * Update user
+ */
+export const updateUser: Types.OrmHandler<
+  UpdateUserParams,
+  Types.Schema.Values.Registration | string
+> = (params) => {
+  return new Promise((resolve) => {
+    db.serialize(() => {
+      const smtp = db.prepare('UPDATE users SET confirm=1, updated=? WHERE id=?', (err: Error) => {
+        if (err) {
+          console.error(`<${Date()}> (ERROR_PREPARE_UPDATE_USERS)`, err);
+          resolve({
+            error: 1,
+            data: err.message,
+          });
+        }
+      });
+      smtp.get(params.updated, params.id, (err: Error, row: undefined) => {
+        if (err) {
+          console.error(`<${Date()}> (ERROR_UPDATE_USERS)`, err, {
+            params,
+          });
+          resolve({
+            error: 1,
+            data: err.message,
+          });
+        } else {
+          resolve({
+            error: 0,
+            data: row,
+          });
+        }
+      });
+      smtp.finalize();
+    });
+  });
+};
+

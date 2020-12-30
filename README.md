@@ -25,9 +25,14 @@ Then setup file next.config.js
     PROJECT_ROOT: __dirname,
     MIN_PASSWORD_LENGTH: 6,
     HASH_SALT_LENGTH: 10,
+    LINK_EXPIRE: 3,
     API_URL: 'https://www.googleapis.com/youtube/v3',
-    JWT_SECRET: 'any secret phrase', // here
-    API_KEY: 'You google api key', // and here
+    JWT_SECRET: 'any secret phrase',
+    API_KEY: 'You google api key',
+    SMTP_HOST: 'smtp.gmail.com',
+    SMTP_PORT: 587,
+    SMTP_EMAIL: 'example@gmail.com',
+    SMTP_PASS: 'strongpass',
   },
 };
 

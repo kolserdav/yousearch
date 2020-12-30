@@ -32,8 +32,6 @@ const scrollSettings = {
 const date = new Date();
 date.setFullYear(date.getFullYear() + 12);
 
-let _videoID: string;
-
 /**
  * Get time in format h:mm:ss
  * @param seconds {string}
@@ -77,6 +75,7 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
   const { v, s, se, ch, l }: any = query;
   const searchRef = useRef<any>();
   const playerRef = useRef<any>();
+  const videoIDRef = useRef<string>();
   const langRef = useRef<string>();
   const subtitlesRef = useRef<Types.Schema.Values.SubtitlesItem[]>();
   const chunksRef = useRef<Types.Schema.Values.SubtitlesItem[][]>();
@@ -105,7 +104,7 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
    * @param id {string} - video ID
    */
   const setEmbedLink = (id: string, start = s) => {
-    _videoID = id;
+    videoIDRef.current = id;
     // Create embed link
     const newLink = `https://www.youtube.com/embed/${id}?start=${start}`;
     setLinkValue(newLink);
@@ -216,7 +215,7 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
       type: 'SUBTITLES_REQUEST',
       body: {
         input: {
-          videoID: _videoID,
+          videoID: videoIDRef.current,
           lang,
         },
         results: ['message', 'lang', 'items {start, text}'],
@@ -386,55 +385,60 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
         <H1>{title || t.content.siteName}</H1>
         <Description>{description || t.content.siteDescription}.</Description>
         {/** Get video ID */}
-        <Input
-          disabled={load || other}
-          onChange={(e: any) => {
-            const { value } = e.target;
-            setLanguages([]);
-            setLink(value);
-            getLink(value);
-          }}
-          placeholder={t.interface.setLink}
-          value={link}
-        />
+        <FormItem>
+          <Label>{t.interface.setLink}</Label>
+          <Input
+            disabled={load || other}
+            onChange={(e: any) => {
+              const { value } = e.target;
+              setLanguages([]);
+              setLink(value);
+              getLink(value);
+            }}
+            value={link}
+          />
+        </FormItem>
         {languages.length !== 0 && (
           <Grid direction="column" align="center">
-            <Label>{t.interface.selectLang}</Label>
             {/** Language subtitles select */}
-            <LangSelect
-              style={{ zIndex: 2 }}
-              disabled={load || other}
-              value={lang}
-              onChange={(e: any) => {
-                const { value } = e.target;
-                cookies.set('dlang', value, { expires: date, sameSite: 'strict' });
-                langRef.current = value;
-                setLang(value);
-                const newQ: Types.Query = Object.assign({}, query);
-                newQ.l = value;
-                updateQuery(newQ);
-                setTimeout(() => {
-                  getSubtitles(value);
-                }, 150);
-              }}>
-              {languages.map((option, index) => (
-                <LangOption key={`${option.lang}-${index}`} value={option.lang}>
-                  {option.lang}&nbsp;({option.type})
-                </LangOption>
-              ))}
-            </LangSelect>
+            <FormItem>
+              <Label>{t.interface.selectLang}</Label>
+              <LangSelect
+                disabled={load || other}
+                value={lang}
+                onChange={(e: any) => {
+                  const { value } = e.target;
+                  cookies.set('dlang', value, { expires: date, sameSite: 'strict' });
+                  langRef.current = value;
+                  setLang(value);
+                  const newQ: Types.Query = Object.assign({}, query);
+                  newQ.l = value;
+                  updateQuery(newQ);
+                  setTimeout(() => {
+                    getSubtitles(value);
+                  }, 150);
+                }}>
+                {languages.map((option, index) => (
+                  <LangOption key={`${option.lang}-${index}`} value={option.lang}>
+                    {option.lang}&nbsp;({option.type})
+                  </LangOption>
+                ))}
+              </LangSelect>
+            </FormItem>
             {/** Search by subtitles */}
-            <Input
-              disabled={load || other}
-              onChange={(e: any) => {
-                const { value } = e.target;
-                setSearch(value);
-                searchValueRef.current = value;
-              }}
-              value={search}
-              placeholder={t.interface.search}
-              ref={searchRef}
-            />
+            <FormItem>
+              <Label>{t.interface.search}</Label>
+              <Input
+                disabled={load || other}
+                onChange={(e: any) => {
+                  const { value } = e.target;
+                  setSearch(value);
+                  searchValueRef.current = value;
+                }}
+                value={search}
+                ref={searchRef}
+              />
+            </FormItem>
             <Button disabled={load || other} onClick={searchSubtitles}>
               {t.interface.search}
             </Button>
@@ -454,7 +458,7 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
                           newQ.s = _start;
                           updateQuery(newQ);
                           setAuto(true);
-                          setEmbedLink(_videoID, _start);
+                          setEmbedLink(videoIDRef.current, _start);
                           playerRef.current.scrollIntoView(scrollSettings);
                         }
                       }}>
@@ -522,6 +526,10 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
   );
 };
 
+const FormItem = styled.div`
+  margin: 20px;
+`;
+
 interface TimeProps {
   selected: boolean;
   disabled: boolean;
@@ -568,7 +576,7 @@ const Player = styled.div`
  * Input link and input search
  */
 const Input = styled.input`
-  margin: var(--item-padding);
+  margin: var(--item-padding) 0;
   min-width: var(--input-width);
   min-height: var(--input-height);
   font-size: var(--p-size);
@@ -578,16 +586,12 @@ const Input = styled.input`
  * Selector of subtitles language
  */
 const LangSelect = styled.select`
-  position: relative;
-  z-index: 2;
   font-size: var(--p-size);
-  margin: var(--item-padding);
+  margin: var(--item-padding) 0;
   height: var(--input-height);
   min-width: 100px;
 `;
 const LangOption = styled.option`
-  position: relative;
-  z-index: 2;
   font-size: var(--p-size);
   height: var(--input-height);
 `;

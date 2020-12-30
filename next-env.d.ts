@@ -17,6 +17,7 @@ export declare namespace ActionTypes {
   export declare type Auth = 'AUTH_REQUEST' | 'AUTH';
   export declare type Link = 'LINK_REQUEST' | 'LINK';
   export declare type GetLink = 'GET_LINK_REQUEST' | 'GETE_LINK';
+  export declare type Confirm = 'CONFIRM_REQUEST' | 'CONFIRM';
   export declare type All =
     | User
     | Registration
@@ -27,6 +28,7 @@ export declare namespace ActionTypes {
     | Auth
     | Link
     | GetLink
+    | Confirm
     | 'INITIAL';
 }
 
@@ -37,6 +39,8 @@ export type Query = {
   ch: number;
   s: string;
   i: string;
+  e: string;
+  k: string;
 };
 
 export type Action<T> = {
@@ -103,6 +107,7 @@ export declare interface Language {
     createAndCopyLink: string;
     more: string;
     close: string;
+    confirmEmail: string;
   };
   content: {
     siteName: string;
@@ -122,6 +127,10 @@ export declare interface Language {
     description: string;
   };
   server: {
+    email: {
+      send: string;
+      notSend: string;
+    };
     user: {
       errorGetByEmail: string;
       warningAreRegistered: string;
@@ -139,6 +148,12 @@ export declare interface Language {
       successLogin: string;
       warningEmailNotRegister: string;
       warningEmailOrPasswordNotMatch: string;
+      warningKeyNotSend: string;
+      warningUserNotFound: string;
+      warningKeyExpired: string;
+      successEmailConfirmed: string;
+      warningEmailConfirmedEarlier: string;
+      errorConfirmedEmail: string;
     };
     subtitles: {
       successFound: string;
@@ -238,3 +253,11 @@ export declare namespace Orm {
     created: Date;
   }
 }
+
+export type Email = {
+  from: string;
+  to: string;
+  subject: string;
+  text: string;
+  html: string;
+};

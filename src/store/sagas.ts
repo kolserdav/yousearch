@@ -114,3 +114,17 @@ function* getLink(action: Types.Action<Types.Schema.Params.ID>) {
 export function* getLinkSaga(): Generator {
   yield takeEvery<Types.ActionTypes.GetLink>('GET_LINK_REQUEST', getLink);
 }
+
+/**
+ * Confirm user
+ */
+function* confirm(action: Types.Action<Types.Schema.Params.Confirm>) {
+  const body = yield call(Api.confirm, action);
+  yield put<Types.Action<Types.Schema.Values.ConfirmRequest>>({
+    type: 'CONFIRM',
+    body,
+  });
+}
+export function* confirmSaga(): Generator {
+  yield takeEvery<Types.ActionTypes.Confirm>('CONFIRM_REQUEST', confirm);
+}

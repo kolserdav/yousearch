@@ -2,6 +2,7 @@ import * as Types from '../../../next-env';
 import * as orm from '../../orm';
 import * as srv from '../../../services';
 import * as lib from '../../lib';
+import * as utils from '../../utils';
 import getConfig from 'next/config';
 const { serverRuntimeConfig } = getConfig();
 const { MIN_PASSWORD_LENGTH } = serverRuntimeConfig;
@@ -101,12 +102,24 @@ const Registration: Types.RequestHandler<
       message: t.server.user.warningGetUserData,
     };
   }
+  const { data } = addedUser;
+  const sendEmail = await utils.sendConfirmEmail(data.email, data.updated);
   const token = lib.getParsedToken(addedUser.data, headers);
+  if (sendEmail.error) {
+    console.warn(headers);
+    return {
+      result: 'success',
+      message: t.server.user.successRegistration,
+      warning: t.server.email.notSend,
+      token,
+    };
+  }
   return {
     result: 'success',
     message: t.server.user.successRegistration,
+    warning: t.server.email.send,
     token,
   };
-}
+};
 
 export default Registration;

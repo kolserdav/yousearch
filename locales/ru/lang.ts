@@ -29,6 +29,7 @@ const t: Language = {
     createAndCopyLink: 'создать и скопировать ссылку',
     more: 'ещё',
     close: 'закрыть',
+    confirmEmail: 'подтверждение почты',
   },
   content: {
     siteName: 'поиск в субтитрах Youtube',
@@ -48,6 +49,10 @@ const t: Language = {
     description: 'бесплатный сервис для поиска ключевых слов по субтитрам видео Youtube',
   },
   server: {
+    email: {
+      send: 'на указанную почту отправлено письмо подтверждения',
+      notSend: 'письмо подверждение не было отправлено',
+    },
     user: {
       errorGetByEmail: 'ошибка при получении пользователя по емайл',
       warningAreRegistered: 'данная почта уже была зарегистрирована ранее',
@@ -65,6 +70,12 @@ const t: Language = {
       successLogin: 'успешный вход',
       warningEmailNotRegister: 'почта не зарегистреирована',
       warningEmailOrPasswordNotMatch: 'почта или пароль не совпадают',
+      warningKeyNotSend: 'ключ не передан',
+      warningUserNotFound: 'пользователь не найден',
+      warningKeyExpired: 'ключ просрочен',
+      successEmailConfirmed: 'почта успашно подтверждена',
+      warningEmailConfirmedEarlier: 'почта была подтверждена ранее',
+      errorConfirmedEmail: 'ошибка подтверждения адреса почты',
     },
     subtitles: {
       successFound: 'субтитры найдены',

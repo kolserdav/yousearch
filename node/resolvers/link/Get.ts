@@ -16,8 +16,14 @@ const GetLink: Types.RequestHandler<Types.Schema.Params.ID, Types.Schema.Values.
   const { headers } = context;
   const { lang } = headers;
   const t = srv.getLang(lang);
-  console.log(1)
-  const getRes = await orm.link.getById(params.input.id);
+  const { input } = params;
+  if (!input) {
+    return {
+      result: 'warning',
+      message: t.server.user.warningInputParamsNotSend,
+    };
+  }
+  const getRes = await orm.link.getById(input.id);
   if (getRes.error) {
     console.warn(headers);
     return {

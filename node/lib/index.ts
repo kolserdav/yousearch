@@ -45,3 +45,20 @@ export const parseToken: ParseToken = (token) => {
   }
   return parsed;
 };
+
+/**
+ *  Encode base64 string
+ * @param data {string}
+ */
+export function encodeBase64(data: string): string {
+  return Buffer.from(data).toString('base64');
+}
+
+/**
+ * Decode base64 string
+ * @param data
+ */
+export function decodeBase64(data: string): string {
+  const buff = Buffer.alloc(data.length, data, 'base64');
+  return buff.toString('ascii');
+}

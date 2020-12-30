@@ -7,6 +7,7 @@ import Info from './video/Info';
 import Auth from './user/Auth';
 import Create from './link/Create';
 import GetLink from './link/Get';
+import Confirm from './user/Confirm';
 
 const resolvers: Resolver = {
   Query: {
@@ -20,6 +21,7 @@ const resolvers: Resolver = {
     captions: Captions,
     info: Info,
     link: Create,
+    confirm: Confirm,
   },
 };
 

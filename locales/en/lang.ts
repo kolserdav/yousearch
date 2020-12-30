@@ -29,6 +29,7 @@ const t: Language = {
     createAndCopyLink: 'create and copy link',
     more: 'more',
     close: 'close',
+    confirmEmail: 'confirm email',
   },
   content: {
     siteName: 'Youtube subtitle search',
@@ -48,6 +49,10 @@ const t: Language = {
     description: 'free service for searching keywords by subtitles of Youtube videos',
   },
   server: {
+    email: {
+      send: 'a confirmation letter has been sent to the specified mail',
+      notSend: 'confirmation email not sent',
+    },
     user: {
       errorGetByEmail: 'error while getting user by email',
       warningAreRegistered: 'this email was registered earlier',
@@ -65,6 +70,12 @@ const t: Language = {
       successLogin: 'success login',
       warningEmailNotRegister: 'email not registered',
       warningEmailOrPasswordNotMatch: 'email or password not match',
+      warningKeyNotSend: 'key not send',
+      warningUserNotFound: 'user not found',
+      warningKeyExpired: 'key is expired',
+      successEmailConfirmed: 'email confirmed successfully',
+      warningEmailConfirmedEarlier: 'email is confirmed earlier',
+      errorConfirmedEmail: 'error confirmed email',
     },
     subtitles: {
       successFound: 'subtitles found',

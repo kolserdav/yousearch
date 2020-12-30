@@ -28,6 +28,7 @@ export const Description = styled.p`
  */
 export const Label = styled.p`
   font-size: var(--p-size);
+  margin-bottom: 0;
   color: ${(props) => props.theme.dark};
   &:first-letter {
     text-transform: capitalize;

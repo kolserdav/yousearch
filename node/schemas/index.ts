@@ -27,6 +27,7 @@ export declare namespace Values {
   type Registration = {
     result: Types.Result;
     message: string;
+    warning?: string;
     token?: string;
   };
   interface RegistrationRequest extends ServerResponse {
@@ -94,6 +95,12 @@ export declare namespace Values {
   interface LinkRequest extends ServerResponse {
     link?: Link;
   }
+  /**
+   * Confirm
+   */
+  interface ConfirmRequest extends ServerResponse {
+    confirm?: Response;
+  }
 }
 
 /**
@@ -153,6 +160,15 @@ export declare namespace Params {
     };
     results: Array<LinkKeys[] | string>;
   };
+  /** Confirm params */
+  type ConfrimKeys = keyof Values.Response;
+  type Confirm = {
+    input: {
+      email: string;
+      key: string;
+    };
+    results: Array<LinkKeys[]>;
+  };
 }
 
 export interface Query extends Types.RequestInterface {
@@ -170,6 +186,7 @@ export interface Mutation extends Types.RequestInterface {
   captions: Types.RequestHandler<Params.Captions, Values.Captions>;
   info: Types.RequestHandler<Params.Captions, Values.Info>;
   link: Types.RequestHandler<Params.Link, Values.Link>;
+  confirm: Types.RequestHandler<Params.Confirm, Values.Response>;
 }
 
 export interface Resolver {
@@ -207,6 +224,7 @@ export const typeDefs = gql`
   type Registration {
     result: Result!
     message: String!
+    warning: String
     token: String
   }
 
@@ -285,6 +303,11 @@ export const typeDefs = gql`
     link(input: Id!): Link!
   }
 
+  input ConfirmInput {
+    email: String!
+    key: String!
+  }
+
   type Mutation {
     registration(input: RegistrationInput!): Registration!
     login(input: LoginInput!): Login!
@@ -292,5 +315,6 @@ export const typeDefs = gql`
     captions(input: CaptionsInput!): Captions!
     info(input: CaptionsInput!): Info!
     link(input: LinkInput!): Link!
+    confirm(input: ConfirmInput): Response!
   }
 `;

@@ -10,7 +10,6 @@ import { StaticContext, StaticProps, Props } from '../next-env';
 import Button from '../src/components/ui/Button';
 import { store, action } from '../src/store';
 import * as Types from '../next-env';
-import IconButton from '../src/components/ui/IconButton';
 import { H1 } from '../src/components/ui/Typography';
 import Input from '../src/components/ui/Input';
 import Alert, { AlertProps } from '../src/components/ui/Alert';
@@ -55,7 +54,7 @@ const Registration: NextComponentType<any, any, Props> = (props): React.ReactEle
           password,
           passwordRepeat,
         },
-        results: ['token', 'message'],
+        results: ['token', 'message', 'warning'],
       },
     });
   };
@@ -82,21 +81,19 @@ const Registration: NextComponentType<any, any, Props> = (props): React.ReactEle
           open: true,
           text: registration.message,
           status: registration.result,
-          button: (
-            <IconButton
-              src="/img/ui/close-white-36dp.svg"
-              alt="close icon"
-              onClick={() => {
-                setAlert(_alert);
-              }}
-            />
-          ),
         });
         if (registration.result === 'success') {
           // Set session cookie
           setSessionCookie(registration.token);
           setTimeout(() => {
-            router.push('/');
+            setAlert({
+              open: true,
+              text: registration.warning,
+              status: registration.result,
+            });
+            setTimeout(() => {
+              router.push('/');
+            }, 3000);
           }, 2000);
         }
       }

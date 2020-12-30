@@ -12,9 +12,17 @@ module.exports = {
     PROJECT_ROOT: __dirname,
     MIN_PASSWORD_LENGTH: 6,
     HASH_SALT_LENGTH: 10,
-    JWT_SECRET: 'any secret phrase',
+    LINK_EXPIRE: 3,
+    APP_ORIGIN: 'https://next.uyem.ru',
+    APP_ORIGIN_LOCAL: 'http://localhost:3000',
     API_URL: 'https://www.googleapis.com/youtube/v3',
+    // TODO settings required
+    JWT_SECRET: 'any secret phrase',
     API_KEY: 'You (YouTube Data API v3) key',
+    SMTP_HOST: 'smtp.gmail.com',
+    SMTP_PORT: 587,
+    SMTP_EMAIL: 'example@gmail.com',
+    SMTP_PASS: 'strongpass',
   },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     if (!isServer) {

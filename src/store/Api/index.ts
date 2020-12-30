@@ -153,3 +153,20 @@ export const getLink = requestQuery((context) => ({
     }
   `,
 }));
+
+/**
+ * Confirm email
+ *  */
+export const confirm = requestMutate((context) => ({
+  variables: {
+    input: context.body.input,
+  },
+  mutation: gql`
+    mutation($input: ConfirmInput!) {
+      confirm(input: $input) {
+        result
+        ${context.body.results}
+      }
+    }
+  `,
+}));
