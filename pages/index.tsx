@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Cookies from 'universal-cookie';
 import { NextComponentType } from 'next';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import * as lib from '../src/lib';
 import AppBar from '../src/components/AppBar';
 import { store, action } from '../src/store';
@@ -15,7 +16,6 @@ import Grid from '../src/components/ui/Grid';
 import Button from '../src/components/ui/Button';
 import { StaticContext, StaticProps, Props } from '../next-env';
 import { H1, Description, Label } from '../src/components/ui/Typography';
-
 
 interface UpdateQuery {
   // eslint-disable-next-line no-unused-vars
@@ -58,18 +58,15 @@ async function checkOldBrowser() {
 
 export interface HomeProps extends Props {
   t: Types.Language;
-  title: string;
-  image: Types.Schema.Values.Image;
-  description: string;
-  other: boolean;
+  error: boolean;
+  title?: string;
+  image?: Types.Schema.Values.Image;
+  description?: string;
+  other?: boolean;
 }
 
-/**
- * Home page
- * @param props {Props}
- */
-const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement => {
-  const { t, title, image, description, other } = props;
+const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.ReactElement => {
+  const { t, title, image, description, other, error } = props;
   const router = useRouter();
   const { query }: any = router;
   const { v, s, se, ch, l }: any = query;
@@ -246,7 +243,7 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
   useEffect(() => {
     window.addEventListener('keydown', keyDownListener);
     // Fill data from query string
-    if (v) {
+    if (v && !error) {
       if (v !== link) {
         setLink(v);
         setLinkValue(v);
@@ -254,7 +251,7 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
         setEmbedLink(v);
       }
     }
-    if (se) {
+    if (se && !error) {
       if (se !== search) {
         setSearch(se);
       }
@@ -526,6 +523,40 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
   );
 };
 
+/**
+ * Home page
+ * @param props {Props}
+ */
+const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement => {
+  const { t, title, image, description, other, error } = props;
+  return (
+    <div>
+      {!error ? (
+        <HomeComponent
+          t={t}
+          error={error}
+          title={title}
+          image={image}
+          description={description}
+          other={other}
+        />
+      ) : (
+        <Theme>
+          {/** 404 page if props.error */}
+          <Grid direction="column" align="center">
+            <H1>{t.interface.pageNotFound}&nbsp;¯\_(ツ)_/¯</H1>
+            <FormItem>
+              <Link href="/">
+                <a style={{ textTransform: 'uppercase' }}>{t.interface.home}</a>
+              </Link>
+            </FormItem>
+          </Grid>
+        </Theme>
+      )}
+    </div>
+  );
+};
+
 const FormItem = styled.div`
   margin: 20px;
 `;
@@ -563,7 +594,7 @@ const Content = styled.div<ContentProps>`
  * Video player
  */
 const Player = styled.div`
-  z-index: 6;
+  z-index: 11;
   width: 100%;
   height: calc(100vw / (1920 / 1080));
   @media (min-width: 2000px) {

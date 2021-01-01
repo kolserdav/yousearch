@@ -132,6 +132,7 @@ export const auth = requestQuery(() => ({
         result
         message
         role
+        confirm
       }
     }
   `,
@@ -164,6 +165,40 @@ export const confirm = requestMutate((context) => ({
   mutation: gql`
     mutation($input: ConfirmInput!) {
       confirm(input: $input) {
+        result
+        ${context.body.results}
+      }
+    }
+  `,
+}));
+
+/**
+ * Get forgot email
+ *  */
+export const forgot = requestMutate((context) => ({
+  variables: {
+    input: context.body.input,
+  },
+  mutation: gql`
+    mutation($input: ForgotInput!) {
+      forgot(input: $input) {
+        result
+        ${context.body.results}
+      }
+    }
+  `,
+}));
+
+/**
+ * Change user password
+ *  */
+export const changePass = requestMutate((context) => ({
+  variables: {
+    input: context.body.input,
+  },
+  mutation: gql`
+    mutation($input: ChangePassInput!) {
+      changePass(input: $input) {
         result
         ${context.body.results}
       }

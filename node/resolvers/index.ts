@@ -8,6 +8,8 @@ import Auth from './user/Auth';
 import Create from './link/Create';
 import GetLink from './link/Get';
 import Confirm from './user/Confirm';
+import Forgot from './user/Forgot';
+import ChangePass from './user/ChangePass';
 
 const resolvers: Resolver = {
   Query: {
@@ -22,6 +24,8 @@ const resolvers: Resolver = {
     info: Info,
     link: Create,
     confirm: Confirm,
+    forgot: Forgot,
+    changePass: ChangePass,
   },
 };
 

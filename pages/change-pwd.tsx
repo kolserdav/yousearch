@@ -1,51 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import type { NextComponentType } from 'next';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import styled from 'styled-components';
-import { setSessionCookie } from '../src/hooks/cookies';
-import Theme from '../src/components/Theme';
-import AppBar from '../src/components/AppBar';
-import * as srv from '../services';
-import { action, store } from '../src/store/index';
-import { H1 } from '../src/components/ui/Typography';
-import Input from '../src/components/ui/Input';
-import Alert, { AlertProps } from '../src/components/ui/Alert';
-import Grid from '../src/components/ui/Grid';
-import IconButton from '../src/components/ui/IconButton';
-import Button from '../src/components/ui/Button';
+import Link from 'next/link';
 import * as Types from '../next-env';
+import * as srv from '../services';
+import AppBar from '../src/components/AppBar';
+import Theme from '../src/components/Theme';
+import { store, action } from '../src/store';
+import Alert, { AlertProps } from '../src/components/ui/Alert';
+import Input from '../src/components/ui/Input';
+import Grid from '../src/components/ui/Grid';
+import { H1, Label } from '../src/components/ui/Typography';
+import Button from '../src/components/ui/Button';
+import { NextComponentType } from 'next';
 
-/**
- * Login page component
- * @param props {Types.Props}
- */
-const Login: NextComponentType<any, any, Types.Props> = (props): React.ReactElement => {
+const Forgot: NextComponentType<any, any, Types.Props> = (props) => {
   const router = useRouter();
+  const { e, k } = router.query;
   const { t } = props;
+  const [password, setPassword] = useState<string>('');
+  const [passwordRepeat, setPasswordRepeat] = useState<string>('');
+  const [load, setLoad] = useState<boolean>(true);
   const _alert: AlertProps = {
-    open: false,
-    status: 'info',
+    open: true,
     text: '',
+    status: 'info',
     button: <div />,
-    trigger: () => {
-      /** */
-    },
   };
   const [alert, setAlert] = useState<AlertProps>(_alert);
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [load, setLoad] = useState<boolean>(true);
-  const login = (): void => {
+  const changePassword = () => {
     setLoad(true);
-    action<Types.Schema.Params.Login>({
-      type: 'LOGIN_REQUEST',
+    action({
+      type: 'CHANGE_PASS_REQUEST',
       body: {
         input: {
-          email,
+          email: e,
+          key: k,
           password,
+          passwordRepeat,
         },
-        results: ['token', 'message'],
+        results: ['message'],
       },
     });
   };
@@ -53,45 +47,25 @@ const Login: NextComponentType<any, any, Types.Props> = (props): React.ReactElem
     setLoad(false);
     const storeSubs = store.subscribe(() => {
       const state: Types.Action<any> = store.getState();
-      if (state.type === 'LOGIN') {
+      if (state.type === 'CHANGE_PASS') {
         setLoad(false);
-        const { body }: Types.Action<Types.Schema.Values.LoginRequest> = state;
-        const { login } = body;
-        if (!login) {
+        const { body }: Types.Action<Types.Schema.Values.ChangePassRequest> = state;
+        const { changePass } = body;
+        if (!changePass) {
           setAlert({
             open: true,
             text: body.toString(),
             status: 'error',
-            trigger: () => {
-              /** */
-            },
           });
-          return 1;
+          return;
         }
         setAlert({
           open: true,
-          text: login.message,
-          status: login.result,
-          button: (
-            <IconButton
-              src="/img/ui/close-white-36dp.svg"
-              alt="close icon"
-              onClick={() => {
-                setAlert(_alert);
-              }}
-            />
-          ),
+          status: changePass.result,
+          text: changePass.message,
         });
-        if (login.result == 'success') {
-          // Set session cookie
-          setSessionCookie(login.token);
-          setTimeout(() => {
-            router.push('/');
-          }, 2000);
-        }
       }
     });
-    if (load) setLoad(false);
     return () => {
       storeSubs();
     };
@@ -100,19 +74,9 @@ const Login: NextComponentType<any, any, Types.Props> = (props): React.ReactElem
     <Theme>
       <AppBar t={t} load={load} />
       <Grid direction="column" align="center">
-        <H1>{t.interface.login}</H1>
+        <H1>{t.interface.changePassword}</H1>
         <FormItem>
-          <Input
-            type="email"
-            value={email}
-            onChange={(e: any) => {
-              const { value } = e.target;
-              setEmail(value);
-            }}
-            placeholder={t.interface.email}
-          />
-        </FormItem>
-        <FormItem>
+          <Label>{t.interface.password}</Label>
           <Input
             type="password"
             value={password}
@@ -120,25 +84,35 @@ const Login: NextComponentType<any, any, Types.Props> = (props): React.ReactElem
               const { value } = e.target;
               setPassword(value);
             }}
-            placeholder={t.interface.password}
           />
         </FormItem>
         <FormItem>
-          <Button disabled={load} onClick={login}>
+          <Label>{t.interface.passwordRepeat}</Label>
+          <Input
+            type="password"
+            value={passwordRepeat}
+            onChange={(e: any) => {
+              const { value } = e.target;
+              setPasswordRepeat(value);
+            }}
+          />
+        </FormItem>
+        <FormItem>
+          <Button disabled={load} onClick={changePassword}>
             {t.interface.send}
           </Button>
         </FormItem>
         <FormItem>
           <Link href="/forgot">
-            <LinkStyled>{t.interface.forgotPassword}</LinkStyled>
+            <LinkStyled>{t.interface.sendNewEmail}</LinkStyled>
           </Link>
         </FormItem>
         <Alert
           open={alert.open}
-          text={alert.text}
-          button={alert.button}
-          trigger={alert.trigger}
           status={alert.status}
+          text={alert.text}
+          trigger={alert.trigger}
+          button={alert.button}
         />
       </Grid>
     </Theme>
@@ -170,4 +144,4 @@ export const getStaticProps = ({ locale }: Types.StaticContext): Types.StaticPro
   };
 };
 
-export default Login;
+export default Forgot;

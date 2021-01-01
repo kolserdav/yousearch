@@ -53,19 +53,20 @@ export function sendConfirmEmail(email: string, dateNow: Date): Promise<Types.Or
   return sendEmail(userMessage, 'Error send email to registered user');
 }
 
-export function getForgotEmail(
-  email: string,
-  dateNow: number,
-  first_name: string
-): Promise<Types.OrmResult<any>> {
-  const key = lib.encodeBase64(new Date(dateNow).toString());
-  const link = `${appOrigin}/change-user-pwd?e=${email}&k=${key}`;
+/**
+ * Send email with change passsword link
+ * @param email {string}
+ * @param dateNow {string | Date}
+ */
+export function sendForgotEmail(email: string, dateNow: string | Date): Promise<Types.OrmResult<any>> {
+  const key = lib.encodeBase64(new Date(dateNow).toISOString());
+  const link = `${appOrigin}/change-pwd?e=${email}&k=${key}`;
   const userMessage = {
     from: SMTP_EMAIL,
     to: email,
     subject: 'Смена пароля',
-    text: `Здравствуйте ${first_name}! Был инициирован процесс смены пароля, если это были вы, пожалуйста перейдите по следующей ссылке ${link},которая действительна в течении ${LINK_EXPIRE} дней.`,
-    html: `Здравствуйте ${first_name}! Был инициирован процесс смены пароля, если это были вы, пожалуйста перейдите по <a href="${link}">ссылке</a>, <i>которая действительна в течении ${LINK_EXPIRE} дней.</i>`,
+    text: `Здравствуйте! Был инициирован процесс смены пароля, если это были вы, пожалуйста перейдите по следующей ссылке ${link},которая действительна в течении ${LINK_EXPIRE} дней.`,
+    html: `Здравствуйте! Был инициирован процесс смены пароля, если это были вы, пожалуйста перейдите по <a href="${link}">ссылке</a>, <i>которая действительна в течении ${LINK_EXPIRE} дней.</i>`,
   };
   return sendEmail(userMessage, 'Error send email to forgot password user');
 }

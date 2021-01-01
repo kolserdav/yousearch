@@ -30,6 +30,10 @@ const t: Language = {
     more: 'ещё',
     close: 'закрыть',
     confirmEmail: 'подтверждение почты',
+    forgotPassword: 'забыли паороль',
+    pageNotFound: 'страница не найдена',
+    changePassword: 'сменить пароль',
+    sendNewEmail: 'оправить новое письмо',
   },
   content: {
     siteName: 'поиск в субтитрах Youtube',
@@ -43,6 +47,7 @@ const t: Language = {
     warningSubtitlesLangNotSet: 'яхык субтитров не обозначен',
     warningVideoIDNotSet: 'идентификатор видео не указан',
     browserNotAccepted: 'в настоящее время этот браузер не поддерживается сайтом',
+    warningEmailNotConfirm: 'почта не подтверждена',
   },
   meta: {
     keywords: 'поиск в субтитрах, ютуб, ютюб, youtube, по субтитрам, субтитры, поиск',
@@ -76,6 +81,10 @@ const t: Language = {
       successEmailConfirmed: 'почта успашно подтверждена',
       warningEmailConfirmedEarlier: 'почта была подтверждена ранее',
       errorConfirmedEmail: 'ошибка подтверждения адреса почты',
+      errorSendingForgotEmail: 'ошибка отправки письма для смены пароля',
+      successForgotEmailIsSend: 'письмо для смены пароля отправлено',
+      errorUpdatePassword: 'ошибка смены пароля',
+      successPasswordUpdated: 'пароль изменен',
     },
     subtitles: {
       successFound: 'субтитры найдены',

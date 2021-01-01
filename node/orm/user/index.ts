@@ -162,6 +162,56 @@ export const createNew: Types.OrmHandler<
   });
 };
 
+interface UpdatePassword {
+  password: string;
+  id: number;
+  updated: Date | string;
+}
+
+/**
+ * Update use password
+ */
+export const updatePassword: Types.OrmHandler<
+  UpdatePassword,
+  Types.Schema.Values.Registration | string
+> = (params) => {
+  return new Promise((resolve) => {
+    db.serialize(() => {
+      const smtp = db.prepare('UPDATE users SET password=?, updated=? WHERE id=?', (err: Error) => {
+        if (err) {
+          console.error(`<${Date()}> (ERROR_PREPARE_INSERT_INTO_USERS)`, err);
+          resolve({
+            error: 1,
+            data: err.message,
+          });
+        }
+      });
+      const { password, id, updated } = params;
+      bcrypt.genSalt(HASH_SALT_LENGTH, (err, salt) => {
+        if (err) console.error(`<${Date()}> (ERROR_GET_SALT)`, err);
+        bcrypt.hash(password, salt, (e, hash) => {
+          if (err) console.error(`<${Date()}> (ERROR_GENERATE_HASH)`, e, { password });
+          smtp.get(hash, updated, id, (err: Error, row: Types.Schema.Values.Registration) => {
+            if (err) {
+              console.error(`<${Date()}> (ERROR_UPDATE_PASSWORD)`, err);
+              resolve({
+                error: 1,
+                data: err.message,
+              });
+            } else {
+              resolve({
+                error: 0,
+                data: row,
+              });
+            }
+          });
+          smtp.finalize();
+        });
+      });
+    });
+  });
+};
+
 interface UpdateUserParams {
   updated: Date | string;
   id: number;

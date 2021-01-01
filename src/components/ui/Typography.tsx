@@ -6,6 +6,8 @@ import styled from 'styled-components';
 export const H1 = styled.h1`
   font-size: var(--h1-size);
   color: ${(props) => props.theme.dark};
+  margin-left: var(--item-padding);
+  margin-right: var(--item-padding);
   &:first-letter {
     text-transform: capitalize;
   }

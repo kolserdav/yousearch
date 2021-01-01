@@ -18,6 +18,8 @@ export declare namespace ActionTypes {
   export declare type Link = 'LINK_REQUEST' | 'LINK';
   export declare type GetLink = 'GET_LINK_REQUEST' | 'GETE_LINK';
   export declare type Confirm = 'CONFIRM_REQUEST' | 'CONFIRM';
+  export declare type Forgot = 'FORGOT_REQUEST' | 'FORGOT';
+  export declare type ChangePass = 'CHANGE_PASS_REQUEST' | 'CHANGE_PASS';
   export declare type All =
     | User
     | Registration
@@ -29,6 +31,8 @@ export declare namespace ActionTypes {
     | Link
     | GetLink
     | Confirm
+    | Forgot
+    | ChangePass
     | 'INITIAL';
 }
 
@@ -108,6 +112,10 @@ export declare interface Language {
     more: string;
     close: string;
     confirmEmail: string;
+    forgotPassword: string;
+    pageNotFound: string;
+    changePassword: string;
+    sendNewEmail: string;
   };
   content: {
     siteName: string;
@@ -121,6 +129,7 @@ export declare interface Language {
     warningSearchValueNotSet: string;
     warnigTimePointNotSelect: string;
     browserNotAccepted: string;
+    warningEmailNotConfirm: string;
   };
   meta: {
     keywords: string;
@@ -154,6 +163,10 @@ export declare interface Language {
       successEmailConfirmed: string;
       warningEmailConfirmedEarlier: string;
       errorConfirmedEmail: string;
+      errorSendingForgotEmail: string;
+      successForgotEmailIsSend: string;
+      errorUpdatePassword: string;
+      successPasswordUpdated: string;
     };
     subtitles: {
       successFound: string;

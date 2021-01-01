@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NextComponentType } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -8,7 +8,6 @@ import Cookies from 'universal-cookie';
 import Alert, { AlertProps } from './ui/Alert';
 import IconButton from './ui/IconButton';
 import * as Types from '../../next-env';
-import { subtitles } from '../store/Api';
 
 const cookies = new Cookies();
 
@@ -27,6 +26,7 @@ interface MenuProps extends Types.Props {
  */
 const Menu: NextComponentType<any, any, MenuProps> = (props) => {
   const { t, other } = props;
+  const confirmRef = useRef<boolean>(false);
   const [show, setShow] = useState<boolean>(false);
   const [_show, _setShow] = useState<boolean>(false);
   const [role, setRole] = useState<Types.UserRoles>('guest');
@@ -38,7 +38,7 @@ const Menu: NextComponentType<any, any, MenuProps> = (props) => {
     trigger: () => {
       setAlert(_alert);
     },
-    button: <div />
+    button: <div />,
   };
   const [alert, setAlert] = useState<AlertProps>(_alert);
   const router = useRouter();
@@ -57,6 +57,15 @@ const Menu: NextComponentType<any, any, MenuProps> = (props) => {
    * Create link handler
    */
   const createLink = () => {
+    if (!confirmRef.current) {
+      setAlert({
+        open: true,
+        text: t.messages.warningEmailNotConfirm,
+        status: 'warning',
+        trigger: alert.trigger,
+      });
+      return;
+    }
     const { query } = router;
     const { v, se, l, s, ch } = query;
     if (!v) {
@@ -140,6 +149,7 @@ const Menu: NextComponentType<any, any, MenuProps> = (props) => {
         let _role: Types.UserRoles = 'guest';
         if (auth) {
           _role = auth.role;
+          confirmRef.current = auth.confirm;
         }
         setRole(_role);
       }

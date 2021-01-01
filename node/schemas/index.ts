@@ -1,5 +1,4 @@
 import { gql } from 'apollo-server-micro';
-import { Schema } from 'inspector';
 import * as Types from '../../next-env';
 
 /**
@@ -80,6 +79,7 @@ export declare namespace Values {
   type Auth = {
     result: Types.Result;
     message: string;
+    confirm?: boolean;
     role?: Types.UserRoles;
   };
   interface AuthRequest extends ServerResponse {
@@ -101,6 +101,14 @@ export declare namespace Values {
   interface ConfirmRequest extends ServerResponse {
     confirm?: Response;
   }
+  /** Forgot values */
+  interface ForgotRequest extends ServerResponse {
+    forgot?: Response;
+  }
+  /** Change pass values */
+  interface ChangePassRequest extends ServerResponse {
+    changePass?: Response;
+  }
 }
 
 /**
@@ -114,6 +122,7 @@ export declare namespace Params {
     };
     results: string[];
   };
+  type ResponseKeys = keyof Values.Response;
   /** Login params */
   type LoginKeys = keyof Values.Login;
   type Login = {
@@ -161,13 +170,31 @@ export declare namespace Params {
     results: Array<LinkKeys[] | string>;
   };
   /** Confirm params */
-  type ConfrimKeys = keyof Values.Response;
+  type ConfirmKeys = keyof Values.Response;
   type Confirm = {
     input: {
       email: string;
       key: string;
     };
-    results: Array<LinkKeys[]>;
+    results: Array<ConfirmKeys[]>;
+  };
+  /** Forgot params */
+  type ForgotKeys = keyof Values.Response;
+  type Forgot = {
+    input: {
+      email: string;
+    };
+    results: Array<ForgotKeys[]>;
+  };
+  /** Change pass params */
+  type ChangePass = {
+    input: {
+      key: string;
+      email: string;
+      password: string;
+      passwordRepeat: string;
+    };
+    results: Array<ResponseKeys[]>;
   };
 }
 
@@ -187,6 +214,8 @@ export interface Mutation extends Types.RequestInterface {
   info: Types.RequestHandler<Params.Captions, Values.Info>;
   link: Types.RequestHandler<Params.Link, Values.Link>;
   confirm: Types.RequestHandler<Params.Confirm, Values.Response>;
+  forgot: Types.RequestHandler<Params.Forgot, Values.Response>;
+  changePass: Types.RequestHandler<Params.ChangePass, Values.Response>;
 }
 
 export interface Resolver {
@@ -284,6 +313,7 @@ export const typeDefs = gql`
     result: Result!
     message: String!
     role: String
+    confirm: Boolean
   }
 
   input LinkInput {
@@ -298,14 +328,25 @@ export const typeDefs = gql`
     description: String
   }
 
-  type Query {
-    auth: Auth!
-    link(input: Id!): Link!
-  }
-
   input ConfirmInput {
     email: String!
     key: String!
+  }
+
+  input ForgotInput {
+    email: String!
+  }
+
+  input ChangePassInput {
+    key: String!
+    email: String!
+    password: String!
+    passwordRepeat: String!
+  }
+
+  type Query {
+    auth: Auth!
+    link(input: Id!): Link!
   }
 
   type Mutation {
@@ -315,6 +356,8 @@ export const typeDefs = gql`
     captions(input: CaptionsInput!): Captions!
     info(input: CaptionsInput!): Info!
     link(input: LinkInput!): Link!
-    confirm(input: ConfirmInput): Response!
+    confirm(input: ConfirmInput!): Response!
+    forgot(input: ForgotInput!): Response!
+    changePass(input: ChangePassInput!): Response!
   }
 `;

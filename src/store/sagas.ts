@@ -128,3 +128,31 @@ function* confirm(action: Types.Action<Types.Schema.Params.Confirm>) {
 export function* confirmSaga(): Generator {
   yield takeEvery<Types.ActionTypes.Confirm>('CONFIRM_REQUEST', confirm);
 }
+
+/**
+ * Get forgot email
+ */
+function* forgot(action: Types.Action<Types.Schema.Params.Forgot>) {
+  const body = yield call(Api.forgot, action);
+  yield put<Types.Action<Types.Schema.Values.ForgotRequest>>({
+    type: 'FORGOT',
+    body,
+  });
+}
+export function* forgotSaga(): Generator {
+  yield takeEvery<Types.ActionTypes.Forgot>('FORGOT_REQUEST', forgot);
+}
+
+/**
+ * Change user password
+ */
+function* changePass(action: Types.Action<Types.Schema.Params.ChangePass>) {
+  const body = yield call(Api.changePass, action);
+  yield put<Types.Action<Types.Schema.Values.ChangePassRequest>>({
+    type: 'CHANGE_PASS',
+    body,
+  });
+}
+export function* changePassSaga(): Generator {
+  yield takeEvery<Types.ActionTypes.ChangePass>('CHANGE_PASS_REQUEST', changePass);
+}

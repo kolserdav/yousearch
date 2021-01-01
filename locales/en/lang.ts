@@ -30,6 +30,10 @@ const t: Language = {
     more: 'more',
     close: 'close',
     confirmEmail: 'confirm email',
+    forgotPassword: 'forgot password',
+    pageNotFound: 'page not found',
+    changePassword: 'change password',
+    sendNewEmail: 'send new email',
   },
   content: {
     siteName: 'Youtube subtitle search',
@@ -43,6 +47,7 @@ const t: Language = {
     warningSubtitlesLangNotSet: 'subtitles language not set',
     warningVideoIDNotSet: 'video ID not set',
     browserNotAccepted: 'in current time this browser not accepted',
+    warningEmailNotConfirm: 'email not confirm',
   },
   meta: {
     keywords: 'subtitle search, youtube, youtube, youtube, subtitle, subtitle, search',
@@ -76,6 +81,10 @@ const t: Language = {
       successEmailConfirmed: 'email confirmed successfully',
       warningEmailConfirmedEarlier: 'email is confirmed earlier',
       errorConfirmedEmail: 'error confirmed email',
+      errorSendingForgotEmail: 'error sending forgot email',
+      successForgotEmailIsSend: 'forgort email is send',
+      errorUpdatePassword: 'error update password',
+      successPasswordUpdated: 'password updated',
     },
     subtitles: {
       successFound: 'subtitles found',

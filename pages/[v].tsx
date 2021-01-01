@@ -6,8 +6,10 @@ import * as Types from '../next-env';
 import * as srv from '../services';
 
 const HomeId: NextComponentType<any, any, HomeProps> = (props): React.ReactElement => {
-  const { t, title, description, image, other } = props;
-  return <Home t={t} title={title} image={image} description={description} other={other} />;
+  const { t, title, description, image, other, error } = props;
+  return (
+    <Home t={t} error={error} title={title} image={image} description={description} other={other} />
+  );
 };
 
 /**
@@ -55,6 +57,16 @@ export async function getServerSideProps(
 ): Promise<HomeServerSideProps> {
   const { locale, query }: any = ctx;
   const { v, i }: Types.Query = query;
+  const lang = srv.getLang(locale);
+  if (!i) {
+    ctx.res.statusCode = 404;
+    return {
+      props: {
+        t: lang,
+        error: true,
+      },
+    };
+  }
   /**
    * Get link
    */
@@ -78,6 +90,12 @@ export async function getServerSideProps(
   });
   if (link === null) {
     ctx.res.statusCode = 404;
+    return {
+      props: {
+        t: lang,
+        error: true,
+      },
+    };
   }
   /**
    * Get video info
@@ -100,10 +118,10 @@ export async function getServerSideProps(
     });
     getInfo(v);
   });
-  const lang = srv.getLang(locale);
   return {
     props: {
       t: lang,
+      error: false,
       title: info.title,
       image: info.image,
       description: link.description,

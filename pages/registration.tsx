@@ -134,7 +134,7 @@ const Registration: NextComponentType<any, any, Props> = (props): React.ReactEle
             setPasswordRepeat(value);
           }}
         />
-        <Button type="submit" onClick={registration}>
+        <Button disabled={load} type="submit" onClick={registration}>
           {t.interface.send}
         </Button>
         <Alert
