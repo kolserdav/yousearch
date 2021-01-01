@@ -48,6 +48,7 @@ const Auth: Types.RequestHandler<void, Types.Schema.Values.Auth> = async (_paren
     message: 'auth',
     role: 'user',
     confirm: data.confirm,
+    email: data.email,
   };
 };
 

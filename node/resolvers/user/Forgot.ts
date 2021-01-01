@@ -1,20 +1,16 @@
 import * as orm from '../../orm';
 import * as Types from '../../../next-env';
 import * as srv from '../../../services';
-import * as lib from '../../lib';
 import * as utils from '../../utils';
-import getConfig from 'next/config';
-const { serverRuntimeConfig } = getConfig();
-const { LINK_EXPIRE } = serverRuntimeConfig;
 
 /**
- * Confirm email
+ * Send forgot email
  * @param _parent
  * @param params {void}
  * @param context
  */
 const Forgot: Types.RequestHandler<
-  Types.Schema.Params.Confirm,
+  Types.Schema.Params.Forgot,
   Types.Schema.Values.Response
 > = async (_parent, params, context) => {
   const { headers } = context;
@@ -51,6 +47,7 @@ const Forgot: Types.RequestHandler<
   const updateRes = await orm.user.updateUser({
     id: user.data.id,
     updated: dateStr,
+    confirm: user.data.confirm,
   });
   if (updateRes.error) {
     console.warn(headers);
@@ -59,7 +56,7 @@ const Forgot: Types.RequestHandler<
       message: t.server.user.errorConfirmedEmail,
     };
   }
-  const sendRes = await utils.sendForgotEmail(input.email, dateStr);
+  const sendRes = await utils.sendForgotEmail(input.email, dateStr + user.data.password);
   if (sendRes.error) {
     return {
       result: 'warning',

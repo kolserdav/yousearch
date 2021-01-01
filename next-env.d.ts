@@ -20,6 +20,7 @@ export declare namespace ActionTypes {
   export declare type Confirm = 'CONFIRM_REQUEST' | 'CONFIRM';
   export declare type Forgot = 'FORGOT_REQUEST' | 'FORGOT';
   export declare type ChangePass = 'CHANGE_PASS_REQUEST' | 'CHANGE_PASS';
+  export declare type SendConfirm = 'SEND_CONFIRM_REQUEST' | 'SEND_CONFIRM';
   export declare type All =
     | User
     | Registration
@@ -32,6 +33,7 @@ export declare namespace ActionTypes {
     | GetLink
     | Confirm
     | Forgot
+    | SendConfirm
     | ChangePass
     | 'INITIAL';
 }
@@ -88,6 +90,7 @@ export declare interface Language {
   name1: LanguageName;
   value1: LanguageValue;
   interface: {
+    no: string;
     settings: string;
     registration: string;
     select_lang: string;
@@ -116,6 +119,7 @@ export declare interface Language {
     pageNotFound: string;
     changePassword: string;
     sendNewEmail: string;
+    copied: string;
   };
   content: {
     siteName: string;
@@ -167,6 +171,7 @@ export declare interface Language {
       successForgotEmailIsSend: string;
       errorUpdatePassword: string;
       successPasswordUpdated: string;
+      successSendConfirmEmail: string;
     };
     subtitles: {
       successFound: string;

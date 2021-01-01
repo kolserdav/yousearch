@@ -156,3 +156,17 @@ function* changePass(action: Types.Action<Types.Schema.Params.ChangePass>) {
 export function* changePassSaga(): Generator {
   yield takeEvery<Types.ActionTypes.ChangePass>('CHANGE_PASS_REQUEST', changePass);
 }
+
+/**
+ * Send confirm email
+ */
+function* sendConfirm(action: Types.Action<Types.Schema.Params.Forgot>) {
+  const body = yield call(Api.sendConfirm, action);
+  yield put<Types.Action<Types.Schema.Values.SendConfirmRequest>>({
+    type: 'SEND_CONFIRM',
+    body,
+  });
+}
+export function* sendConfirmSaga(): Generator {
+  yield takeEvery<Types.ActionTypes.SendConfirm>('SEND_CONFIRM_REQUEST', sendConfirm);
+}

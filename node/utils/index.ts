@@ -38,10 +38,10 @@ function sendEmail(message: Types.Email, errMess: string): Promise<Types.OrmResu
 /**
  * Send email with confirm link
  * @param email {string}
- * @param dateNow {number}
+ * @param datePass {string}
  */
-export function sendConfirmEmail(email: string, dateNow: Date): Promise<Types.OrmResult<any>> {
-  const key = lib.encodeBase64(dateNow.toString());
+export function sendConfirmEmail(email: string, datePass: string): Promise<Types.OrmResult<any>> {
+  const key = lib.encodeBase64(datePass);
   const link = `${appOrigin}/confirm?e=${email}&k=${key}`;
   const userMessage: Types.Email = {
     from: SMTP_EMAIL,
@@ -56,10 +56,10 @@ export function sendConfirmEmail(email: string, dateNow: Date): Promise<Types.Or
 /**
  * Send email with change passsword link
  * @param email {string}
- * @param dateNow {string | Date}
+ * @param datePass {string}
  */
-export function sendForgotEmail(email: string, dateNow: string | Date): Promise<Types.OrmResult<any>> {
-  const key = lib.encodeBase64(new Date(dateNow).toISOString());
+export function sendForgotEmail(email: string, datePass: string): Promise<Types.OrmResult<any>> {
+  const key = lib.encodeBase64(datePass);
   const link = `${appOrigin}/change-pwd?e=${email}&k=${key}`;
   const userMessage = {
     from: SMTP_EMAIL,

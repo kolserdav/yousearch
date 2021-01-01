@@ -6,6 +6,7 @@ const t: Language = {
   name1: 'english',
   value1: 'en',
   interface: {
+    no: 'не',
     settings: 'настройки',
     registration: 'регистрация',
     select_lang: 'выбор языка',
@@ -34,6 +35,7 @@ const t: Language = {
     pageNotFound: 'страница не найдена',
     changePassword: 'сменить пароль',
     sendNewEmail: 'оправить новое письмо',
+    copied: 'скопирвано',
   },
   content: {
     siteName: 'поиск в субтитрах Youtube',
@@ -85,6 +87,7 @@ const t: Language = {
       successForgotEmailIsSend: 'письмо для смены пароля отправлено',
       errorUpdatePassword: 'ошибка смены пароля',
       successPasswordUpdated: 'пароль изменен',
+      successSendConfirmEmail: 'письмо подтверждения отправлено',
     },
     subtitles: {
       successFound: 'субтитры найдены',

@@ -10,6 +10,7 @@ import GetLink from './link/Get';
 import Confirm from './user/Confirm';
 import Forgot from './user/Forgot';
 import ChangePass from './user/ChangePass';
+import SendConfirm from './user/SendConfirm';
 
 const resolvers: Resolver = {
   Query: {
@@ -26,6 +27,7 @@ const resolvers: Resolver = {
     confirm: Confirm,
     forgot: Forgot,
     changePass: ChangePass,
+    sendConfirm: SendConfirm,
   },
 };
 

@@ -133,6 +133,7 @@ export const auth = requestQuery(() => ({
         message
         role
         confirm
+        email
       }
     }
   `,
@@ -199,6 +200,23 @@ export const changePass = requestMutate((context) => ({
   mutation: gql`
     mutation($input: ChangePassInput!) {
       changePass(input: $input) {
+        result
+        ${context.body.results}
+      }
+    }
+  `,
+}));
+
+/**
+ * Send confirm email
+ *  */
+export const sendConfirm = requestMutate((context) => ({
+  variables: {
+    input: context.body.input,
+  },
+  mutation: gql`
+    mutation($input: ForgotInput!) {
+      sendConfirm(input: $input) {
         result
         ${context.body.results}
       }

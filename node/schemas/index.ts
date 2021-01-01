@@ -79,6 +79,7 @@ export declare namespace Values {
   type Auth = {
     result: Types.Result;
     message: string;
+    email?: string;
     confirm?: boolean;
     role?: Types.UserRoles;
   };
@@ -108,6 +109,10 @@ export declare namespace Values {
   /** Change pass values */
   interface ChangePassRequest extends ServerResponse {
     changePass?: Response;
+  }
+  /** SendConfirm values */
+  interface SendConfirmRequest extends ServerResponse {
+    sendConfirm?: Response;
   }
 }
 
@@ -216,6 +221,7 @@ export interface Mutation extends Types.RequestInterface {
   confirm: Types.RequestHandler<Params.Confirm, Values.Response>;
   forgot: Types.RequestHandler<Params.Forgot, Values.Response>;
   changePass: Types.RequestHandler<Params.ChangePass, Values.Response>;
+  sendConfirm: Types.RequestHandler<Params.Forgot, Values.Response>;
 }
 
 export interface Resolver {
@@ -312,6 +318,7 @@ export const typeDefs = gql`
   type Auth {
     result: Result!
     message: String!
+    email: String
     role: String
     confirm: Boolean
   }
@@ -359,5 +366,6 @@ export const typeDefs = gql`
     confirm(input: ConfirmInput!): Response!
     forgot(input: ForgotInput!): Response!
     changePass(input: ChangePassInput!): Response!
+    sendConfirm(input: ForgotInput!): Response!
   }
 `;

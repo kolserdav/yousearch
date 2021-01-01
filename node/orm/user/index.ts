@@ -215,6 +215,7 @@ export const updatePassword: Types.OrmHandler<
 interface UpdateUserParams {
   updated: Date | string;
   id: number;
+  confirm: boolean;
 }
 
 /**
@@ -226,7 +227,7 @@ export const updateUser: Types.OrmHandler<
 > = (params) => {
   return new Promise((resolve) => {
     db.serialize(() => {
-      const smtp = db.prepare('UPDATE users SET confirm=1, updated=? WHERE id=?', (err: Error) => {
+      const smtp = db.prepare('UPDATE users SET confirm=?, updated=? WHERE id=?', (err: Error) => {
         if (err) {
           console.error(`<${Date()}> (ERROR_PREPARE_UPDATE_USERS)`, err);
           resolve({
@@ -235,7 +236,7 @@ export const updateUser: Types.OrmHandler<
           });
         }
       });
-      smtp.get(params.updated, params.id, (err: Error, row: undefined) => {
+      smtp.get(params.confirm, params.updated, params.id, (err: Error, row: undefined) => {
         if (err) {
           console.error(`<${Date()}> (ERROR_UPDATE_USERS)`, err, {
             params,

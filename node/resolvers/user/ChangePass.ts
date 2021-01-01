@@ -83,7 +83,7 @@ const ChangePass: Types.RequestHandler<
     };
   }
   const dateStr = user.data.updated.toString();
-  if (input.key !== lib.encodeBase64(dateStr)) {
+  if (input.key !== lib.encodeBase64(dateStr + user.data.password)) {
     return {
       result: 'warning',
       message: t.server.user.warningKeyNotSend,

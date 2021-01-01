@@ -29,8 +29,10 @@ const Alert: NextComponentType<any, any, AlertProps> = (props) => {
   useEffect(() => {
     const t = setTimeout(() => {
       Trigger();
-      clearTimeout(t);
     }, 3000);
+    return () => {
+      clearTimeout(t);
+    };
   }, [open]);
   return (
     <Wrapper relative={relative} open={open}>

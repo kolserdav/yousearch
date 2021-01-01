@@ -18,6 +18,7 @@ date.setFullYear(date.getFullYear() + 12);
 
 interface MenuProps extends Types.Props {
   other?: boolean;
+  load: boolean;
 }
 
 /**
@@ -25,8 +26,9 @@ interface MenuProps extends Types.Props {
  * @param props {Types.Props}
  */
 const Menu: NextComponentType<any, any, MenuProps> = (props) => {
-  const { t, other } = props;
+  const { t, other, load } = props;
   const confirmRef = useRef<boolean>(false);
+  const emailRef = useRef<string>('');
   const [show, setShow] = useState<boolean>(false);
   const [_show, _setShow] = useState<boolean>(false);
   const [role, setRole] = useState<Types.UserRoles>('guest');
@@ -53,6 +55,17 @@ const Menu: NextComponentType<any, any, MenuProps> = (props) => {
       body: {},
     });
   };
+  const sendConfirmEmail = () => {
+    action({
+      type: 'SEND_CONFIRM_REQUEST',
+      body: {
+        input: {
+          email: emailRef.current,
+        },
+        results: ['message'],
+      },
+    });
+  };
   /**
    * Create link handler
    */
@@ -62,7 +75,14 @@ const Menu: NextComponentType<any, any, MenuProps> = (props) => {
         open: true,
         text: t.messages.warningEmailNotConfirm,
         status: 'warning',
-        trigger: alert.trigger,
+        button: (
+          <IconButton
+            src="/img/ui/send-white-36dp.svg"
+            alt={`${t.interface.send} ${t.interface.icon}`}
+            title={`${t.interface.send} ${t.interface.email}`}
+            onClick={sendConfirmEmail}
+          />
+        ),
       });
       return;
     }
@@ -143,6 +163,25 @@ const Menu: NextComponentType<any, any, MenuProps> = (props) => {
     if (role === 'guest') auth();
     const storeSubs = store.subscribe(() => {
       const state: Types.Action<any> = store.getState();
+      if (state.type === 'SEND_CONFIRM') {
+        const { body }: Types.Action<Types.Schema.Values.SendConfirmRequest> = state;
+        const { sendConfirm } = body;
+        if (!sendConfirm) {
+          setAlert({
+            status: 'error',
+            text: body.toString(),
+            open: true,
+            trigger: alert.trigger,
+          });
+          return;
+        }
+        setAlert({
+          open: true,
+          text: sendConfirm.message,
+          status: sendConfirm.result,
+          trigger: alert.trigger,
+        });
+      }
       if (state.type === 'AUTH') {
         const { body }: Types.Action<Types.Schema.Values.AuthRequest> = state;
         const { auth } = body;
@@ -150,6 +189,7 @@ const Menu: NextComponentType<any, any, MenuProps> = (props) => {
         if (auth) {
           _role = auth.role;
           confirmRef.current = auth.confirm;
+          emailRef.current = auth.email;
         }
         setRole(_role);
       }
@@ -167,24 +207,39 @@ const Menu: NextComponentType<any, any, MenuProps> = (props) => {
         }
         let mess = link.message;
         if (link.result === 'success') {
-          mess = `${mess}: ${window.origin}${link.link}`;
+          mess = `${window.origin}${link.link}`;
         }
-        setAlert({
+        const alertRes = {
           open: true,
           text: mess,
           status: link.result,
-          trigger: () => {
-            /** */
-          },
           button: (
             <IconButton
-              src="/img/ui/close-white-36dp.svg"
+              src="/img/ui/content_copy-white-36dp.svg"
               alt={`${t.interface.close} ${t.interface.icon}`}
               title={t.interface.close}
-              onClick={alert.trigger}
+              onClick={() => {
+                navigator.clipboard
+                  .writeText(mess)
+                  .then(() => {
+                    setAlert({
+                      open: true,
+                      text: `${t.interface.copied}: ${mess}`,
+                      status: 'success',
+                    });
+                  })
+                  .catch(() => {
+                    setAlert({
+                      open: true,
+                      text: `${t.interface.no} ${t.interface.copied}: ${mess}`,
+                      status: 'error',
+                    });
+                  });
+              }}
             />
           ),
-        });
+        }
+        setAlert(alertRes);
       }
     });
     cookies.set('lang', locale, { expires: date, path: '*', sameSite: 'strict' });
@@ -202,7 +257,7 @@ const Menu: NextComponentType<any, any, MenuProps> = (props) => {
           _setShow(true);
         }}
       />
-      {role === 'user' && !other && (
+      {role === 'user' && !other && pathname === '/' && !load && (
         <MenuIconButton
           src="/img/ui/link-white-36dp.svg"
           alt={`${t.interface.link} ${t.interface.icon}`}

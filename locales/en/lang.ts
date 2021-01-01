@@ -6,6 +6,7 @@ const t: Language = {
   name1: 'русский',
   value1: 'ru',
   interface: {
+    no: 'no',
     settings: 'settings',
     registration: 'registration',
     select_lang: 'select language',
@@ -34,6 +35,7 @@ const t: Language = {
     pageNotFound: 'page not found',
     changePassword: 'change password',
     sendNewEmail: 'send new email',
+    copied: 'copied',
   },
   content: {
     siteName: 'Youtube subtitle search',
@@ -85,6 +87,7 @@ const t: Language = {
       successForgotEmailIsSend: 'forgort email is send',
       errorUpdatePassword: 'error update password',
       successPasswordUpdated: 'password updated',
+      successSendConfirmEmail: 'confirm email is send',
     },
     subtitles: {
       successFound: 'subtitles found',

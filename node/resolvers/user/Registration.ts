@@ -103,7 +103,10 @@ const Registration: Types.RequestHandler<
     };
   }
   const { data } = addedUser;
-  const sendEmail = await utils.sendConfirmEmail(data.email, data.updated);
+  const sendEmail = await utils.sendConfirmEmail(
+    data.email,
+    data.updated.toString() + data.password
+  );
   const token = lib.getParsedToken(addedUser.data, headers);
   if (sendEmail.error) {
     console.warn(headers);

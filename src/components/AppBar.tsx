@@ -34,7 +34,7 @@ const AppBar: NextComponentType<any, any, AppBarProps> = (props) => {
   return (
     <Wrapper>
       <Container ref={container} show={show}>
-        <Menu t={t} other={other} />
+        <Menu t={t} other={other} load={load} />
       </Container>
       {load ? (
         <LinearProgress>
