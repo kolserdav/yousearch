@@ -28,6 +28,7 @@ sagaMiddleware.run(sagas.confirmSaga);
 sagaMiddleware.run(sagas.forgotSaga);
 sagaMiddleware.run(sagas.changePassSaga);
 sagaMiddleware.run(sagas.sendConfirmSaga);
+sagaMiddleware.run(sagas.visitSaga);
 
 function action<T>(actionParams: Types.Action<T>): void {
   store.dispatch(actionParams);

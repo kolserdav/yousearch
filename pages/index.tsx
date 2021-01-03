@@ -46,8 +46,10 @@ const getBeautiTime = (seconds: string): string => {
   return `${h}:${m}:${s}`;
 };
 
-// TODO check
-async function checkOldBrowser() {
+/**
+ * Check browser is old
+ */
+async function checkOldBrowser(): Promise<boolean> {
   return await new Promise((resolve) => {
     const img = new Image();
     img.onload = function() { resolve(false); };
@@ -65,11 +67,35 @@ export interface HomeProps extends Props {
   other?: boolean;
 }
 
+interface SaveVisit {
+  // eslint-disable-next-line no-unused-vars
+  (isOld: boolean, width: number, height: number): void;
+}
+
+const saveVisit: SaveVisit = (isOld, width, height) => {
+  action({
+    type: 'VISIT_REQUEST',
+    body: {
+      input: {
+        is_old: isOld,
+        width,
+        height,
+      },
+      results: ['message'],
+    },
+  });
+};
+
+/**
+ * Nome component for change status response when link not found
+ * @param props
+ */
 const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.ReactElement => {
   const { t, title, image, description, other, error } = props;
   const router = useRouter();
   const { query }: any = router;
   const { v, s, se, ch, l }: any = query;
+  const visitSavedRef = useRef<boolean>(false);
   const searchRef = useRef<any>();
   const playerRef = useRef<any>();
   const videoIDRef = useRef<string>();
@@ -241,6 +267,19 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
     }
   };
   useEffect(() => {
+    // Save visit
+    if (!visitSavedRef.current) {
+      visitSavedRef.current = true;
+      const width = document.body.clientWidth;
+      const height = document.body.clientHeight;
+      checkOldBrowser()
+        .then((isOld) => {
+          saveVisit(isOld, width, height);
+        })
+        .catch((error) => {
+          saveVisit(error, width, height);
+        });
+    }
     window.addEventListener('keydown', keyDownListener);
     // Fill data from query string
     if (v && !error) {

@@ -43,6 +43,43 @@ export const createTableUsers: Types.OrmHandler<void, any> = () => {
 };
 
 /**
+ * Create table visits
+ */
+export const createTableVisits: Types.OrmHandler<void, any> = () => {
+  return new Promise((resolve) => {
+    db.serialize(() => {
+      db.run(
+        'CREATE TABLE IF NOT EXISTS visits (\
+          id INTEGER PRIMARY KEY AUTOINCREMENT,\
+          user_agent TEXT,\
+          ip TEXT,\
+          role TEXT,\
+          is_old BOOLEAN,\
+          width INTEGER,\
+          height INTEGER,\
+          created DATETIME DEFAULT CURRENT_TIMESTAMP\
+          )\
+        ',
+        (err: Error, row: any[]) => {
+          if (err) {
+            console.error(`<${Date()}> (ERROR_CREATE_TABLE_VISITS)`, err);
+            resolve({
+              error: 1,
+              data: err.message,
+            });
+          } else {
+            resolve({
+              error: 0,
+              data: row,
+            });
+          }
+        }
+      );
+    });
+  });
+};
+
+/**
  * Drop table users
  */
 export const dropTableUsers: Types.OrmHandler<void, any> = () => {
@@ -51,6 +88,30 @@ export const dropTableUsers: Types.OrmHandler<void, any> = () => {
       db.run('DROP table users', (err: Error, row: any[]) => {
         if (err) {
           console.error(`<${Date()}> (ERROR_DROP_TABLE_USERS)`, err);
+          resolve({
+            error: 1,
+            data: err.message,
+          });
+        } else {
+          resolve({
+            error: 0,
+            data: row,
+          });
+        }
+      });
+    });
+  });
+};
+
+/**
+ * Drop table visits
+ */
+export const dropTableVisits: Types.OrmHandler<void, any> = () => {
+  return new Promise((resolve) => {
+    db.serialize(() => {
+      db.run('DROP table visits', (err: Error, row: any[]) => {
+        if (err) {
+          console.error(`<${Date()}> (ERROR_DROP_TABLE_VISITS)`, err);
           resolve({
             error: 1,
             data: err.message,
@@ -158,6 +219,55 @@ export const createNew: Types.OrmHandler<
           smtp.finalize();
         });
       });
+    });
+  });
+};
+
+/**
+ * Create new visit
+ */
+export const visit: Types.OrmHandler<Types.Schema.Params.Visit, Types.Schema.Values.Response> = (
+  params
+) => {
+  const { input } = params;
+
+  return new Promise((resolve) => {
+    db.serialize(() => {
+      const smtp = db.prepare(
+        'INSERT INTO visits (role, user_agent, ip, is_old, width, height) VALUES (?, ?, ?, ?, ?, ?)',
+        (err: Error) => {
+          if (err) {
+            console.error(`<${Date()}> (ERROR_PREPARE_INSERT_INTO_VISITS)`, err);
+            resolve({
+              error: 1,
+              message: err.message,
+            });
+          }
+        }
+      );
+      smtp.get(
+        input.role,
+        input.user_agent,
+        input.ip,
+        input.is_old,
+        input.width,
+        input.height,
+        (err: Error, row: Types.Schema.Values.Registration) => {
+          if (err) {
+            console.error(`<${Date()}> (ERROR_INSERT_INTO_VISITS)`, err);
+            resolve({
+              error: 1,
+              message: err.message,
+            });
+          } else {
+            resolve({
+              error: 0,
+              data: row,
+            });
+          }
+        }
+      );
+      smtp.finalize();
     });
   });
 };

@@ -114,6 +114,10 @@ export declare namespace Values {
   interface SendConfirmRequest extends ServerResponse {
     sendConfirm?: Response;
   }
+  /** Visit values */
+  interface VisitRequest extends ServerResponse {
+    visit?: Response;
+  }
 }
 
 /**
@@ -201,6 +205,19 @@ export declare namespace Params {
     };
     results: Array<ResponseKeys[]>;
   };
+  /** Visit params */
+  type Roles = 'user' | 'guest';
+  type Visit = {
+    input: {
+      is_old: boolean;
+      width: number;
+      height: number;
+      user_agent?: string;
+      ip?: string;
+      role?: Roles;
+    };
+    results?: Array<ResponseKeys[]>;
+  };
 }
 
 export interface Query extends Types.RequestInterface {
@@ -222,6 +239,7 @@ export interface Mutation extends Types.RequestInterface {
   forgot: Types.RequestHandler<Params.Forgot, Values.Response>;
   changePass: Types.RequestHandler<Params.ChangePass, Values.Response>;
   sendConfirm: Types.RequestHandler<Params.Forgot, Values.Response>;
+  visit: Types.RequestHandler<Params.Visit, Values.Response>;
 }
 
 export interface Resolver {
@@ -351,6 +369,20 @@ export const typeDefs = gql`
     passwordRepeat: String!
   }
 
+  enum Roles {
+    user
+    guest
+  }
+
+  input VisitInput {
+    is_old: Boolean!
+    user_agent: String
+    role: Roles
+    ip: String
+    width: Int!
+    height: Int!
+  }
+
   type Query {
     auth: Auth!
     link(input: Id!): Link!
@@ -367,5 +399,6 @@ export const typeDefs = gql`
     forgot(input: ForgotInput!): Response!
     changePass(input: ChangePassInput!): Response!
     sendConfirm(input: ForgotInput!): Response!
+    visit(input: VisitInput!): Response!
   }
 `;

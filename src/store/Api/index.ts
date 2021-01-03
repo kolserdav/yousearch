@@ -223,3 +223,20 @@ export const sendConfirm = requestMutate((context) => ({
     }
   `,
 }));
+
+/**
+ * Save visit
+ *  */
+export const visit = requestMutate((context) => ({
+  variables: {
+    input: context.body.input,
+  },
+  mutation: gql`
+    mutation($input: VisitInput!) {
+      visit(input: $input) {
+        result
+        ${context.body.results}
+      }
+    }
+  `,
+}));

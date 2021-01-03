@@ -21,6 +21,7 @@ export declare namespace ActionTypes {
   export declare type Forgot = 'FORGOT_REQUEST' | 'FORGOT';
   export declare type ChangePass = 'CHANGE_PASS_REQUEST' | 'CHANGE_PASS';
   export declare type SendConfirm = 'SEND_CONFIRM_REQUEST' | 'SEND_CONFIRM';
+  export declare type Visit = 'VISIT_REQUEST' | 'VISIT';
   export declare type All =
     | User
     | Registration
@@ -35,6 +36,7 @@ export declare namespace ActionTypes {
     | Forgot
     | SendConfirm
     | ChangePass
+    | Visit
     | 'INITIAL';
 }
 
@@ -268,6 +270,15 @@ export declare namespace Orm {
     user_id: number;
     link: string;
     description: string;
+    created: Date;
+  }
+  interface Visit {
+    id: number;
+    user_agent: string;
+    ip: string;
+    is_old: boolean;
+    width: number;
+    height: number;
     created: Date;
   }
 }

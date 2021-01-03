@@ -209,35 +209,38 @@ const Menu: NextComponentType<any, any, MenuProps> = (props) => {
         if (link.result === 'success') {
           mess = `${window.origin}${link.link}`;
         }
+        const b = (
+          <IconButton
+            src="/img/ui/content_copy-white-36dp.svg"
+            alt={`${t.interface.close} ${t.interface.icon}`}
+            title={t.interface.close}
+            onClick={() => {
+              navigator.clipboard
+                .writeText(mess)
+                .then(() => {
+                  setAlert({
+                    open: true,
+                    text: `${t.interface.copied}: ${mess}`,
+                    status: 'success',
+                    button: b,
+                  });
+                })
+                .catch(() => {
+                  setAlert({
+                    open: true,
+                    text: `${t.interface.no} ${t.interface.copied}: ${mess}`,
+                    status: 'error',
+                    button: b,
+                  });
+                });
+            }}
+          />
+        );
         const alertRes = {
           open: true,
           text: mess,
           status: link.result,
-          button: (
-            <IconButton
-              src="/img/ui/content_copy-white-36dp.svg"
-              alt={`${t.interface.close} ${t.interface.icon}`}
-              title={t.interface.close}
-              onClick={() => {
-                navigator.clipboard
-                  .writeText(mess)
-                  .then(() => {
-                    setAlert({
-                      open: true,
-                      text: `${t.interface.copied}: ${mess}`,
-                      status: 'success',
-                    });
-                  })
-                  .catch(() => {
-                    setAlert({
-                      open: true,
-                      text: `${t.interface.no} ${t.interface.copied}: ${mess}`,
-                      status: 'error',
-                    });
-                  });
-              }}
-            />
-          ),
+          button: b,
         }
         setAlert(alertRes);
       }

@@ -170,3 +170,17 @@ function* sendConfirm(action: Types.Action<Types.Schema.Params.Forgot>) {
 export function* sendConfirmSaga(): Generator {
   yield takeEvery<Types.ActionTypes.SendConfirm>('SEND_CONFIRM_REQUEST', sendConfirm);
 }
+
+/**
+ * Save visit
+ */
+function* visit(action: Types.Action<Types.Schema.Params.Visit>) {
+  const body = yield call(Api.visit, action);
+  yield put<Types.Action<Types.Schema.Values.VisitRequest>>({
+    type: 'VISIT_CONFIRM',
+    body,
+  });
+}
+export function* visitSaga(): Generator {
+  yield takeEvery<Types.ActionTypes.Visit>('VISIT_REQUEST', visit);
+}
