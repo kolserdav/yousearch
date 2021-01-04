@@ -215,6 +215,8 @@ export declare namespace Params {
       user_agent?: string;
       ip?: string;
       role?: Roles;
+      path?: string;
+      error?: string;
     };
     results?: Array<ResponseKeys[]>;
   };
@@ -378,6 +380,8 @@ export const typeDefs = gql`
     is_old: Boolean!
     user_agent: String
     role: Roles
+    path: String!
+    error: String!
     ip: String
     width: Int!
     height: Int!

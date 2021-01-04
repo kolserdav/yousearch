@@ -54,6 +54,8 @@ export const createTableVisits: Types.OrmHandler<void, any> = () => {
           user_agent TEXT,\
           ip TEXT,\
           role TEXT,\
+          path TEXT,\
+          error TEXT,\
           is_old BOOLEAN,\
           width INTEGER,\
           height INTEGER,\
@@ -234,7 +236,7 @@ export const visit: Types.OrmHandler<Types.Schema.Params.Visit, Types.Schema.Val
   return new Promise((resolve) => {
     db.serialize(() => {
       const smtp = db.prepare(
-        'INSERT INTO visits (role, user_agent, ip, is_old, width, height) VALUES (?, ?, ?, ?, ?, ?)',
+        'INSERT INTO visits (path, error, role, user_agent, ip, is_old, width, height) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
         (err: Error) => {
           if (err) {
             console.error(`<${Date()}> (ERROR_PREPARE_INSERT_INTO_VISITS)`, err);
@@ -246,6 +248,8 @@ export const visit: Types.OrmHandler<Types.Schema.Params.Visit, Types.Schema.Val
         }
       );
       smtp.get(
+        input.path,
+        input.error,
         input.role,
         input.user_agent,
         input.ip,

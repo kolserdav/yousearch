@@ -302,6 +302,15 @@ const Menu: NextComponentType<any, any, MenuProps> = (props) => {
               <MenuItemText>{t.interface.home}</MenuItemText>
             </MenuItem>
           </Link>
+          <Link href="/about">
+            <MenuItem onClick={closeMenu} selected={pathname === '/about'}>
+              <MenuItemIcon
+                src="/img/ui/info-black-36dp.svg"
+                alt={`${t.interface.about} ${t.interface.icon}`}
+              />
+              <MenuItemText>{t.interface.about}</MenuItemText>
+            </MenuItem>
+          </Link>
           <Divider />
           {role === 'guest' && (
             <Link href="/registration">

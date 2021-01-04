@@ -122,10 +122,14 @@ export declare interface Language {
     changePassword: string;
     sendNewEmail: string;
     copied: string;
+    about: string;
   };
   content: {
     siteName: string;
     siteDescription: string;
+    about: string;
+    donate: string;
+    donateLink: string;
   };
   messages: {
     linkNotValid: string;
@@ -194,6 +198,17 @@ export declare interface Language {
       errorGettingLink: string;
       warningLinkNotFound: string;
       successReceived: string;
+    };
+    letter: {
+      proofOfAddress: string;
+      hello: string;
+      youEmailAddress: string;
+      toConfirmAddress: string;
+      link: string;
+      whichIsValid: string;
+      days: string;
+      changePassword: string;
+      wasInitiated: string;
     };
   };
 }
@@ -277,6 +292,8 @@ export declare namespace Orm {
     user_agent: string;
     ip: string;
     is_old: boolean;
+    path: string;
+    error: any;
     width: number;
     height: number;
     created: Date;

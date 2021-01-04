@@ -105,7 +105,8 @@ const Registration: Types.RequestHandler<
   const { data } = addedUser;
   const sendEmail = await utils.sendConfirmEmail(
     data.email,
-    data.updated.toString() + data.password
+    data.updated.toString() + data.password,
+    t
   );
   const token = lib.getParsedToken(addedUser.data, headers);
   if (sendEmail.error) {

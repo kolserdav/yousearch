@@ -28,6 +28,7 @@ const GlobalVariables = styled.div`
   --border-radius: calc(5px + (25 - 5) * ((100vw - 320px) / (7680 - 320)));
   --input-width: calc(300px + (1000 - 300) * ((100vw - 320px) / (7680 - 320)));
   --input-height: calc(20px + (80 - 20) * ((100vw - 320px) / (7680 - 320)));
+  --container-width: calc(300px + (6000 - 300) * ((100vw - 320px) / (7680 - 320)));
   background-color: ${(props) => props.theme.light};
   width: 100%;
   height: 100%;

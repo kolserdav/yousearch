@@ -69,10 +69,17 @@ export interface HomeProps extends Props {
 
 interface SaveVisit {
   // eslint-disable-next-line no-unused-vars
-  (isOld: boolean, width: number, height: number): void;
+  (isOld: boolean, width: number, height: number, path: string, error?: string): void;
 }
 
-const saveVisit: SaveVisit = (isOld, width, height) => {
+/**
+ * Save user visit
+ * @param isOld {boolean}
+ * @param width {number}
+ * @param height {number}
+ * @param error {string}
+ */
+const saveVisit: SaveVisit = (isOld, width, height, path, error = '') => {
   action({
     type: 'VISIT_REQUEST',
     body: {
@@ -80,6 +87,8 @@ const saveVisit: SaveVisit = (isOld, width, height) => {
         is_old: isOld,
         width,
         height,
+        path,
+        error,
       },
       results: ['message'],
     },
@@ -274,10 +283,10 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
       const height = document.body.clientHeight;
       checkOldBrowser()
         .then((isOld) => {
-          saveVisit(isOld, width, height);
+          saveVisit(isOld, width, height, router.asPath);
         })
         .catch((error) => {
-          saveVisit(error, width, height);
+          saveVisit(false, width, height, router.asPath, error.message);
         });
     }
     window.addEventListener('keydown', keyDownListener);

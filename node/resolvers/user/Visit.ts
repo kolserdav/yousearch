@@ -37,6 +37,8 @@ const Login: Types.RequestHandler<Types.Schema.Params.Visit, Types.Schema.Values
       height: input.height,
       user_agent,
       ip,
+      path: input.path,
+      error: input.error,
     },
   });
   if (saveRes.error) {

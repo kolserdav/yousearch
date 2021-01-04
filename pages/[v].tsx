@@ -88,7 +88,7 @@ export async function getServerSideProps(
     });
     getLink(parseInt(i));
   });
-  if (link === null) {
+  if (link.result !== 'success') {
     ctx.res.statusCode = 404;
     return {
       props: {

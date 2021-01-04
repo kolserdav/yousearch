@@ -56,7 +56,7 @@ const Forgot: Types.RequestHandler<
       message: t.server.user.errorConfirmedEmail,
     };
   }
-  const sendRes = await utils.sendForgotEmail(input.email, dateStr + user.data.password);
+  const sendRes = await utils.sendForgotEmail(input.email, dateStr + user.data.password, t);
   if (sendRes.error) {
     return {
       result: 'warning',

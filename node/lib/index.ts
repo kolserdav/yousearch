@@ -62,3 +62,11 @@ export function decodeBase64(data: string): string {
   const buff = Buffer.alloc(data.length, data, 'base64');
   return buff.toString('ascii');
 }
+
+/**
+ * Capitalize first letter
+ * @param string {string}
+ */
+export function capitalize(string: string): string {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
