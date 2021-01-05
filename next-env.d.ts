@@ -130,6 +130,8 @@ export declare interface Language {
     about: string;
     donate: string;
     donateLink: string;
+    sourceCode: string;
+    isLicensed: string;
   };
   messages: {
     linkNotValid: string;

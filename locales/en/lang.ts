@@ -46,6 +46,8 @@ const t: Language = {
     donate:
       'We do not receive money for the development of this project, but for the operation of this panel we have to spend our own money, so we will be glad if you support us from the bottom of your heart:',
     donateLink: 'donate link',
+    sourceCode: 'the source code of this project is located at',
+    isLicensed: 'source code is licensed',
   },
   messages: {
     linkNotValid: 'link not valid',

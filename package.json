@@ -1,7 +1,13 @@
 {
   "name": "youtube-search-subtitles",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "private": true,
+  "license": "GNU GPL",
+  "author": {
+    "name": "Sergey Kolmiller",
+    "email": "uyem.ru@gmail.com",
+    "url": "https://github.com/kolserdav"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

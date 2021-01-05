@@ -8,6 +8,9 @@ import AppBar from '../src/components/AppBar';
 import { H1, Description, Label } from '../src/components/ui/Typography';
 import Grid from '../src/components/ui/Grid';
 
+const repoUrl = 'https://github.com/kolserdav/nextjs-graphql';
+const licenseUrl = 'https://www.gnu.org/licenses/gpl-3.0.ru.html';
+
 /**
  * About page
  * @param props
@@ -25,6 +28,18 @@ const About: NextComponentType<any, any, Types.Props> = (props): React.ReactElem
         <Container>
           <H1>{t.interface.about}</H1>
           <Description>{t.content.about}</Description>
+          <Description>
+            {t.content.sourceCode}:&nbsp;
+            <a rel="noreferrer" target="_blank" href={repoUrl}>
+              {repoUrl}
+            </a>
+          </Description>
+          <Description>
+            {t.content.isLicensed}:&nbsp;
+            <a rel="noreferrer" target="_blank" href={licenseUrl}>
+              GNU GENERAL PUBLIC LICENSE
+            </a>
+          </Description>
           <Label>{t.content.donate}</Label>
           <DonateLink
             target="_blank"
@@ -43,6 +58,7 @@ const DonateLink = styled.a`
 `;
 
 const Container = styled.div`
+  height: 100vh;
   width: var(--container-width);
 `;
 
