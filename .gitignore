@@ -29,3 +29,5 @@ yarn-error.log*
 tmp/
 database/you.db
 next.config.js
+logs/*
+!logs/LOGS.md

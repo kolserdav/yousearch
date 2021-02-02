@@ -10,12 +10,13 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "yarn ts:build && next build",
     "start": "next start -p 3001",
     "ts": "tsc -p . -w",
-    "prod": "echo logfile /home/spec/logs/you-${npm_package_version}.log > ~/.screenrc && screen -dmS you -L yarn start",
+    "ts:build": "tsc -p .",
+    "prod": "echo logfile $(pwd)/logs/you-${npm_package_version}.log > ~/.screenrc && screen -dmS you -L yarn start",
     "deploy": "yarn build && yarn prod",
-    "logs": "cat ~/logs/you-${npm_package_version}.log",
+    "logs": "cat $(pwd)/logs/you-${npm_package_version}.log",
     "get": "screen -x you"
   },
   "dependencies": {

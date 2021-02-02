@@ -6,7 +6,8 @@ import { Language, LanguageValue } from '../next-env';
  * @param locale - current locale
  */
 export const getLang = (locale: LanguageValue): Language => {
-  return require(`../locales/${locale}/lang`).default;
+  const loc = locale ? locale : 'en';
+  return require(`../locales/${loc}/lang`).default;
 };
 
 /**

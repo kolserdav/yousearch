@@ -41,9 +41,7 @@ const About: NextComponentType<any, any, Types.Props> = (props): React.ReactElem
             </a>
           </Description>
           <Label>{t.content.donate}</Label>
-          <DonateLink
-            target="_blank"
-            href="https://www.tinkoff.ru/rm/kolmiller.sergey1/HtC4U66788/">
+          <DonateLink target="_blank" href="https://paypal.me/kolserdav">
             {t.content.donateLink}
           </DonateLink>
         </Container>
@@ -54,6 +52,7 @@ const About: NextComponentType<any, any, Types.Props> = (props): React.ReactElem
 
 const DonateLink = styled.a`
   margin: var(--item-padding);
+  margin-bottom: 40px;
   text-transform: uppercase;
 `;
 

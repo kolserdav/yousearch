@@ -38,5 +38,9 @@ Then setup file next.config.js
 
 ```
 
+### Deployment
+
+`yarn deploy`
+
 
 Demo: https://next.uyem.ru
