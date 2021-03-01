@@ -123,6 +123,8 @@ export declare interface Language {
     sendNewEmail: string;
     copied: string;
     about: string;
+    accept: string;
+    policy: string;
   };
   content: {
     siteName: string;

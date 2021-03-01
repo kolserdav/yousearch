@@ -7,7 +7,6 @@ const { serverRuntimeConfig } = getConfig();
 const { PROJECT_ROOT, HASH_SALT_LENGTH } = serverRuntimeConfig;
 const sqlite3 = Sqlite3.verbose();
 const db = new sqlite3.Database(path.resolve(PROJECT_ROOT, 'database/you.db'));
-
 /**
  * Create table users
  */

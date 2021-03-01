@@ -37,6 +37,8 @@ const t: Language = {
     sendNewEmail: 'оправить новое письмо',
     copied: 'скопирвано',
     about: 'о сайте',
+    accept: 'принимаю',
+    policy: 'политику конфиденциальности'
   },
   content: {
     about:

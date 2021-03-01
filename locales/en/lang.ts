@@ -37,6 +37,8 @@ const t: Language = {
     sendNewEmail: 'send new email',
     copied: 'copied',
     about: 'about this site',
+    accept: 'i accept the',
+    policy: 'privacy policy'
   },
   content: {
     about:

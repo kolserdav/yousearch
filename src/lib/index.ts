@@ -10,7 +10,7 @@ export interface Search {
  * Capitalize first letter
  * @param string {string}
  */
-function capitalize(string: string): string {
+export function capitalize(string: string): string {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 

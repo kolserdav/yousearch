@@ -5,13 +5,15 @@ import Theme from '../src/components/Theme';
 import AppBar from '../src/components/AppBar';
 import { setSessionCookie } from '../src/hooks/cookies';
 import * as srv from '../services';
+import * as lib from '../src/lib';
 import Grid from '../src/components/ui/Grid';
 import { StaticContext, StaticProps, Props } from '../next-env';
 import Button from '../src/components/ui/Button';
 import { store, action } from '../src/store';
 import * as Types from '../next-env';
-import { H1 } from '../src/components/ui/Typography';
+import { H1, Label } from '../src/components/ui/Typography';
 import Input from '../src/components/ui/Input';
+import Checkbox from '../src/components/ui/Checkbox';
 import Alert, { AlertProps } from '../src/components/ui/Alert';
 
 export const getStaticProps = ({ locale }: StaticContext): StaticProps => {
@@ -41,6 +43,7 @@ const Registration: NextComponentType<any, any, Props> = (props): React.ReactEle
   };
   const [alert, setAlert] = useState<AlertProps>(_alert);
   const [load, setLoad] = useState<boolean>(true);
+  const [checked, setChecked] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [passwordRepeat, setPasswordRepeat] = useState<string>('');
@@ -134,7 +137,14 @@ const Registration: NextComponentType<any, any, Props> = (props): React.ReactEle
             setPasswordRepeat(value);
           }}
         />
-        <Button disabled={load} type="submit" onClick={registration}>
+        <Checkbox
+          onClick={(e: any) => {
+            setChecked(e.target.checked);
+          }}
+          type="checkbox" 
+        />
+        <span>{lib.capitalize(t.interface.accept)}{` `}<a href="https://automatic.uyem.ru/policy">{t.interface.policy}</a></span>
+        <Button disabled={load || !checked} type="submit" onClick={registration}>
           {t.interface.send}
         </Button>
         <Alert
