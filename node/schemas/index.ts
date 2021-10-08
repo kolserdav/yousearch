@@ -11,7 +11,7 @@ export declare namespace Values {
     message: string;
   }
   interface ServerResponse {
-    readonly [key: string /** Handler name */]: Response; 
+    readonly [key: string /** Handler name */]: Response;
   }
   /** Login values */
   type Login = {
