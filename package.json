@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "yarn ts:build && next build",
-    "start": "next start -p 3002",
+    "start": "next start -p 3012",
     "ts": "tsc -p . -w",
     "ts:build": "tsc -p .",
     "prod": "echo logfile $(pwd)/logs/you-${npm_package_version}.log > ~/.screenrc && screen -dmS you -L yarn start",

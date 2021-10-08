@@ -1,28 +1,9 @@
-import passport from 'passport';
-import { OAuth2Strategy } from 'passport-google-oauth';
 import getConfig from 'next/config';
 import { google } from 'googleapis';
 
 const { serverRuntimeConfig } = getConfig();
 
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = serverRuntimeConfig;
-
-passport.use(
-  new OAuth2Strategy(
-    {
-      clientID: GOOGLE_CLIENT_ID,
-      clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: 'http://localhost:3000/api/callback',
-    },
-    function (accessToken, refreshToken, profile, done) {
-      return done(0, {
-        accessToken,
-        refreshToken,
-        profile,
-      });
-    }
-  )
-);
 
 const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,
