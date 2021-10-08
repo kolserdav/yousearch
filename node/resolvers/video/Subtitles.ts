@@ -54,15 +54,15 @@ const Search: Types.RequestHandler<Types.Schema.Params.Subtitles, any> = async (
         resolve(res.data);
       })
       .catch((err) => {
-        console.error('Error get subtitles', err.response.data, err.response.data.error.errors);
-        resolve(err);
+        console.error('Error get subtitles', err.response.data);
+        resolve(err.response.data.error.message);
       });
   });
   return {
-    result: 'success',
-    message: t.server.subtitles.successReceived,
+    result: 'error',
+    message: resSubs,
     lang: input.lang,
-    items: resSubs,
+    items: [],
   };
 };
 
