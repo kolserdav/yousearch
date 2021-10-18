@@ -41,6 +41,7 @@ const Button = styled.button`
   &:disabled {
     cursor: default;
     background-color: ${(props) => props.theme.bg};
+    animation: none;
   }
   &:disabled:hover {
     box-shadow: 0px 0px var(--border-radius) rgba(0, 0, 0, 0);
