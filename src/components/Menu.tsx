@@ -155,7 +155,7 @@ const Menu: NextComponentType<any, any, MenuProps> = (props) => {
           link,
           description,
         },
-        results: ['message', 'link']
+        results: ['message', 'link'],
       },
     });
   };
@@ -241,7 +241,7 @@ const Menu: NextComponentType<any, any, MenuProps> = (props) => {
           text: mess,
           status: link.result,
           button: b,
-        }
+        };
         setAlert(alertRes);
       }
     });
@@ -276,6 +276,7 @@ const Menu: NextComponentType<any, any, MenuProps> = (props) => {
         button={alert.button}
         relative={true}
       />
+      <div dangerouslySetInnerHTML={{ __html: t.content.contactInformation }} />
       {!other && (
         <LangSelect>
           <LangSelectItem selected={true}>{t.name}</LangSelectItem>

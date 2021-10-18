@@ -50,6 +50,7 @@ const t: Language = {
     donateLink: 'ссылка доната',
     sourceCode: 'исходный код этого проекта расположен на',
     isLicensed: 'исходный код распостраняется по лицензии',
+    contactInformation: 'Напишите мне: <a href="uyem.ru@gmail.com">uyem.ru@gmail.com</a>',
     acceptTos:
       'Иcпользуя сервис вы подтверждаете согласие с условиями использования Youtube Api <a href="https://www.youtube.com/static?template=terms">https://www.youtube.com/static?template=terms</a>',
   },
