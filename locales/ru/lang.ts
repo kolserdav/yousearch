@@ -51,6 +51,8 @@ const t: Language = {
     sourceCode: 'исходный код этого проекта расположен на',
     isLicensed: 'исходный код распостраняется по лицензии',
     contactInformation: 'Напишите мне: <a href="uyem.ru@gmail.com">uyem.ru@gmail.com</a>',
+    closed:
+      'В настоящее время регистрация на нашем сайте закрыта. Мы ожидаем получение квоты на YouTube API, чтобы сделать авторизацию по всем правилам Google.',
     acceptTos:
       'Иcпользуя сервис вы подтверждаете согласие с условиями использования Youtube Api <a href="https://www.youtube.com/static?template=terms">https://www.youtube.com/static?template=terms</a>',
   },

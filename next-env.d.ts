@@ -136,6 +136,7 @@ export declare interface Language {
     isLicensed: string;
     acceptTos: string;
     contactInformation: string;
+    closed: string;
   };
   messages: {
     linkNotValid: string;

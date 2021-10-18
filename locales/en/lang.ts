@@ -41,6 +41,8 @@ const t: Language = {
     policy: 'privacy policy',
   },
   content: {
+    closed:
+      'Registration on our website is currently closed. We are awaiting a quota on the YouTube API in order to make authorization in accordance with all the rules of Google.',
     about:
       'On this site, you can search for YouTube video subtitles. To search for video subtitles, you need to specify the video ID. The video ID is determined by the program automatically when the video link is sent. After specifying the video ID, the system will automatically detect the presence of subtitles in all possible languages, after selecting the subtitle language, you can search for them. The site has a user registration functionality. Currently, registration gives the user the opportunity to create "beautiful" links. These links open a page with viewing data for this moment in the video, it is beautiful because when you insert it on social networks to share it, it will have as a title - the name of the video, as a description an excerpt from the subtitles selected by the user who created the link , and as a picture - a preview of the video image.',
     siteName: 'Youtube subtitle search',

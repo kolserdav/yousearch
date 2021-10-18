@@ -26,8 +26,8 @@ export const getStaticProps = ({ locale }: StaticContext): StaticProps => {
 };
 
 /**
- * 
- * @param props 
+ *
+ * @param props
  */
 const Registration: NextComponentType<any, any, Props> = (props): React.ReactElement => {
   const { t } = props;
@@ -47,6 +47,7 @@ const Registration: NextComponentType<any, any, Props> = (props): React.ReactEle
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [passwordRepeat, setPasswordRepeat] = useState<string>('');
+  const CLOSED = true;
   const registration = (): void => {
     setLoad(true);
     action<Types.Schema.Params.Registration>({
@@ -62,7 +63,9 @@ const Registration: NextComponentType<any, any, Props> = (props): React.ReactEle
     });
   };
   useEffect(() => {
-    setTimeout(() => {setLoad(false)}, 1000)
+    setTimeout(() => {
+      setLoad(false);
+    }, 1000);
     const storeSubs = store.subscribe(() => {
       const state: Types.Action<any> = store.getState();
       if (state.type === 'REGISTRATION') {
@@ -110,6 +113,9 @@ const Registration: NextComponentType<any, any, Props> = (props): React.ReactEle
       <AppBar t={t} load={load} />
       <Grid direction="column" align="center">
         <H1>{t.interface.registration}</H1>
+        <h5 style={{ marginLeft: '2rem', marginRight: '2rem', color: 'red' }}>
+          {t.content.closed}
+        </h5>
         <Input
           value={email}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,11 +123,13 @@ const Registration: NextComponentType<any, any, Props> = (props): React.ReactEle
             setEmail(value);
           }}
           type="email"
+          disabled={CLOSED}
           placeholder={t.interface.email}
         />
         <Input
           type="password"
           value={password}
+          disabled={CLOSED}
           placeholder={t.interface.password}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             const { value } = e.target;
@@ -131,6 +139,7 @@ const Registration: NextComponentType<any, any, Props> = (props): React.ReactEle
         <Input
           type="password"
           value={passwordRepeat}
+          disabled={CLOSED}
           placeholder={t.interface.passwordRepeat}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             const { value } = e.target;
@@ -138,13 +147,18 @@ const Registration: NextComponentType<any, any, Props> = (props): React.ReactEle
           }}
         />
         <Checkbox
+          disabled={CLOSED}
           onClick={(e: any) => {
             setChecked(e.target.checked);
           }}
-          type="checkbox" 
+          type="checkbox"
         />
-        <span>{lib.capitalize(t.interface.accept)}{` `}<a href="https://automatic.uyem.ru/policy">{t.interface.policy}</a></span>
-        <Button disabled={load || !checked} type="submit" onClick={registration}>
+        <span>
+          {lib.capitalize(t.interface.accept)}
+          {` `}
+          <a href="https://automatic.uyem.ru/policy">{t.interface.policy}</a>
+        </span>
+        <Button disabled={CLOSED || load || !checked} type="submit" onClick={registration}>
           {t.interface.send}
         </Button>
         <Alert
