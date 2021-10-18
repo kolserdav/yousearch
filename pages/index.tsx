@@ -16,6 +16,7 @@ import Grid from '../src/components/ui/Grid';
 import Button from '../src/components/ui/Button';
 import { StaticContext, StaticProps, Props } from '../next-env';
 import { H1, Description, Label } from '../src/components/ui/Typography';
+import IconButton from '../src/components/ui/IconButton';
 
 interface UpdateQuery {
   // eslint-disable-next-line no-unused-vars
@@ -428,9 +429,18 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
         <meta property="og:title" content={title || t.content.siteName} />
         <meta property="og:url" content="https://next.uyem.ru/" />
         <meta property="og:updated_time" content="1608949224609" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="manifest" href="/site.webmanifest" />
       </Head>
       <AppBar t={t} load={load} other={other} />
       <Grid direction="column" align="center">
+        <a href="https://youtube.com" title="https://youtube.com">
+          <div style={{ maxWidth: '90%', minWidth: '280px' }}>
+            <img src="/YouTube_Logo.svg" />
+          </div>
+        </a>
         <H1>{title || t.content.siteName}</H1>
         <h5
           style={{ marginLeft: '2rem', marginRight: '2rem' }}
