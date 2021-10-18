@@ -27,7 +27,10 @@ yarn-error.log*
 .env.production.local
 
 tmp/
+next.config.js
+
 database/you.db
 next.config.js
 logs/*
 !logs/LOGS.md
+ 
