@@ -38,7 +38,7 @@ const t: Language = {
     copied: 'скопирвано',
     about: 'о сайте',
     accept: 'принимаю',
-    policy: 'политику конфиденциальности'
+    policy: 'политику конфиденциальности',
   },
   content: {
     about:
@@ -50,6 +50,8 @@ const t: Language = {
     donateLink: 'ссылка доната',
     sourceCode: 'исходный код этого проекта расположен на',
     isLicensed: 'исходный код распостраняется по лицензии',
+    acceptTos:
+      'Иcпользуя сервис вы подтверждаете согласие с условиями использования Youtube Api <a href="https://www.youtube.com/static?template=terms">https://www.youtube.com/static?template=terms</a>',
   },
   messages: {
     linkNotValid: 'ссылка имеет неверный формат',

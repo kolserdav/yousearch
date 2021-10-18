@@ -134,6 +134,7 @@ export declare interface Language {
     donateLink: string;
     sourceCode: string;
     isLicensed: string;
+    acceptTos: string;
   };
   messages: {
     linkNotValid: string;

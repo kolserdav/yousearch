@@ -38,7 +38,7 @@ const t: Language = {
     copied: 'copied',
     about: 'about this site',
     accept: 'i accept the',
-    policy: 'privacy policy'
+    policy: 'privacy policy',
   },
   content: {
     about:
@@ -50,6 +50,8 @@ const t: Language = {
     donateLink: 'donate link',
     sourceCode: 'the source code of this project is located at',
     isLicensed: 'source code is licensed',
+    acceptTos:
+      'By using the service you agree to the terms of use of Youtube Api <a href="https://www.youtube.com/static?template=terms"> https://www.youtube.com/static?template=terms</a > ',
   },
   messages: {
     linkNotValid: 'link not valid',

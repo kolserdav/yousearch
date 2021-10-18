@@ -52,8 +52,12 @@ const getBeautiTime = (seconds: string): string => {
 async function checkOldBrowser(): Promise<boolean> {
   return await new Promise((resolve) => {
     const img = new Image();
-    img.onload = function() { resolve(false); };
-    img.onerror = function() { resolve(true); };
+    img.onload = function () {
+      resolve(false);
+    };
+    img.onerror = function () {
+      resolve(true);
+    };
     img.src = '/img/webp.webp';
   });
 }
@@ -142,7 +146,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
     setLinkValue(newLink);
   };
   /**
-   * 
+   *
    * @param query {Query}
    */
   const updateQuery: UpdateQuery = (query) => {
@@ -428,7 +432,13 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
       <AppBar t={t} load={load} other={other} />
       <Grid direction="column" align="center">
         <H1>{title || t.content.siteName}</H1>
-        <Description>{description || t.content.siteDescription}.</Description>
+        <h5
+          style={{ marginLeft: '2rem', marginRight: '2rem' }}
+          dangerouslySetInnerHTML={{ __html: t.content.acceptTos }}
+        />
+        <Description style={{ marginLeft: '2rem', marginRight: '2rem' }}>
+          {description || t.content.siteDescription}.
+        </Description>
         {/** Get video ID */}
         <FormItem>
           <Label>{t.interface.setLink}</Label>
