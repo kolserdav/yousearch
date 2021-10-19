@@ -45,7 +45,7 @@ const t: Language = {
       'Registration on our website is currently closed. We are awaiting a quota on the YouTube API in order to make authorization in accordance with all the rules of Google.',
     about:
       'On this site, you can search for YouTube video subtitles. To search for video subtitles, you need to specify the video ID. The video ID is determined by the program automatically when the video link is sent. After specifying the video ID, the system will automatically detect the presence of subtitles in all possible languages, after selecting the subtitle language, you can search for them. The site has a user registration functionality. Currently, registration gives the user the opportunity to create "beautiful" links. These links open a page with viewing data for this moment in the video, it is beautiful because when you insert it on social networks to share it, it will have as a title - the name of the video, as a description an excerpt from the subtitles selected by the user who created the link , and as a picture - a preview of the video image.',
-    siteName: 'Youtube subtitle search',
+    siteName: 'YouTube subtitle search',
     siteDescription: 'provide a link to the video and search in its subtitles',
     donate:
       'We do not receive money for the development of this project, but for the operation of this panel we have to spend our own money, so we will be glad if you support us from the bottom of your heart:',
@@ -54,7 +54,7 @@ const t: Language = {
     isLicensed: 'source code is licensed',
     contactInformation: 'Contact me: <a href="uyem.ru@gmail.com">uyem.ru@gmail.com</a>',
     acceptTos:
-      'By using the service you agree to the terms of use of Youtube Api <a href="https://www.youtube.com/static?template=terms"> https://www.youtube.com/static?template=terms</a > ',
+      'By using the service you agree to the terms of use of YouTube Api <a href="https://www.youtube.com/static?template=terms"> https://www.youtube.com/static?template=terms</a > ',
   },
   messages: {
     linkNotValid: 'link not valid',
@@ -68,7 +68,7 @@ const t: Language = {
   },
   meta: {
     keywords: 'subtitle search, youtube, youtube, youtube, subtitle, subtitle, search',
-    description: 'free service for searching keywords by subtitles of Youtube videos',
+    description: 'free service for searching keywords by subtitles of YouTube videos',
   },
   server: {
     email: {
