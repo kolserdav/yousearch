@@ -52,7 +52,7 @@ const t: Language = {
     donateLink: 'donate link',
     sourceCode: 'the source code of this project is located at',
     isLicensed: 'source code is licensed',
-    contactInformation: 'Contact me: <a href="uyem.ru@gmail.com">uyem.ru@gmail.com</a>',
+    contactInformation: 'Contact me: <a href="mailto: uyem.ru@gmail.com">uyem.ru@gmail.com</a>',
     acceptTos:
       'By using the service you agree to the terms of use of YouTube API <a href="https://www.youtube.com/static?template=terms"> https://www.youtube.com/static?template=terms</a > ',
   },

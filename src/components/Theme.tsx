@@ -32,6 +32,7 @@ const GlobalVariables = styled.div`
   background-color: ${(props) => props.theme.light};
   width: 100%;
   height: 100%;
+  min-height: 100vh;
 `;
 
 export default function Theme(props: Types.ThemeProps): React.ReactElement {

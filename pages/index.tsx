@@ -16,7 +16,6 @@ import Grid from '../src/components/ui/Grid';
 import Button from '../src/components/ui/Button';
 import { StaticContext, StaticProps, Props } from '../next-env';
 import { H1, Description, Label } from '../src/components/ui/Typography';
-import IconButton from '../src/components/ui/IconButton';
 
 interface UpdateQuery {
   // eslint-disable-next-line no-unused-vars
