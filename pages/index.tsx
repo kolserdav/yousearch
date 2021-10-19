@@ -610,7 +610,7 @@ const Home: NextComponentType<any, any, HomeProps> = (props): React.ReactElement
       ) : (
         <Theme>
           {/** 404 page if props.error */}
-          <Grid direction="column" align="center">
+          <Grid justifyContent="center" minHeight="100vh" direction="column" align="center">
             <H1>{t.interface.pageNotFound}&nbsp;¯\_(ツ)_/¯</H1>
             <FormItem>
               <Link href="/">
