@@ -54,7 +54,7 @@ const t: Language = {
     isLicensed: 'source code is licensed',
     contactInformation: 'Contact me: <a href="uyem.ru@gmail.com">uyem.ru@gmail.com</a>',
     acceptTos:
-      'By using the service you agree to the terms of use of YouTube Api <a href="https://www.youtube.com/static?template=terms"> https://www.youtube.com/static?template=terms</a > ',
+      'By using the service you agree to the terms of use of YouTube API <a href="https://www.youtube.com/static?template=terms"> https://www.youtube.com/static?template=terms</a > ',
   },
   messages: {
     linkNotValid: 'link not valid',

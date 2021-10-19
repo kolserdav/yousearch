@@ -54,7 +54,7 @@ const t: Language = {
     closed:
       'В настоящее время регистрация на нашем сайте закрыта. Мы ожидаем получение квоты на YouTube API, чтобы сделать авторизацию по всем правилам Google.',
     acceptTos:
-      'Иcпользуя сервис вы подтверждаете согласие с условиями использования YouTube Api <a href="https://www.youtube.com/static?template=terms">https://www.youtube.com/static?template=terms</a>',
+      'Иcпользуя сервис вы подтверждаете согласие с условиями использования YouTube API <a href="https://www.youtube.com/static?template=terms">https://www.youtube.com/static?template=terms</a>',
   },
   messages: {
     linkNotValid: 'ссылка имеет неверный формат',
