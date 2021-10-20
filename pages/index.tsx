@@ -435,12 +435,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
       </Head>
       <AppBar t={t} load={load} other={other} />
       <Grid direction="column" align="center">
-        <a href="https://youtube.com" title="https://youtube.com">
-          <div style={{ maxWidth: '90%', minWidth: '280px' }}>
-            <img src="/YouTube_Logo.svg" />
-          </div>
-        </a>
-        <H1>{title || t.content.siteName}</H1>
+        <H1 dangerouslySetInnerHTML={{ __html: title || t.content.siteName }} />
         <h5
           style={{ marginLeft: '2rem', marginRight: '2rem' }}
           dangerouslySetInnerHTML={{ __html: t.content.acceptTos }}
