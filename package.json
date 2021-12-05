@@ -1,8 +1,10 @@
 {
-  "name": "youtube-search-subtitles",
+  "name": "yousearch",
   "version": "2.2.2",
   "private": true,
   "license": "GNU GPL",
+  "homepage": "https://yousearch.uyem.ru",
+  "repository": "git@github.com:kolserdav/nextjs-graphql.git",
   "author": {
     "name": "Sergey Kolmiller",
     "email": "uyem.ru@gmail.com",
