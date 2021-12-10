@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { Language, LanguageValue } from '../next-env';
 
 /**
  * Get lang values

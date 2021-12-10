@@ -1,5 +1,3 @@
-import { Language } from '../../next-env';
-
 const t: Language = {
   name: 'english',
   value: 'en',

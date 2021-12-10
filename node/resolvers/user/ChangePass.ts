@@ -1,5 +1,4 @@
 import * as orm from '../../orm';
-import * as Types from '../../../next-env';
 import * as srv from '../../../services';
 import * as lib from '../../lib';
 import getConfig from 'next/config';
@@ -12,10 +11,11 @@ const { MIN_PASSWORD_LENGTH, LINK_EXPIRE } = serverRuntimeConfig;
  * @param params
  * @param context
  */
-const ChangePass: Types.RequestHandler<
-  Types.Schema.Params.ChangePass,
-  Types.Schema.Values.Response
-> = async (_parent, params, context) => {
+const ChangePass: RequestHandler<Schema.Params.ChangePass, Schema.Values.Response> = async (
+  _parent,
+  params,
+  context
+) => {
   const { headers } = context;
   const { lang } = headers;
   const t = srv.getLang(lang);

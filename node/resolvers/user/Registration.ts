@@ -1,4 +1,3 @@
-import * as Types from '../../../next-env';
 import * as orm from '../../orm';
 import * as srv from '../../../services';
 import * as lib from '../../lib';
@@ -10,13 +9,14 @@ const { MIN_PASSWORD_LENGTH } = serverRuntimeConfig;
 /**
  * Registion route
  * @param parent parent route
- * @param params {Types.Schema.Params.Registration} request params
+ * @param params {Schema.Params.Registration} request params
  * @param context context (headers)
  */
-const Registration: Types.RequestHandler<
-  Types.Schema.Params.Registration,
-  Types.Schema.Values.Registration
-> = async (parent, params, context) => {
+const Registration: RequestHandler<Schema.Params.Registration, Schema.Values.Registration> = async (
+  parent,
+  params,
+  context
+) => {
   const { headers } = context;
   const { lang } = headers;
   const t = srv.getLang(lang);

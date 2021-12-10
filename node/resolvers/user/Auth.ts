@@ -1,19 +1,18 @@
 import * as orm from '../../orm';
-import * as Types from '../../../next-env';
 import * as srv from '../../../services';
 import * as lib from '../../lib';
 
 /**
  * Auth user query route
- * @param _parent 
+ * @param _parent
  * @param params {void}
- * @param context 
+ * @param context
  */
-const Auth: Types.RequestHandler<void, Types.Schema.Values.Auth> = async (_parent, params, context) => {
+const Auth: RequestHandler<void, Schema.Values.Auth> = async (_parent, params, context) => {
   const { headers } = context;
   const { lang, xqt } = headers;
   const t = srv.getLang(lang);
-  const guestRes: Types.Schema.Values.Auth = {
+  const guestRes: Schema.Values.Auth = {
     result: 'success',
     message: 'auth',
     role: 'guest',

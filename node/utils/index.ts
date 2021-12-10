@@ -1,5 +1,4 @@
 import transporter from './transporter';
-import * as Types from '../../next-env';
 import * as lib from '../lib';
 import getConfig from 'next/config';
 import t from '../../locales/en/lang';
@@ -14,7 +13,7 @@ const appOrigin = dev ? APP_ORIGIN_LOCAL : APP_ORIGIN;
  * @param message
  * @param errMess
  */
-function sendEmail(message: Types.Email, errMess: string): Promise<Types.OrmResult<any>> {
+function sendEmail(message: Email, errMess: string): Promise<OrmResult<any>> {
   return new Promise((resolve) => {
     transporter
       .sendMail(message)
@@ -40,16 +39,16 @@ function sendEmail(message: Types.Email, errMess: string): Promise<Types.OrmResu
  * Send email with confirm link
  * @param email {string}
  * @param datePass {string}
- * @param t {Types.Language}
+ * @param t {Language}
  */
 export function sendConfirmEmail(
   email: string,
   datePass: string,
-  t: Types.Language
-): Promise<Types.OrmResult<any>> {
+  t: Language
+): Promise<OrmResult<any>> {
   const key = lib.encodeBase64(datePass);
   const link = `${appOrigin}/confirm?e=${email}&k=${key}`;
-  const userMessage: Types.Email = {
+  const userMessage: Email = {
     from: SMTP_EMAIL,
     to: email,
     subject: lib.capitalize(t.server.letter.proofOfAddress),
@@ -71,13 +70,13 @@ export function sendConfirmEmail(
  * Send email with change passsword link
  * @param email {string}
  * @param datePass {string}
- * @param t {Types.Language}
+ * @param t {Language}
  */
 export function sendForgotEmail(
   email: string,
   datePass: string,
-  t: Types.Language
-): Promise<Types.OrmResult<any>> {
+  t: Language
+): Promise<OrmResult<any>> {
   const key = lib.encodeBase64(datePass);
   const link = `${appOrigin}/change-pwd?e=${email}&k=${key}`;
   const userMessage = {

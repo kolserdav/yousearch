@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import type { NextComponentType } from 'next';
 import { useRouter } from 'next/router';
-import Theme from '../src/components/Theme';
-import AppBar from '../src/components/AppBar';
-import { setSessionCookie } from '../src/hooks/cookies';
+import Theme from '../components/Theme';
+import AppBar from '../components/AppBar';
+import { setSessionCookie } from '../hooks/cookies';
 import * as srv from '../services';
-import * as lib from '../src/lib';
-import Grid from '../src/components/ui/Grid';
-import { StaticContext, StaticProps, Props } from '../next-env';
-import Button from '../src/components/ui/Button';
-import { store, action } from '../src/store';
-import * as Types from '../next-env';
-import { H1, Label } from '../src/components/ui/Typography';
-import Input from '../src/components/ui/Input';
-import Checkbox from '../src/components/ui/Checkbox';
-import Alert, { AlertProps } from '../src/components/ui/Alert';
+import * as lib from '../lib';
+import Grid from '../components/ui/Grid';
+import Button from '../components/ui/Button';
+import { store, action } from '../store';
+import { H1, Label } from '../components/ui/Typography';
+import Input from '../components/ui/Input';
+import Checkbox from '../components/ui/Checkbox';
+import Alert, { AlertProps } from '../components/ui/Alert';
 
 export const getStaticProps = ({ locale }: StaticContext): StaticProps => {
   const lang = srv.getLang(locale);
@@ -50,7 +48,7 @@ const Registration: NextComponentType<any, any, Props> = (props): React.ReactEle
   const CLOSED = true;
   const registration = (): void => {
     setLoad(true);
-    action<Types.Schema.Params.Registration>({
+    action<Schema.Params.Registration>({
       type: 'REGISTRATION_REQUEST',
       body: {
         input: {
@@ -67,9 +65,9 @@ const Registration: NextComponentType<any, any, Props> = (props): React.ReactEle
       setLoad(false);
     }, 1000);
     const storeSubs = store.subscribe(() => {
-      const state: Types.Action<any> = store.getState();
+      const state: Action<any> = store.getState();
       if (state.type === 'REGISTRATION') {
-        const { body }: Types.Action<Types.Schema.Values.RegistrationRequest> = state;
+        const { body }: Action<Schema.Values.RegistrationRequest> = state;
         const { registration } = body;
         setLoad(false);
         if (!registration) {

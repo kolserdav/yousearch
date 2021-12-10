@@ -2,12 +2,11 @@ import React, { useEffect } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { NextComponentType } from 'next';
 import Grid from './Grid';
-import * as Types from '../../../next-env';
 
 export interface AlertProps {
   open: boolean;
   relative?: boolean;
-  status: Types.Result | 'info';
+  status: Result | 'info';
   text: string;
   button?: React.ReactElement;
   trigger?: () => void;
@@ -95,8 +94,8 @@ const Wrapper = styled.div<WraperProps>`
 `;
 
 interface AlertStyledProps {
-  status: Types.Result | 'info';
-  theme: Types.Theme;
+  status: Result | 'info';
+  theme: Theme;
 }
 
 const AlertStyled = styled.div<AlertStyledProps>`

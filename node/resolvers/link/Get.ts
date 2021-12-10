@@ -1,5 +1,4 @@
 import * as orm from '../../orm';
-import * as Types from '../../../next-env';
 import * as srv from '../../../services';
 
 /**
@@ -8,7 +7,7 @@ import * as srv from '../../../services';
  * @param params {void}
  * @param context
  */
-const GetLink: Types.RequestHandler<Types.Schema.Params.ID, Types.Schema.Values.Link> = async (
+const GetLink: RequestHandler<Schema.Params.ID, Schema.Values.Link> = async (
   _parent,
   params,
   context

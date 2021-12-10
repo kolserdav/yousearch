@@ -5,21 +5,19 @@ import Cookies from 'universal-cookie';
 import { NextComponentType } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import * as lib from '../src/lib';
-import AppBar from '../src/components/AppBar';
-import { store, action } from '../src/store';
+import * as lib from '../lib';
+import AppBar from '../components/AppBar';
+import { store, action } from '../store';
 import * as srv from '../services';
-import Theme from '../src/components/Theme';
-import * as Types from '../next-env';
-import Alert, { AlertProps } from '../src/components/ui/Alert';
-import Grid from '../src/components/ui/Grid';
-import Button from '../src/components/ui/Button';
-import { StaticContext, StaticProps, Props } from '../next-env';
-import { H1, Description, Label } from '../src/components/ui/Typography';
+import Theme from '../components/Theme';
+import Alert, { AlertProps } from '../components/ui/Alert';
+import Grid from '../components/ui/Grid';
+import Button from '../components/ui/Button';
+import { H1, Description, Label } from '../components/ui/Typography';
 
 interface UpdateQuery {
   // eslint-disable-next-line no-unused-vars
-  (query: Types.Query): void;
+  (query: Query): void;
 }
 
 const cookies = new Cookies();
@@ -63,10 +61,10 @@ async function checkOldBrowser(): Promise<boolean> {
 }
 
 export interface HomeProps extends Props {
-  t: Types.Language;
+  t: Language;
   error: boolean;
   title?: string;
-  image?: Types.Schema.Values.Image;
+  image?: Schema.Values.Image;
   description?: string;
   other?: boolean;
 }
@@ -113,16 +111,16 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
   const playerRef = useRef<any>();
   const videoIDRef = useRef<string>();
   const langRef = useRef<string>();
-  const subtitlesRef = useRef<Types.Schema.Values.SubtitlesItem[]>();
-  const chunksRef = useRef<Types.Schema.Values.SubtitlesItem[][]>();
+  const subtitlesRef = useRef<Schema.Values.SubtitlesItem[]>();
+  const chunksRef = useRef<Schema.Values.SubtitlesItem[][]>();
   const searchValueRef = useRef<string>('');
   const [link, setLink] = useState<string>('');
   const [linkValue, setLinkValue] = useState<string>('');
   const [lang, setLang] = useState<string>('');
-  const [languages, setLanguages] = useState<Types.Schema.Values.CaptionsItem[]>([]);
+  const [languages, setLanguages] = useState<Schema.Values.CaptionsItem[]>([]);
   const [search, setSearch] = useState<string>('');
   const [load, setLoad] = useState<boolean>(false);
-  const [subtitles, setSubtitles] = useState<Types.Schema.Values.SubtitlesItem[]>([]);
+  const [subtitles, setSubtitles] = useState<Schema.Values.SubtitlesItem[]>([]);
   const [auto, setAuto] = useState<boolean>(true);
   const [showMore, setShowMore] = useState<boolean>(false);
   // Initial alert
@@ -200,7 +198,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
     // Set new values
     getCaptions(id);
     setEmbedLink(id);
-    const newQ: Types.Query = Object.assign({}, query);
+    const newQ: Query = Object.assign({}, query);
     newQ.v = id;
     updateQuery(newQ);
   };
@@ -208,7 +206,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
    * Search subtitles into session storage with web worker
    */
   const searchSubtitles = async () => {
-    const newQ: Types.Query = Object.assign({}, query);
+    const newQ: Query = Object.assign({}, query);
     newQ.se = searchValueRef.current;
     updateQuery(newQ);
     setSubtitles([]);
@@ -247,7 +245,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
    */
   const getSubtitles = (lang: string): void => {
     setLoad(true);
-    action<Types.Schema.Params.Subtitles>({
+    action<Schema.Params.Subtitles>({
       type: 'SUBTITLES_REQUEST',
       body: {
         input: {
@@ -264,7 +262,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
    */
   const getCaptions = (id: string): void => {
     setLoad(true);
-    action<Types.Schema.Params.Captions>({
+    action<Schema.Params.Captions>({
       type: 'CAPTIONS_REQUEST',
       body: {
         input: {
@@ -312,13 +310,13 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
      * Subscribe to storage
      */
     const storeSubs = store.subscribe(() => {
-      const state: Types.Action<any> = store.getState();
+      const state: Action<any> = store.getState();
       /**
        * Get subtitles listener
        */
       if (state.type === 'SUBTITLES') {
         setLoad(false);
-        const { body }: Types.Action<Types.Schema.Values.SubtitlesRequest> = state;
+        const { body }: Action<Schema.Values.SubtitlesRequest> = state;
         const { subtitles } = body;
         if (!subtitles) {
           setAlert({
@@ -350,7 +348,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
        */
       if (state.type === 'CAPTIONS') {
         setLoad(false);
-        const { body }: Types.Action<Types.Schema.Values.CaptionsRequest> = state;
+        const { body }: Action<Schema.Values.CaptionsRequest> = state;
         const { captions } = body;
         if (!captions) {
           setAlert({
@@ -369,7 +367,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
           const { items } = captions;
           // Set default lang from cookie
           const cookie = cookies.get('dlang');
-          items.forEach((i: Types.Schema.Values.CaptionsItem) => {
+          items.forEach((i: Schema.Values.CaptionsItem) => {
             if (!l) {
               if (i.lang === cookie) {
                 setLang(i.lang);
@@ -387,7 +385,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
             langRef.current = items[0].lang;
             setLang(items[0].lang);
           }
-          const newQ: Types.Query = Object.assign({}, query);
+          const newQ: Query = Object.assign({}, query);
           newQ.l = langRef.current;
           updateQuery(newQ);
           setLanguages(items);
@@ -470,7 +468,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
                   cookies.set('dlang', value, { expires: date, sameSite: 'strict' });
                   langRef.current = value;
                   setLang(value);
-                  const newQ: Types.Query = Object.assign({}, query);
+                  const newQ: Query = Object.assign({}, query);
                   newQ.l = value;
                   updateQuery(newQ);
                   setTimeout(() => {
@@ -502,7 +500,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
               {t.interface.search}
             </Button>
             <Results>
-              {subtitles.map((item: Types.Schema.Values.SubtitlesItem, index: number) => {
+              {subtitles.map((item: Schema.Values.SubtitlesItem, index: number) => {
                 const sReg = new RegExp(`^${s}\\.`);
                 const beautiTime = getBeautiTime(item.start);
                 return (
@@ -513,7 +511,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
                       onClick={() => {
                         if (!other) {
                           const _start = item.start.replace(/\.\d+/, '');
-                          const newQ: Types.Query = Object.assign({}, query);
+                          const newQ: Query = Object.assign({}, query);
                           newQ.s = _start;
                           updateQuery(newQ);
                           setAuto(true);
@@ -539,7 +537,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
                   const oldCh = parseInt(ch) || 0;
                   const chunk = chunksRef.current[oldCh + 1];
                   if (chunk) {
-                    const newQ: Types.Query = Object.assign({}, query);
+                    const newQ: Query = Object.assign({}, query);
                     newQ.ch = oldCh + 1;
                     updateQuery(newQ);
                     const res = subtitles.concat(chunk);

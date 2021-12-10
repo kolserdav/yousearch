@@ -1,4 +1,3 @@
-import type { Request, Response } from 'express';
 import getConfig from 'next/config';
 import { google } from 'googleapis';
 

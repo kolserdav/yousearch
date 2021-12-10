@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { NextComponentType } from 'next';
 import styled from 'styled-components';
-import * as Types from '../next-env';
 import * as srv from '../services';
-import Theme from '../src/components/Theme';
-import AppBar from '../src/components/AppBar';
-import { H1, Description, Label } from '../src/components/ui/Typography';
-import Grid from '../src/components/ui/Grid';
+import Theme from '../components/Theme';
+import AppBar from '../components/AppBar';
+import { H1, Description, Label } from '../components/ui/Typography';
+import Grid from '../components/ui/Grid';
 
 const repoUrl = 'https://github.com/kolserdav/nextjs-graphql';
 const licenseUrl = 'https://www.gnu.org/licenses/gpl-3.0.ru.html';
@@ -15,7 +14,7 @@ const licenseUrl = 'https://www.gnu.org/licenses/gpl-3.0.ru.html';
  * About page
  * @param props
  */
-const About: NextComponentType<any, any, Types.Props> = (props): React.ReactElement => {
+const About: NextComponentType<any, any, Props> = (props): React.ReactElement => {
   const { t } = props;
   const [load, setLoad] = useState<boolean>(true);
   useEffect(() => {
@@ -61,7 +60,7 @@ const Container = styled.div`
   width: var(--container-width);
 `;
 
-export const getStaticProps = ({ locale }: Types.StaticContext): Types.StaticProps => {
+export const getStaticProps = ({ locale }: StaticContext): StaticProps => {
   const lang = srv.getLang(locale);
   return {
     props: {

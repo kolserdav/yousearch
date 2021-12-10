@@ -1,8 +1,7 @@
 import React from 'react';
 import { NextComponentType, GetServerSidePropsContext } from 'next';
-import { store, action } from '../src/store';
+import { store, action } from '../store';
 import Home, { HomeProps } from './index';
-import * as Types from '../next-env';
 import * as srv from '../services';
 
 const HomeId: NextComponentType<any, any, HomeProps> = (props): React.ReactElement => {
@@ -17,7 +16,7 @@ const HomeId: NextComponentType<any, any, HomeProps> = (props): React.ReactEleme
  * @param id {string} videoId
  */
 const getInfo = (id: string): void => {
-  action<Types.Schema.Params.Captions>({
+  action<Schema.Params.Captions>({
     type: 'INFO_REQUEST',
     body: {
       input: {
@@ -33,7 +32,7 @@ const getInfo = (id: string): void => {
  * @param id {number} videoId
  */
 const getLink = (id: number): void => {
-  action<Types.Schema.Params.ID>({
+  action<Schema.Params.ID>({
     type: 'GET_LINK_REQUEST',
     body: {
       input: {
@@ -56,7 +55,7 @@ export async function getServerSideProps(
   ctx: GetServerSidePropsContext
 ): Promise<HomeServerSideProps> {
   const { locale, query }: any = ctx;
-  const { v, i }: Types.Query = query;
+  const { v, i }: Query = query;
   const lang = srv.getLang(locale);
   if (!i) {
     ctx.res.statusCode = 404;
@@ -70,11 +69,11 @@ export async function getServerSideProps(
   /**
    * Get link
    */
-  const link = await new Promise<Types.Schema.Values.Link>((resolve) => {
+  const link = await new Promise<Schema.Values.Link>((resolve) => {
     const storeSubs = store.subscribe(() => {
-      const state: Types.Action<any> = store.getState();
+      const state: Action<any> = store.getState();
       if (state.type === 'GET_LINK') {
-        const { body }: Types.Action<Types.Schema.Values.LinkRequest> = state;
+        const { body }: Action<Schema.Values.LinkRequest> = state;
         const { link } = body;
         if (!link) {
           resolve({
@@ -100,11 +99,11 @@ export async function getServerSideProps(
   /**
    * Get video info
    */
-  const info = await new Promise<Types.Schema.Values.Info>((resolve) => {
+  const info = await new Promise<Schema.Values.Info>((resolve) => {
     const storeSubs = store.subscribe(() => {
-      const state: Types.Action<any> = store.getState();
+      const state: Action<any> = store.getState();
       if (state.type === 'INFO') {
-        const { body }: Types.Action<Types.Schema.Values.InfoRequest> = state;
+        const { body }: Action<Schema.Values.InfoRequest> = state;
         const { info } = body;
         if (!info) {
           resolve({

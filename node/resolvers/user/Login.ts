@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt';
-import * as Types from '../../../next-env';
 import * as orm from '../../orm';
 import * as lib from '../../lib';
 import * as srv from '../../../services';
@@ -10,10 +9,10 @@ const { MIN_PASSWORD_LENGTH } = serverRuntimeConfig;
 /**
  * Registion route
  * @param _parent parent route
- * @param params {Types.Schema.Params.Login} request params
+ * @param params {Schema.Params.Login} request params
  * @param context context (headers)
  */
-const Login: Types.RequestHandler<Types.Schema.Params.Login, Types.Schema.Values.Login> = async (
+const Login: RequestHandler<Schema.Params.Login, Schema.Values.Login> = async (
   _parent,
   params,
   context

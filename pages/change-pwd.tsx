@@ -2,19 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Link from 'next/link';
-import * as Types from '../next-env';
 import * as srv from '../services';
-import AppBar from '../src/components/AppBar';
-import Theme from '../src/components/Theme';
-import { store, action } from '../src/store';
-import Alert, { AlertProps } from '../src/components/ui/Alert';
-import Input from '../src/components/ui/Input';
-import Grid from '../src/components/ui/Grid';
-import { H1, Label } from '../src/components/ui/Typography';
-import Button from '../src/components/ui/Button';
+import AppBar from '../components/AppBar';
+import Theme from '../components/Theme';
+import { store, action } from '../store';
+import Alert, { AlertProps } from '../components/ui/Alert';
+import Input from '../components/ui/Input';
+import Grid from '../components/ui/Grid';
+import { H1, Label } from '../components/ui/Typography';
+import Button from '../components/ui/Button';
 import { NextComponentType } from 'next';
 
-const Forgot: NextComponentType<any, any, Types.Props> = (props) => {
+const Forgot: NextComponentType<any, any, Props> = (props) => {
   const router = useRouter();
   const { e, k } = router.query;
   const { t } = props;
@@ -46,10 +45,10 @@ const Forgot: NextComponentType<any, any, Types.Props> = (props) => {
   useEffect(() => {
     setLoad(false);
     const storeSubs = store.subscribe(() => {
-      const state: Types.Action<any> = store.getState();
+      const state: Action<any> = store.getState();
       if (state.type === 'CHANGE_PASS') {
         setLoad(false);
-        const { body }: Types.Action<Types.Schema.Values.ChangePassRequest> = state;
+        const { body }: Action<Schema.Values.ChangePassRequest> = state;
         const { changePass } = body;
         if (!changePass) {
           setAlert({
@@ -135,7 +134,7 @@ const LinkStyled = styled.a`
   }
 `;
 
-export const getStaticProps = ({ locale }: Types.StaticContext): Types.StaticProps => {
+export const getStaticProps = ({ locale }: StaticContext): StaticProps => {
   const lang = srv.getLang(locale);
   return {
     props: {

@@ -7,7 +7,6 @@ import styled, { keyframes, css } from 'styled-components';
 import Cookies from 'universal-cookie';
 import Alert, { AlertProps } from './ui/Alert';
 import IconButton from './ui/IconButton';
-import * as Types from '../../next-env';
 
 const cookies = new Cookies();
 
@@ -16,14 +15,14 @@ const duration = 350;
 const date = new Date();
 date.setFullYear(date.getFullYear() + 12);
 
-interface MenuProps extends Types.Props {
+interface MenuProps extends Props {
   other?: boolean;
   load: boolean;
 }
 
 /**
  * Left menu element
- * @param props {Types.Props}
+ * @param props {Props}
  */
 const Menu: NextComponentType<any, any, MenuProps> = (props) => {
   const { t, other, load } = props;
@@ -31,7 +30,7 @@ const Menu: NextComponentType<any, any, MenuProps> = (props) => {
   const emailRef = useRef<string>('');
   const [show, setShow] = useState<boolean>(false);
   const [_show, _setShow] = useState<boolean>(false);
-  const [role, setRole] = useState<Types.UserRoles>('guest');
+  const [role, setRole] = useState<UserRoles>('guest');
   // Alert
   const _alert: AlertProps = {
     open: false,
@@ -126,7 +125,7 @@ const Menu: NextComponentType<any, any, MenuProps> = (props) => {
     }
     const chQ = ch ? `&ch=${ch}` : '';
     const link = `/${v}?l=${l}&se=${se}${chQ}&s=${s}`;
-    const { body }: Types.Action<Types.Schema.Values.SubtitlesRequest> = store.getState().SUBTITLES;
+    const { body }: Action<Schema.Values.SubtitlesRequest> = store.getState().SUBTITLES;
     const { subtitles } = body;
     if (!subtitles) {
       setAlert({
@@ -148,7 +147,7 @@ const Menu: NextComponentType<any, any, MenuProps> = (props) => {
         );
       }
     });
-    action<Types.Schema.Params.Link>({
+    action<Schema.Params.Link>({
       type: 'LINK_REQUEST',
       body: {
         input: {
@@ -162,9 +161,9 @@ const Menu: NextComponentType<any, any, MenuProps> = (props) => {
   useEffect(() => {
     if (role === 'guest') auth();
     const storeSubs = store.subscribe(() => {
-      const state: Types.Action<any> = store.getState();
+      const state: Action<any> = store.getState();
       if (state.type === 'SEND_CONFIRM') {
-        const { body }: Types.Action<Types.Schema.Values.SendConfirmRequest> = state;
+        const { body }: Action<Schema.Values.SendConfirmRequest> = state;
         const { sendConfirm } = body;
         if (!sendConfirm) {
           setAlert({
@@ -183,9 +182,9 @@ const Menu: NextComponentType<any, any, MenuProps> = (props) => {
         });
       }
       if (state.type === 'AUTH') {
-        const { body }: Types.Action<Types.Schema.Values.AuthRequest> = state;
+        const { body }: Action<Schema.Values.AuthRequest> = state;
         const { auth } = body;
-        let _role: Types.UserRoles = 'guest';
+        let _role: UserRoles = 'guest';
         if (auth) {
           _role = auth.role;
           confirmRef.current = auth.confirm;
@@ -194,7 +193,7 @@ const Menu: NextComponentType<any, any, MenuProps> = (props) => {
         setRole(_role);
       }
       if (state.type === 'LINK') {
-        const { body }: Types.Action<Types.Schema.Values.LinkRequest> = state;
+        const { body }: Action<Schema.Values.LinkRequest> = state;
         const { link } = body;
         if (!link) {
           setAlert({
@@ -375,7 +374,7 @@ const LangSelect = styled.div`
 
 interface LangSelectItemProps {
   selected: boolean;
-  value?: Types.LanguageValue;
+  value?: LanguageValue;
   // eslint-disable-next-line no-unused-vars
   onClick?: (e: React.MouseEvent<HTMLDivElement, React.MouseEvent>) => void;
 }

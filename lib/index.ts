@@ -1,9 +1,7 @@
-import * as Types from '../../next-env';
-
 export interface Search {
   // eslint-disable-next-line no-unused-vars
-  (subtitles: Types.Schema.Values.SubtitlesItem[], search: string): Promise<
-    Types.Schema.Values.SubtitlesItem[]
+  (subtitles: Schema.Values.SubtitlesItem[], search: string): Promise<
+    Schema.Values.SubtitlesItem[]
   >;
 }
 /**

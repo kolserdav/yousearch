@@ -1,7 +1,6 @@
 import Sqlite3 from 'sqlite3';
 import getConfig from 'next/config';
 import path from 'path';
-import * as Types from '../../../next-env';
 const { serverRuntimeConfig } = getConfig();
 const { PROJECT_ROOT } = serverRuntimeConfig;
 const sqlite3 = Sqlite3.verbose();
@@ -9,7 +8,7 @@ const db = new sqlite3.Database(path.resolve(PROJECT_ROOT, 'database/you.db'));
 /**
  * Create table links
  */
-export const createTableLinks: Types.OrmHandler<void, any> = () => {
+export const createTableLinks: OrmHandler<void, any> = () => {
   return new Promise((resolve) => {
     db.serialize(() => {
       db.run(
@@ -43,7 +42,7 @@ export const createTableLinks: Types.OrmHandler<void, any> = () => {
 /**
  * Drop table links
  */
-export const dropTableLinks: Types.OrmHandler<void, any> = () => {
+export const dropTableLinks: OrmHandler<void, any> = () => {
   return new Promise((resolve) => {
     db.serialize(() => {
       db.run('DROP table links', (err: Error, row: any[]) => {
@@ -67,7 +66,7 @@ export const dropTableLinks: Types.OrmHandler<void, any> = () => {
 /**
  * Add new link
  */
-export const createNew: Types.OrmHandler<Types.Schema.Params.Link, Types.Orm.Link> = (params) => {
+export const createNew: OrmHandler<Schema.Params.Link, Orm.Link> = (params) => {
   return new Promise((resolve) => {
     db.serialize(() => {
       const smtp = db.prepare(
@@ -86,7 +85,7 @@ export const createNew: Types.OrmHandler<Types.Schema.Params.Link, Types.Orm.Lin
         params.input.link,
         params.input.userId,
         params.input.description,
-        (err: Error, row: Types.Schema.Values.Link) => {
+        (err: Error, row: Schema.Values.Link) => {
           if (err) {
             console.error(`<${Date()}> (ERROR_INSERT_INTO_LINKS)`, err);
             resolve({
@@ -118,10 +117,10 @@ export const createNew: Types.OrmHandler<Types.Schema.Params.Link, Types.Orm.Lin
 /**
  * Get link by id
  */
-export const getById: Types.OrmHandler<number, Types.Orm.Link> = (id) => {
+export const getById: OrmHandler<number, Orm.Link> = (id) => {
   return new Promise((resolve) => {
     db.serialize(() => {
-      db.get(`SELECT * FROM links WHERE rowid="${id}"`, (err: Error, row: Types.Orm.Link) => {
+      db.get(`SELECT * FROM links WHERE rowid="${id}"`, (err: Error, row: Orm.Link) => {
         if (err) {
           console.error(`<${Date()}> (ERROR_GET_LINK_BY_ID)`, err);
           resolve({

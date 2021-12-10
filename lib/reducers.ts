@@ -1,11 +1,10 @@
 /**
  * Universal reducer for all cases of store
  */
-import * as Types from '../../next-env';
 
-const initialType: Types.ActionTypes.All = 'INITIAL';
+const initialType: All = 'INITIAL';
 
-const initialState: Types.Reducer<any> = {
+const initialState: Reducer<any> = {
   type: initialType,
   body: {
     type: initialType,
@@ -14,9 +13,9 @@ const initialState: Types.Reducer<any> = {
 };
 
 export default function reducer(
-  state: Types.Reducer<any> = initialState,
-  action: Types.Action<any>
-): Types.Reducer<any> {
+  state: Reducer<any> = initialState,
+  action: Action<any>
+): Reducer<any> {
   state.type = action.type;
   state.body = action.body;
   return Object.assign(state, { [action.type]: action });

@@ -1,5 +1,4 @@
 import * as orm from '../../orm';
-import * as Types from '../../../next-env';
 import * as srv from '../../../services';
 import * as utils from '../../utils';
 
@@ -9,10 +8,11 @@ import * as utils from '../../utils';
  * @param params {void}
  * @param context
  */
-const SendConfirm: Types.RequestHandler<
-  Types.Schema.Params.Forgot,
-  Types.Schema.Values.Response
-> = async (_parent, params, context) => {
+const SendConfirm: RequestHandler<Schema.Params.Forgot, Schema.Values.Response> = async (
+  _parent,
+  params,
+  context
+) => {
   const { headers } = context;
   const { lang } = headers;
   const t = srv.getLang(lang);

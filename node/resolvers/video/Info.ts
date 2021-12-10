@@ -1,11 +1,14 @@
 import axios from 'axios';
-import * as Types from '../../../next-env';
 import * as srv from '../../../services';
 import getConfig from 'next/config';
 const { serverRuntimeConfig } = getConfig();
 const { API_KEY, API_URL } = serverRuntimeConfig;
 
-const Info: Types.RequestHandler<Types.Schema.Params.Captions, Types.Schema.Values.Info> = async (_parent, params, context) => {
+const Info: RequestHandler<Schema.Params.Captions, Schema.Values.Info> = async (
+  _parent,
+  params,
+  context
+) => {
   const { headers } = context;
   const { lang } = headers;
   const t = srv.getLang(lang);
@@ -23,7 +26,7 @@ const Info: Types.RequestHandler<Types.Schema.Params.Captions, Types.Schema.Valu
       message: t.server.subtitles.warningVideoIDNotSend,
     };
   }
-  const info = await new Promise<Types.OrmResult<any>>((resolve) => {
+  const info = await new Promise<OrmResult<any>>((resolve) => {
     axios
       .get(
         `${API_URL}/videos?key=${API_KEY}&id=${videoID}&part=snippet&userIP=${headers['x-forwarded-for']}`

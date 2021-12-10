@@ -1,5 +1,4 @@
 import axios from 'axios';
-import * as Types from '../../../next-env';
 import * as srv from '../../../services';
 import getConfig from 'next/config';
 const { serverRuntimeConfig } = getConfig();
@@ -43,13 +42,14 @@ interface CaptionsInterface {
 /**
  * Search subtitles route
  * @param _parent parent route
- * @param params {Types.Schema.Params.Captions} request params
+ * @param params {Schema.Params.Captions} request params
  * @param context context (headers)
  */
-const Captions: Types.RequestHandler<
-  Types.Schema.Params.Captions,
-  Types.Schema.Values.Captions
-> = async (_parent, params, context) => {
+const Captions: RequestHandler<Schema.Params.Captions, Schema.Values.Captions> = async (
+  _parent,
+  params,
+  context
+) => {
   const { headers } = context;
   const { lang } = headers;
   const t = srv.getLang(lang);
@@ -67,7 +67,7 @@ const Captions: Types.RequestHandler<
       message: t.server.subtitles.warningVideoIDNotSend,
     };
   }
-  const captions = await new Promise<Types.OrmResult<CaptionsInterface>>((resolve) => {
+  const captions = await new Promise<OrmResult<CaptionsInterface>>((resolve) => {
     axios
       .get(
         `${API_URL}/captions?key=${API_KEY}&videoId=${videoID}&part=snippet&userIP=${headers['x-forwarded-for']}`

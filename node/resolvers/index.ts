@@ -1,6 +1,5 @@
 import Registration from './user/Registration';
 import Login from './user/Login';
-import { Resolver } from '../schemas';
 import Search from './video/Subtitles';
 import Captions from './video/Captions';
 import Info from './video/Info';
@@ -13,7 +12,7 @@ import ChangePass from './user/ChangePass';
 import SendConfirm from './user/SendConfirm';
 import Visit from './user/Visit';
 
-const resolvers: Resolver = {
+const resolvers: Schema.Resolver = {
   Query: {
     auth: Auth,
     link: GetLink,

@@ -4,14 +4,14 @@
   "private": true,
   "license": "GNU GPL",
   "homepage": "https://yousearch.uyem.ru",
-  "repository": "git@github.com:kolserdav/nextjs-graphql.git",
+  "repository": "git@github.com:kolserdav/yousearch.git",
   "author": {
     "name": "Sergey Kolmiller",
     "email": "uyem.ru@gmail.com",
     "url": "https://github.com/kolserdav"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3012",
     "build": "yarn ts:build && next build",
     "start": "next start -p 3012",
     "ts": "tsc -p . -w",

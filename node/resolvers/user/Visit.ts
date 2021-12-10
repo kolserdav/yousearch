@@ -1,4 +1,3 @@
-import * as Types from '../../../next-env';
 import * as orm from '../../orm';
 import * as srv from '../../../services';
 import Auth from './Auth';
@@ -6,10 +5,10 @@ import Auth from './Auth';
 /**
  * Registion route
  * @param _parent parent route
- * @param params {Types.Schema.Params.Login} request params
+ * @param params {Schema.Params.Login} request params
  * @param context context (headers)
  */
-const Login: Types.RequestHandler<Types.Schema.Params.Visit, Types.Schema.Values.Response> = async (
+const Login: RequestHandler<Schema.Params.Visit, Schema.Values.Response> = async (
   _parent,
   params,
   context

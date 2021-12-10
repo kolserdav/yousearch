@@ -3,24 +3,23 @@ import type { NextComponentType } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import styled from 'styled-components';
-import { setSessionCookie } from '../src/hooks/cookies';
-import Theme from '../src/components/Theme';
-import AppBar from '../src/components/AppBar';
+import { setSessionCookie } from '../hooks/cookies';
+import Theme from '../components/Theme';
+import AppBar from '../components/AppBar';
 import * as srv from '../services';
-import { action, store } from '../src/store/index';
-import { H1 } from '../src/components/ui/Typography';
-import Input from '../src/components/ui/Input';
-import Alert, { AlertProps } from '../src/components/ui/Alert';
-import Grid from '../src/components/ui/Grid';
-import IconButton from '../src/components/ui/IconButton';
-import Button from '../src/components/ui/Button';
-import * as Types from '../next-env';
+import { action, store } from '../store/index';
+import { H1 } from '../components/ui/Typography';
+import Input from '../components/ui/Input';
+import Alert, { AlertProps } from '../components/ui/Alert';
+import Grid from '../components/ui/Grid';
+import IconButton from '../components/ui/IconButton';
+import Button from '../components/ui/Button';
 
 /**
  * Login page component
- * @param props {Types.Props}
+ * @param props {Props}
  */
-const Login: NextComponentType<any, any, Types.Props> = (props): React.ReactElement => {
+const Login: NextComponentType<any, any, Props> = (props): React.ReactElement => {
   const router = useRouter();
   const { t } = props;
   const _alert: AlertProps = {
@@ -38,7 +37,7 @@ const Login: NextComponentType<any, any, Types.Props> = (props): React.ReactElem
   const [load, setLoad] = useState<boolean>(true);
   const login = (): void => {
     setLoad(true);
-    action<Types.Schema.Params.Login>({
+    action<Schema.Params.Login>({
       type: 'LOGIN_REQUEST',
       body: {
         input: {
@@ -52,10 +51,10 @@ const Login: NextComponentType<any, any, Types.Props> = (props): React.ReactElem
   useEffect(() => {
     setLoad(false);
     const storeSubs = store.subscribe(() => {
-      const state: Types.Action<any> = store.getState();
+      const state: Action<any> = store.getState();
       if (state.type === 'LOGIN') {
         setLoad(false);
-        const { body }: Types.Action<Types.Schema.Values.LoginRequest> = state;
+        const { body }: Action<Schema.Values.LoginRequest> = state;
         const { login } = body;
         if (!login) {
           setAlert({
@@ -161,7 +160,7 @@ const LinkStyled = styled.a`
   }
 `;
 
-export const getStaticProps = ({ locale }: Types.StaticContext): Types.StaticProps => {
+export const getStaticProps = ({ locale }: StaticContext): StaticProps => {
   const lang = srv.getLang(locale);
   return {
     props: {

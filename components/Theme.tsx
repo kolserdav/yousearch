@@ -1,8 +1,7 @@
 import React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import * as Types from '../../next-env';
 
-const theme: Types.Theme = {
+const theme: Theme = {
   main: '#4285F4',
   light: '#deeaee',
   dark: '#3e4444',
@@ -35,7 +34,7 @@ const GlobalVariables = styled.div`
   min-height: 100vh;
 `;
 
-export default function Theme(props: Types.ThemeProps): React.ReactElement {
+export default function Theme(props: ThemeProps): React.ReactElement {
   const { children } = props;
   return (
     <GlobalVariables theme={theme}>

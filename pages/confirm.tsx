@@ -1,19 +1,13 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import * as Types from '../next-env';
 import * as srv from '../services';
-import Theme from '../src/components/Theme';
-import { store, action } from '../src/store';
-import Alert from '../src/components/ui/Alert';
-import Grid from '../src/components/ui/Grid';
-import { H1 } from '../src/components/ui/Typography';
+import Theme from '../components/Theme';
+import { store, action } from '../store';
+import Alert from '../components/ui/Alert';
+import Grid from '../components/ui/Grid';
+import { H1 } from '../components/ui/Typography';
 import { NextComponentType, GetServerSidePropsContext } from 'next';
-
-interface ConfirmProps extends Types.Props {
-  result: Types.Result;
-  message: string;
-}
 
 interface ConfirmStaticProps {
   props: ConfirmProps;
@@ -44,14 +38,14 @@ export async function getServerSideProps(
   ctx: GetServerSidePropsContext
 ): Promise<ConfirmStaticProps> {
   const { locale, query }: any = ctx;
-  const { e, k }: Types.Query = query;
+  const { e, k }: Query = query;
   const lang = srv.getLang(locale);
   const confirmRes = await new Promise<ConfirmProps>((resolve) => {
     const storeSubs = store.subscribe(() => {
-      const state: Types.Action<any> = store.getState();
+      const state: Action<any> = store.getState();
       if (state.type === 'CONFIRM') {
         storeSubs();
-        const { body }: Types.Action<Types.Schema.Values.ConfirmRequest> = state;
+        const { body }: Action<Schema.Values.ConfirmRequest> = state;
         const { confirm } = body;
         if (!confirm) {
           resolve({

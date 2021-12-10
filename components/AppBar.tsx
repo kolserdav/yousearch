@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { NextComponentType } from 'next';
-import { Props } from '../../next-env';
 import Menu from './Menu';
 
 let oldY = 0;

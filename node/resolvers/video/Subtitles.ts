@@ -1,6 +1,3 @@
-import * as Types from '../../../next-env';
-import * as orm from '../../orm';
-import * as lib from '../../lib';
 import * as srv from '../../../services';
 import axios from 'axios';
 
@@ -10,14 +7,10 @@ const tC =
 /**
  * Search subtitles route
  * @param _parent parent route
- * @param params {Types.Schema.Params.Subtitles} request params
+ * @param params {Schema.Params.Subtitles} request params
  * @param context context (headers)
  */
-const Search: Types.RequestHandler<Types.Schema.Params.Subtitles, any> = async (
-  _parent,
-  params,
-  context
-) => {
+const Search: RequestHandler<Schema.Params.Subtitles, any> = async (_parent, params, context) => {
   const { headers } = context;
   const { lang } = headers;
   const t = srv.getLang(lang);

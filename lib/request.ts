@@ -13,7 +13,6 @@ import {
   createHttpLink,
 } from '@apollo/client';
 import { concatPagination } from '@apollo/client/utilities';
-import * as Types from '../../next-env';
 import { setContext } from '@apollo/client/link/context';
 import Cookies from 'universal-cookie';
 
@@ -71,18 +70,18 @@ const client = new ApolloClient({
     mutate: {
       errorPolicy: 'all',
     },
-  }
+  },
 });
 
 /**
  * Request for query
- * @param callback {Types.RequestCallback<any, QueryOptions<Record<string, any>, any>>}
+ * @param callback {RequestCallback<any, QueryOptions<Record<string, any>, any>>}
  */
 const requestQuery = (
-  callback: Types.RequestCallback<any, QueryOptions<Record<string, any>, any>>
-): Types.Request<any> => ({
+  callback: RequestCallback<any, QueryOptions<Record<string, any>, any>>
+): any => ({
   context: this,
-  fn: async (context: Types.Action<any>) => {
+  fn: async (context: Action<any>) => {
     return await new Promise((resolve) => {
       client
         .query(callback(context))
@@ -103,13 +102,13 @@ const requestQuery = (
 
 /**
  * Request for mutation
- * @param callback {Types.RequestCallback<any, MutationOptions<Record<string, any>, any>>}
+ * @param callback {RequestCallback<any, MutationOptions<Record<string, any>, any>>}
  */
 const requestMutate = (
-  callback: Types.RequestCallback<any, MutationOptions<Record<string, any>, any>>
-): Types.Request<any> => ({
+  callback: RequestCallback<any, MutationOptions<Record<string, any>, any>>
+): any => ({
   context: this,
-  fn: async (context: Types.Action<any>): Promise<Record<string, any> | string> => {
+  fn: async (context: Action<any>): Promise<Record<string, any> | string> => {
     return await new Promise((resolve) => {
       client
         .mutate(callback(context))
