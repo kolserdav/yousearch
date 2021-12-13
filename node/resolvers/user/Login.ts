@@ -52,39 +52,9 @@ const Login: RequestHandler<Schema.Params.Login, Schema.Values.Login> = async (
       message: `${t.server.user.warningPasswordTooShort} ${t.server.user.infoMinimumPasswordLength} ${MIN_PASSWORD_LENGTH}`,
     };
   }
-  // Get user data
-  const user = await orm.user.getByEmail(params.input.email);
-  if (user.error) {
-    console.warn(headers);
-    return {
-      result: 'error',
-      message: t.server.user.errorGetByEmail,
-      stdErrMessage: user.message,
-    };
-  }
-  if (user.data === undefined) {
-    return {
-      result: 'warning',
-      message: t.server.user.warningEmailNotRegister,
-    };
-  }
-  const { data } = user;
-  const checkPass = await new Promise((resolve) => {
-    bcrypt.compare(params.input.password, data.password, (err, result) => {
-      resolve(result);
-    });
-  });
-  if (!checkPass) {
-    return {
-      result: 'warning',
-      message: t.server.user.warningEmailOrPasswordNotMatch,
-    };
-  }
-  const token = lib.getParsedToken(data, headers);
   return {
     result: 'success',
     message: t.server.user.successLogin,
-    token,
   };
 };
 

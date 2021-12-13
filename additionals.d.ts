@@ -546,20 +546,19 @@ declare global {
   }
 
   export interface ParsedToken {
-    id: number;
-    email: string;
-    password: string;
-    userAgent: string;
+    id: string;
   }
 
   export declare namespace Orm {
     interface User {
-      id: number;
+      name: string;
       email: string;
-      password: string;
-      confirm: boolean;
-      created: Date;
-      updated: Date;
+      verifiedEmail: boolean;
+      googleId: string;
+      role: string;
+      picture: string;
+      updated_at: Date;
+      locale: string;
     }
     interface Link {
       id: number;

@@ -40,21 +40,6 @@ const Registration: RequestHandler<Schema.Params.Registration, Schema.Values.Reg
       message: t.server.user.warningEmailNotValid,
     };
   }
-  // Check if user exists
-  const user = await orm.user.getByEmail(params.input.email);
-  if (user.error) {
-    console.warn(headers);
-    return {
-      result: 'error',
-      message: t.server.user.errorGetByEmail,
-    };
-  }
-  if (user.data !== undefined) {
-    return {
-      result: 'warning',
-      message: t.server.user.warningAreRegistered,
-    };
-  }
   // Check passwords
   if (!input.password) {
     return {
@@ -80,49 +65,10 @@ const Registration: RequestHandler<Schema.Params.Registration, Schema.Values.Reg
       message: t.server.user.warningPasswordsNotMatch,
     };
   }
-  // Add new user
-  const newUser = await orm.user.createNew(params);
-  if (newUser.error) {
-    console.warn(headers);
-    return {
-      result: 'error',
-      message: t.server.user.errorRegistration,
-    };
-  }
-  const addedUser = await orm.user.getByEmail(params.input.email);
-  if (addedUser.error) {
-    return {
-      result: 'error',
-      message: t.server.user.errorGetByEmail,
-    };
-  }
-  if (addedUser.data === undefined) {
-    return {
-      result: 'warning',
-      message: t.server.user.warningGetUserData,
-    };
-  }
-  const { data } = addedUser;
-  const sendEmail = await utils.sendConfirmEmail(
-    data.email,
-    data.updated.toString() + data.password,
-    t
-  );
-  const token = lib.getParsedToken(addedUser.data, headers);
-  if (sendEmail.error) {
-    console.warn(headers);
-    return {
-      result: 'success',
-      message: t.server.user.successRegistration,
-      warning: t.server.email.notSend,
-      token,
-    };
-  }
   return {
     result: 'success',
     message: t.server.user.successRegistration,
     warning: t.server.email.send,
-    token,
   };
 };
 

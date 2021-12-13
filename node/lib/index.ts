@@ -8,7 +8,7 @@ const { JWT_SECRET } = serverRuntimeConfig;
 
 interface GetParsedToken {
   // eslint-disable-next-line no-unused-vars
-  (data: Orm.User, headers: any): string;
+  (id: Orm.User['googleId']): string;
 }
 
 /**
@@ -16,13 +16,9 @@ interface GetParsedToken {
  * @param data {Orm.User}
  * @param headers {any}
  */
-export const getParsedToken: GetParsedToken = (data, headers) => {
-  const { email, password, id } = data;
+export const getParsedToken: GetParsedToken = (id) => {
   const parsedToken: ParsedToken = {
     id,
-    email,
-    password,
-    userAgent: headers['user-agent'],
   };
   return jwt.sign(parsedToken, JWT_SECRET);
 };

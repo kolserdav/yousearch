@@ -25,29 +25,10 @@ const Auth: RequestHandler<void, Schema.Values.Auth> = async (_parent, params, c
     return guestRes;
   }
   const { id } = parsedToken;
-  const user = await orm.user.getById(id);
-  if (user.error) {
-    return {
-      result: 'error',
-      message: t.server.user.errorGetByEmail,
-    };
-  }
-  const { data } = user;
-  if (!data) {
-    return guestRes;
-  }
-  if (data.password !== parsedToken.password) {
-    return guestRes;
-  }
-  if (parsedToken.userAgent !== headers['user-agent']) {
-    return guestRes;
-  }
   return {
     result: 'success',
     message: 'auth',
     role: 'user',
-    confirm: data.confirm,
-    email: data.email,
   };
 };
 

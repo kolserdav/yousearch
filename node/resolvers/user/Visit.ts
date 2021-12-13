@@ -26,23 +26,6 @@ const Login: RequestHandler<Schema.Params.Visit, Schema.Values.Response> = async
       message: t.server.user.warningInputParamsNotSend,
     };
   }
-  // @ts-ignore
-  const authRes = await Auth(_parent, {}, context, {});
-  const saveRes = await orm.user.visit({
-    input: {
-      role: authRes.role,
-      is_old: input.is_old,
-      width: input.width,
-      height: input.height,
-      user_agent,
-      ip,
-      path: input.path,
-      error: input.error,
-    },
-  });
-  if (saveRes.error) {
-    console.warn(headers);
-  }
   return {
     result: 'success',
     message: '',
