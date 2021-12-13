@@ -7,7 +7,7 @@ import AppBar from '../components/AppBar';
 import { H1, Description, Label } from '../components/ui/Typography';
 import Grid from '../components/ui/Grid';
 
-const repoUrl = 'https://github.com/kolserdav/nextjs-graphql';
+const repoUrl = 'https://github.com/kolserdav/yousearch';
 const licenseUrl = 'https://www.gnu.org/licenses/gpl-3.0.ru.html';
 
 /**

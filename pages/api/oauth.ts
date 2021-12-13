@@ -3,18 +3,25 @@ import { google } from 'googleapis';
 
 const { serverRuntimeConfig } = getConfig();
 
-const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = serverRuntimeConfig;
+const {
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
+  APP_ORIGIN_LOCAL,
+  APP_ORIGIN,
+} = serverRuntimeConfig;
 
 const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
-  'http://localhost:3000/api/callback'
+  `${process.env.NODE_ENV === 'production' ? APP_ORIGIN : APP_ORIGIN_LOCAL}/api/callback`
 );
 
 // generate a url that asks permissions for Blogger and Google Calendar scopes
 const scopes = [
   'https://www.googleapis.com/auth/youtube.force-ssl',
   'https://www.googleapis.com/auth/youtubepartner',
+  'https://www.googleapis.com/auth/userinfo.profile',
+  'https://www.googleapis.com/auth/userinfo.email',
 ];
 
 const url = oauth2Client.generateAuthUrl({
@@ -33,5 +40,6 @@ export default passport.authenticate('google', {
 });
 */
 export default async function Oauth(req, res) {
+  console.log(req);
   res.redirect(url);
 }

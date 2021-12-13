@@ -9,7 +9,7 @@ import * as lib from '../lib';
 import Grid from '../components/ui/Grid';
 import Button from '../components/ui/Button';
 import { store, action } from '../store';
-import { H1, Label } from '../components/ui/Typography';
+import { H1 } from '../components/ui/Typography';
 import Input from '../components/ui/Input';
 import Checkbox from '../components/ui/Checkbox';
 import Alert, { AlertProps } from '../components/ui/Alert';

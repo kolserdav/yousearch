@@ -10,8 +10,11 @@
     "email": "uyem.ru@gmail.com",
     "url": "https://github.com/kolserdav"
   },
+  "prisma": {
+    "schema": "orm/schema.prisma"
+  },
   "scripts": {
-    "dev": "next dev -p 3012",
+    "dev": "next dev",
     "build": "yarn ts:build && next build",
     "start": "next start -p 3012",
     "ts": "tsc -p . -w",
@@ -19,10 +22,18 @@
     "prod": "echo logfile $(pwd)/logs/you-${npm_package_version}.log > ~/.screenrc && screen -dmS you -L yarn start",
     "deploy": "yarn build && yarn prod",
     "logs": "cat $(pwd)/logs/you-${npm_package_version}.log",
-    "get": "screen -x you"
+    "get": "screen -x you",
+    "dev:migrate": "yarn format && prisma migrate dev --preview-feature && yarn generate",
+    "migrate": "prisma migrate deploy --preview-feature",
+    "migrate:reset": "prisma migrate reset --preview-feature",
+    "migrate:status": "prisma migrate status --preview-feature",
+    "studio": "prisma studio",
+    "generate": "prisma generate",
+    "format": "prisma format"
   },
   "dependencies": {
     "@apollo/client": "^3.3.2",
+    "@prisma/client": "^3.6.0",
     "apollo-server-micro": "^2.19.0",
     "axios": "^0.21.0",
     "bcrypt": "^5.0.0",
@@ -31,6 +42,7 @@
     "jsonwebtoken": "^8.5.1",
     "next": "^10.0.0",
     "nodemailer": "^6.4.17",
+    "prisma": "^3.6.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "redux": "^4.0.5",

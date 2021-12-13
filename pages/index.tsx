@@ -14,6 +14,7 @@ import Alert, { AlertProps } from '../components/ui/Alert';
 import Grid from '../components/ui/Grid';
 import Button from '../components/ui/Button';
 import { H1, Description, Label } from '../components/ui/Typography';
+import IconButton from '../components/ui/IconButton';
 
 interface UpdateQuery {
   // eslint-disable-next-line no-unused-vars
@@ -277,6 +278,12 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
       searchSubtitles();
     }
   };
+
+  const loginRedirect = () => {
+    console.log(1);
+    router.push('/api/oauth?page=index');
+  };
+
   useEffect(() => {
     // Save visit
     if (!visitSavedRef.current) {
@@ -395,6 +402,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
         }
       }
     });
+
     return () => {
       // Ubsubscribe from storage
       storeSubs();
@@ -402,6 +410,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
       window.removeEventListener('keydown', keyDownListener);
     };
   }, [v]);
+
   return (
     <Theme>
       <Head>
@@ -438,6 +447,18 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
           style={{ marginLeft: '2rem', marginRight: '2rem' }}
           dangerouslySetInnerHTML={{ __html: t.content.acceptTos }}
         />
+        <Grid direction="column" align="center">
+          <Button disabled={load || other} onClick={loginRedirect}>
+            <IconButton
+              src="/img/ui/google-logo.svg"
+              alt={`${t.interface.send} ${t.interface.icon}`}
+              title={`${t.interface.send} ${t.interface.email}`}
+              onClick={() => {
+                /** */
+              }}
+            />
+          </Button>
+        </Grid>
         <Description style={{ marginLeft: '2rem', marginRight: '2rem' }}>
           {description || t.content.siteDescription}.
         </Description>

@@ -312,28 +312,6 @@ const Menu: NextComponentType<any, any, MenuProps> = (props) => {
             </MenuItem>
           </Link>
           <Divider />
-          {role === 'guest' && (
-            <Link href="/registration">
-              <MenuItem onClick={closeMenu} selected={pathname === '/registration'}>
-                <MenuItemIcon
-                  src="/img/ui/how_to_reg-black-36dp.svg"
-                  alt={`${t.interface.registration} ${t.interface.icon}`}
-                />
-                <MenuItemText>{t.interface.registration}</MenuItemText>
-              </MenuItem>
-            </Link>
-          )}
-          {role === 'guest' && (
-            <Link href="/login">
-              <MenuItem onClick={closeMenu} selected={pathname === '/login'}>
-                <MenuItemIcon
-                  src="/img/ui/login-black-36dp.svg"
-                  alt={`${t.interface.login} ${t.interface.icon}`}
-                />
-                <MenuItemText>{t.interface.login}</MenuItemText>
-              </MenuItem>
-            </Link>
-          )}
           {role === 'user' && (
             <Link href="/logout">
               <MenuItem onClick={closeMenu} selected={pathname === '/logout'}>

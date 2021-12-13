@@ -13,7 +13,7 @@ const activeButton = keyframes`
  * Custom button for app
  */
 const Button = styled.button`
-  --color: ${(props) => props.theme.main};
+  --color: white;
   --second-color: ${(props) => props.theme.white};
   --padding-left: calc(10px + (50 - 10) * ((100vw - 320px) / (7680 - 320)));
   --padding-top: calc(5px + (30 - 5) * ((100vw - 320px) / (7680 - 320)));
@@ -40,7 +40,7 @@ const Button = styled.button`
   }
   &:disabled {
     cursor: default;
-    background-color: ${(props) => props.theme.bg};
+    background-color: ${(props) => props.theme.paper};
     animation: none;
   }
   &:disabled:hover {
