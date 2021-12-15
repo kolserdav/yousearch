@@ -15,7 +15,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "yarn ts:build && next build",
+    "build": "next build",
     "start": "next start -p 3012",
     "ts": "tsc -p . -w",
     "ts:build": "tsc -p .",
