@@ -33,4 +33,5 @@ database/you.db
 next.config.js
 logs/*
 !logs/LOGS.md
- 
+database/sqlite/*
+!database/sqlite/.gitkeep
