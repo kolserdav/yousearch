@@ -20,5 +20,20 @@ model User {
   updated_at    DateTime @default(now())
   created_at    DateTime @default(now())
 
+  Token Token[]
   @@index([role])
+}
+
+// Tokens table
+model Token {
+  id         Int      @id @default(autoincrement())
+  access     String
+  idToken    String
+  type       String
+  expityDate Int
+  scope      String
+  userId     Int
+  User       User     @relation(fields: [userId], references: [id])
+  updated_at DateTime @default(now())
+  created_at DateTime @default(now())
 }

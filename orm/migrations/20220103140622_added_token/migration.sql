@@ -1,0 +1,14 @@
+-- CreateTable
+CREATE TABLE "Token" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "access" TEXT NOT NULL,
+    "refresh" TEXT NOT NULL,
+    "idToken" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
+    "expityDate" INTEGER NOT NULL,
+    "scope" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "updated_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "Token_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);

@@ -31,20 +31,29 @@ export default async function callback(req, res) {
     return res.status(502);
   }
   const { data } = userinfo;
-  console.log(userinfo.data, 'res');
-  let findRes;
+  let createRes: User & {
+    Token: {
+      id: number;
+    }[];
+  };
   try {
-    findRes = await prisma.user.findFirst({
+    createRes = await prisma.user.findFirst({
       where: {
         email: userinfo.data.email,
+      },
+      include: {
+        Token: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
   } catch (e) {
     console.error('Error get user PAC38', e);
     return res.status(500);
   }
-  let createRes;
-  if (findRes === null) {
+  if (createRes === null) {
     try {
       createRes = await prisma.user.create({
         data: {
@@ -56,6 +65,13 @@ export default async function callback(req, res) {
           picture: data.picture,
           locale: data.locale,
         },
+        include: {
+          Token: {
+            select: {
+              id: true,
+            },
+          },
+        },
       });
     } catch (e) {
       console.error('Error create user PAC38', e);
@@ -65,17 +81,24 @@ export default async function callback(req, res) {
     try {
       createRes = await prisma.user.update({
         where: {
-          id: findRes.id,
+          id: createRes.id,
         },
         data: {
           name: data.name,
           email: data.email,
           verifiedEmail: data.verified_email,
           googleId: data.id,
-          role: findRes.role,
+          role: createRes.role,
           picture: data.picture,
           updated_at: new Date(),
           locale: data.locale,
+        },
+        include: {
+          Token: {
+            select: {
+              id: true,
+            },
+          },
         },
       });
     } catch (e) {
@@ -83,7 +106,44 @@ export default async function callback(req, res) {
       return res.status(500);
     }
   }
-  const token = lib.getParsedToken(createRes);
-
-  res.status(200).json({ query, tokens });
+  if (createRes.Token[0]) {
+    await prisma.token.update({
+      where: {
+        id: createRes.Token[0].id,
+      },
+      data: {
+        idToken: tokens.id_token,
+        access: tokens.access_token,
+        expityDate: tokens.expiry_date,
+        scope: tokens.scope,
+        type: tokens.token_type,
+        userId: createRes.id,
+      },
+    });
+  } else {
+    try {
+      await prisma.user.update({
+        where: {
+          id: createRes.id,
+        },
+        data: {
+          Token: {
+            create: {
+              idToken: tokens.id_token,
+              access: tokens.access_token,
+              expityDate: tokens.expiry_date,
+              scope: tokens.scope,
+              type: tokens.token_type,
+            },
+          },
+          updated_at: new Date(),
+        },
+      });
+    } catch (e) {
+      console.error('Error create token PAC139', e);
+      return res.status(500);
+    }
+  }
+  const token = lib.getParsedToken(createRes.id);
+  res.redirect(`/?token=${token}`);
 }

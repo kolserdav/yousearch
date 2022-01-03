@@ -2,7 +2,7 @@
  * Universal reducer for all cases of store
  */
 
-const initialType: All = 'INITIAL';
+const initialType: any = 'INITIAL';
 
 const initialState: Reducer<any> = {
   type: initialType,
@@ -16,7 +16,8 @@ export default function reducer(
   state: Reducer<any> = initialState,
   action: Action<any>
 ): Reducer<any> {
-  state.type = action.type;
-  state.body = action.body;
-  return Object.assign(state, { [action.type]: action });
+  const { type, body }: any = action;
+  state.type = type;
+  state.body = body;
+  return Object.assign(state, { [type]: action });
 }

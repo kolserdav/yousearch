@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 import type * as NodeSchema from './node/schemas';
+import type { User as PrismaUser } from '@prisma/client';
 /**
  * Types of libraries
  */
@@ -18,6 +19,7 @@ declare module 'youtube-captions-scraper' {
 }
 
 declare global {
+  type User = PrismaUser;
   interface ConfirmProps extends Props {
     result: Result;
     message: string;
@@ -290,13 +292,13 @@ declare global {
   export declare type Info = 'INFO_REQUEST' | 'INFO';
   export declare type Auth = 'AUTH_REQUEST' | 'AUTH';
   export declare type Link = 'LINK_REQUEST' | 'LINK';
-  export declare type GetLink = 'GET_LINK_REQUEST' | 'GETE_LINK';
+  export declare type GetLink = 'GET_LINK_REQUEST' | 'GET_LINK';
   export declare type Confirm = 'CONFIRM_REQUEST' | 'CONFIRM';
   export declare type Forgot = 'FORGOT_REQUEST' | 'FORGOT';
   export declare type ChangePass = 'CHANGE_PASS_REQUEST' | 'CHANGE_PASS';
   export declare type SendConfirm = 'SEND_CONFIRM_REQUEST' | 'SEND_CONFIRM';
-  export declare type Visit = 'VISIT_REQUEST' | 'VISIT';
-  export declare type All =
+  export declare type Visit = 'VISIT_REQUEST' | 'VISIT_CONFIRM';
+  type All =
     | User
     | Registration
     | Login
@@ -325,7 +327,7 @@ declare global {
   };
 
   export type Action<T> = {
-    type: ActionAll;
+    type: All;
     body: T;
   };
 
@@ -334,9 +336,9 @@ declare global {
   };
 
   export type Reducer<T> = {
-    type: ActionAll;
+    type: All;
     body: Action<T>;
-    [key?: string]: Action<T>;
+    [key?: string]: Action<T> | undefined;
   };
 
   export type RequestCallback<T, U> = (context: Action<T>, ...args: any[]) => U;
@@ -546,7 +548,7 @@ declare global {
   }
 
   export interface ParsedToken {
-    id: string;
+    id: number;
   }
 
   export declare namespace Orm {

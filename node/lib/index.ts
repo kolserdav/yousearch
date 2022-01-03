@@ -8,7 +8,7 @@ const { JWT_SECRET } = serverRuntimeConfig;
 
 interface GetParsedToken {
   // eslint-disable-next-line no-unused-vars
-  (id: Orm.User['googleId']): string;
+  (id: number): string;
 }
 
 /**
