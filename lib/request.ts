@@ -15,6 +15,7 @@ import {
 import { concatPagination } from '@apollo/client/utilities';
 import { setContext } from '@apollo/client/link/context';
 import Cookies from 'universal-cookie';
+import * as lib from '../lib';
 
 const cookies = new Cookies();
 const dev = process.env.NODE_ENV === 'development';
@@ -29,13 +30,14 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext((_, ctx) => {
+  const token = cookies.get(lib.TOKEN_COOKIE_NAME);
   const { headers } = ctx;
   // get the authentication token from local storage if it exists
   // return the headers to the context so httpLink can read them
   return {
     headers: {
       ...headers,
-      authorization: 'Bearer L8qq9PZyRg6ieKGEKhZolGC0vJWLw8iEJ88DRdyOg',
+      authorization: token,
       lang: cookies.get('lang') || 'en',
       xqt: cookies.get('_qt') || '',
     },

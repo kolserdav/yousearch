@@ -106,7 +106,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
   const { t, title, image, description, other, error } = props;
   const router = useRouter();
   const { query }: any = router;
-  const { v, s, se, ch, l }: any = query;
+  const { v, s, se, ch, l, token }: any = query;
   const visitSavedRef = useRef<boolean>(false);
   const searchRef = useRef<any>();
   const playerRef = useRef<any>();
@@ -280,11 +280,28 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
   };
 
   const loginRedirect = () => {
-    console.log(1);
     router.push('/api/oauth?page=index');
   };
 
+  const changeLanguage = (e: any) => {
+    const { value } = e.target;
+    cookies.set('dlang', value, { expires: date, sameSite: 'strict' });
+    langRef.current = value;
+    setLang(value);
+    const newQ: Query = Object.assign({}, query);
+    newQ.l = value;
+    updateQuery(newQ);
+    setTimeout(() => {
+      getSubtitles(value);
+    }, 150);
+  };
+
   useEffect(() => {
+    if (token) {
+      const date = new Date();
+      date.setFullYear(date.getFullYear() + 1);
+      cookies.set(lib.TOKEN_COOKIE_NAME, token, { sameSite: true, secure: true, expires: date });
+    }
     // Save visit
     if (!visitSavedRef.current) {
       visitSavedRef.current = true;
@@ -404,12 +421,12 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
     });
 
     return () => {
-      // Ubsubscribe from storage
+      // Unsubscribe from storage
       storeSubs();
       // Remove window event listener
       window.removeEventListener('keydown', keyDownListener);
     };
-  }, [v]);
+  }, [v, token]);
 
   return (
     <Theme>
@@ -481,21 +498,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
             {/** Language subtitles select */}
             <FormItem>
               <Label>{t.interface.selectLang}</Label>
-              <LangSelect
-                disabled={load || other}
-                value={lang}
-                onChange={(e: any) => {
-                  const { value } = e.target;
-                  cookies.set('dlang', value, { expires: date, sameSite: 'strict' });
-                  langRef.current = value;
-                  setLang(value);
-                  const newQ: Query = Object.assign({}, query);
-                  newQ.l = value;
-                  updateQuery(newQ);
-                  setTimeout(() => {
-                    getSubtitles(value);
-                  }, 150);
-                }}>
+              <LangSelect disabled={load || other} value={lang} onChange={changeLanguage}>
                 {languages.map((option, index) => (
                   <LangOption key={`${option.lang}-${index}`} value={option.lang}>
                     {option.lang}&nbsp;({option.type})

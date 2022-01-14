@@ -1,8 +1,12 @@
 import axios from 'axios';
+import { PrismaClient } from '@prisma/client';
 import * as srv from '../../../services';
 import getConfig from 'next/config';
+import * as lib from '../../lib';
 const { serverRuntimeConfig } = getConfig();
 const { API_KEY, API_URL } = serverRuntimeConfig;
+
+const prisma = new PrismaClient();
 
 /**
  * Google REST api
@@ -51,7 +55,7 @@ const Captions: RequestHandler<Schema.Params.Captions, Schema.Values.Captions> =
   context
 ) => {
   const { headers } = context;
-  const { lang } = headers;
+  const { lang, authorization } = headers;
   const t = srv.getLang(lang);
   const { input } = params;
   if (!input) {
@@ -67,11 +71,45 @@ const Captions: RequestHandler<Schema.Params.Captions, Schema.Values.Captions> =
       message: t.server.subtitles.warningVideoIDNotSend,
     };
   }
+  const parsedToken = lib.parseToken(authorization);
+  if (!parsedToken) {
+    return {
+      result: 'warning',
+      message: t.server.forbidden,
+    };
+  }
+  let user;
+  try {
+    user = await prisma.user.findUnique({
+      where: {
+        id: parsedToken.id,
+      },
+      select: {
+        Token: true,
+      },
+    });
+  } catch (e) {
+    console.error(`<${Date()}> (GET_USER_ERROR)`, e.toJSON());
+    return {
+      result: 'error',
+      message: t.server.user.errorGetByEmail,
+    };
+  }
+  if (user === null) {
+    return {
+      result: 'warning',
+      message: t.server.user.warningUserNotFound,
+    };
+  }
+  const { Token } = user;
+  const { type, access } = Token[0];
   const captions = await new Promise<OrmResult<CaptionsInterface>>((resolve) => {
     axios
-      .get(
-        `${API_URL}/captions?key=${API_KEY}&videoId=${videoID}&part=snippet&userIP=${headers['x-forwarded-for']}`
-      )
+      .get(`${API_URL}/captions?videoId=${videoID}&part=snippet`, {
+        headers: {
+          authorization: `${type} ${access}`,
+        },
+      })
       .then((response) => {
         resolve({
           error: 0,

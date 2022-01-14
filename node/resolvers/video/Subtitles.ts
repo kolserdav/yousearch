@@ -1,8 +1,9 @@
-import * as srv from '../../../services';
 import axios from 'axios';
+import { PrismaClient } from '@prisma/client';
+import * as srv from '../../../services';
+import * as lib from '../../lib';
 
-const tC =
-  'Bearer ya29.a0ARrdaM_r874rfrRz_Vx0ZrX1EZUqnsLRHxzDOFkO5FOGdXkiwlcvnvbkcpDxyi88oy4iT8D3lpGNJZIM48ZZrLfyxu2pXsr1bDnp-w5I_FCYjMizZSnpl1a1zO2rie06xwV6psnDJ2zHBTmfQgKBqyzhYVSe';
+const prisma = new PrismaClient();
 
 /**
  * Search subtitles route
@@ -12,7 +13,7 @@ const tC =
  */
 const Search: RequestHandler<Schema.Params.Subtitles, any> = async (_parent, params, context) => {
   const { headers } = context;
-  const { lang } = headers;
+  const { lang, authorization } = headers;
   const t = srv.getLang(lang);
   const { input } = params;
   if (!input) {
@@ -34,13 +35,46 @@ const Search: RequestHandler<Schema.Params.Subtitles, any> = async (_parent, par
       message: t.server.subtitles.warningLangOfSubtitlesNotSend,
     };
   }
+  const parsedToken = lib.parseToken(authorization);
+  if (!parsedToken) {
+    return {
+      result: 'warning',
+      message: t.server.forbidden,
+    };
+  }
+  let user;
+  try {
+    user = await prisma.user.findUnique({
+      where: {
+        id: parsedToken.id,
+      },
+      select: {
+        Token: true,
+      },
+    });
+  } catch (e) {
+    console.error(`<${Date()}> (GET_USER_ERROR)`, e.toJSON());
+    return {
+      result: 'error',
+      message: t.server.user.errorGetByEmail,
+    };
+  }
+  if (user === null) {
+    return {
+      result: 'warning',
+      message: t.server.user.warningUserNotFound,
+    };
+  }
+  const { Token } = user;
+  const { type, access } = Token[0];
+  console.log(videoID);
   const resSubs = await new Promise((resolve) => {
     axios
       .request({
         url: `https://www.googleapis.com/youtube/v3/captions/${videoID}`,
         method: 'GET',
         headers: {
-          Authorization: tC,
+          Authorization: `${type} ${access}`,
         },
       })
       .then((res) => {

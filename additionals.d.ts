@@ -429,6 +429,7 @@ declare global {
       description: string;
     };
     server: {
+      forbidden: string;
       email: {
         send: string;
         notSend: string;

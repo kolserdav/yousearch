@@ -62,3 +62,5 @@ export const search: Search = async (subtitles, search) => {
   });
   return result;
 };
+
+export const TOKEN_COOKIE_NAME = '_auth_t';

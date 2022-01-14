@@ -69,12 +69,13 @@ const t: Language = {
     description: 'free service for searching keywords by subtitles of YouTube videos',
   },
   server: {
+    forbidden: 'Forbidden without authentication',
     email: {
       send: 'a confirmation letter has been sent to the specified mail',
       notSend: 'confirmation email not sent',
     },
     user: {
-      errorGetByEmail: 'error while getting user by email',
+      errorGetByEmail: 'error while getting user',
       warningAreRegistered: 'this email was registered earlier',
       errorRegistration: 'error while added new user',
       successRegistration: 'registration successfully',
