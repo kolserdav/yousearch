@@ -79,6 +79,7 @@ declare global {
       }
       /** Caption values */
       type CaptionsItem = {
+        id: string;
         lang: string;
         type: string;
       };

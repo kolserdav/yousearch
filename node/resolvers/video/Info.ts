@@ -63,7 +63,7 @@ const Info: RequestHandler<Schema.Params.Captions, Schema.Values.Info> = async (
       message: t.server.subtitles.warningVideoInfoNotFound,
     };
   }
-  const item = info.data.items[0].snippet;
+  const item = info.data.items[0];
   return {
     result: 'success',
     message: t.server.subtitles.successVideoInfoReceived,

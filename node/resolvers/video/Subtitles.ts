@@ -67,7 +67,6 @@ const Search: RequestHandler<Schema.Params.Subtitles, any> = async (_parent, par
   }
   const { Token } = user;
   const { type, access } = Token[0];
-  console.log(videoID);
   const resSubs = await new Promise((resolve) => {
     axios
       .request({

@@ -98,6 +98,8 @@ const saveVisit: SaveVisit = (isOld, width, height, path, error = '') => {
   });
 };
 
+let _captionId = '';
+
 /**
  * Nome component for change status response when link not found
  * @param props
@@ -118,6 +120,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
   const [link, setLink] = useState<string>('');
   const [linkValue, setLinkValue] = useState<string>('');
   const [lang, setLang] = useState<string>('');
+  const [captionId, setCaptionId] = useState<string>('');
   const [languages, setLanguages] = useState<Schema.Values.CaptionsItem[]>([]);
   const [search, setSearch] = useState<string>('');
   const [load, setLoad] = useState<boolean>(false);
@@ -250,7 +253,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
       type: 'SUBTITLES_REQUEST',
       body: {
         input: {
-          videoID: videoIDRef.current,
+          videoID: _captionId,
           lang,
         },
         results: ['message', 'lang', 'items {start, text}'],
@@ -269,7 +272,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
         input: {
           videoID: id,
         },
-        results: ['message', 'items {lang, type}'],
+        results: ['message', 'items {lang, type, id}'],
       },
     });
   };
@@ -288,6 +291,8 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
     cookies.set('dlang', value, { expires: date, sameSite: 'strict' });
     langRef.current = value;
     setLang(value);
+    const state: Action<any> = store.getState();
+    console.log(state);
     const newQ: Query = Object.assign({}, query);
     newQ.l = value;
     updateQuery(newQ);
@@ -350,10 +355,9 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
           });
           return 1;
         }
-        setAlert({
-          open: true,
-          text: subtitles.message,
-          status: subtitles.result,
+        const { message } = subtitles;
+        message.split('\n\n').map((item) => {
+          console.log(item);
         });
         if (subtitles.result === 'success') {
           const { items } = subtitles;
@@ -401,6 +405,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
               }
             } else {
               setLang(l);
+              _captionId = i.id;
               langRef.current = l;
             }
           });
@@ -408,6 +413,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
           if (!langRef.current) {
             langRef.current = items[0].lang;
             setLang(items[0].lang);
+            _captionId = items[0].id;
           }
           const newQ: Query = Object.assign({}, query);
           newQ.l = langRef.current;

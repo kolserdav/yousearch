@@ -59,6 +59,7 @@ export const typeDefs = gql`
   }
 
   type CaptionsItem {
+    id: String!
     lang: String!
     type: String!
   }

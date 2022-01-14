@@ -144,6 +144,7 @@ const Captions: RequestHandler<Schema.Params.Captions, Schema.Values.Captions> =
   }
   const langs = captions.data.items.map((item) => {
     return {
+      id: item.id,
       lang: item.snippet.language,
       type: item.snippet.trackKind,
     };
