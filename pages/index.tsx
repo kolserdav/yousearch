@@ -15,6 +15,7 @@ import Grid from '../components/ui/Grid';
 import Button from '../components/ui/Button';
 import { H1, Description, Label } from '../components/ui/Typography';
 import IconButton from '../components/ui/IconButton';
+import { Statement } from 'sqlite3';
 
 interface UpdateQuery {
   // eslint-disable-next-line no-unused-vars
@@ -36,13 +37,21 @@ date.setFullYear(date.getFullYear() + 12);
  * @param seconds {string}
  */
 const getBeautiTime = (seconds: string): string => {
-  const sec = parseFloat(seconds);
-  const h = Math.floor(sec / 3600);
-  let m: any = Math.floor((sec % 3600) / 60);
-  let s: any = Math.floor((sec % 3600) % 60);
-  m = m < 10 ? `0${m}` : `${m}`;
-  s = s < 10 ? `0${s}` : `${s}`;
-  return `${h}:${m}:${s}`;
+  return seconds.replace(/\.\d+$/, '');
+};
+
+const getSeconds = (string: string): string => {
+  let hours: string | RegExpMatchArray = string.match(/^\d+/);
+  hours = hours ? hours[0] : '0';
+  let minutes: string | RegExpMatchArray = string.match(/:\d+/);
+  minutes = minutes ? minutes[0].replace(':', '') : '0';
+  let seconds: string | RegExpMatchArray = string.match(/:\d+\./);
+  seconds = seconds ? seconds[0].replace(/[:.]*/g, '') : '0';
+  return (
+    parseInt(hours, 10) * 3600 +
+    parseInt(minutes, 10) * 60 +
+    parseInt(seconds, 10)
+  ).toString();
 };
 
 /**
@@ -121,6 +130,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
   const [linkValue, setLinkValue] = useState<string>('');
   const [lang, setLang] = useState<string>('');
   const [captionId, setCaptionId] = useState<string>('');
+  const [logged, setLogged] = useState<boolean>(false);
   const [languages, setLanguages] = useState<Schema.Values.CaptionsItem[]>([]);
   const [search, setSearch] = useState<string>('');
   const [load, setLoad] = useState<boolean>(false);
@@ -291,8 +301,6 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
     cookies.set('dlang', value, { expires: date, sameSite: 'strict' });
     langRef.current = value;
     setLang(value);
-    const state: Action<any> = store.getState();
-    console.log(state);
     const newQ: Query = Object.assign({}, query);
     newQ.l = value;
     updateQuery(newQ);
@@ -300,6 +308,25 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
       getSubtitles(value);
     }, 150);
   };
+
+  useEffect(() => {
+    const subs = store.subscribe(() => {
+      const { type, body } = store.getState();
+      if (type === 'AUTH') {
+        const { auth } = body as any;
+        if (auth?.role === 'user') {
+          setLogged(true);
+        }
+      }
+    });
+    action<any>({
+      type: 'AUTH',
+      body: {},
+    });
+    return () => {
+      subs();
+    };
+  }, []);
 
   useEffect(() => {
     if (token) {
@@ -355,12 +382,8 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
           });
           return 1;
         }
-        const { message } = subtitles;
-        message.split('\n\n').map((item) => {
-          console.log(item);
-        });
-        if (subtitles.result === 'success') {
-          const { items } = subtitles;
+        const { result, items } = subtitles;
+        if (result === 'success') {
           // Save all subtitles of video in sessionStorage
           subtitlesRef.current = items;
           if (se) {
@@ -470,18 +493,20 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
           style={{ marginLeft: '2rem', marginRight: '2rem' }}
           dangerouslySetInnerHTML={{ __html: t.content.acceptTos }}
         />
-        <Grid direction="column" align="center">
-          <Button disabled={load || other} onClick={loginRedirect}>
-            <IconButton
-              src="/img/ui/google-logo.svg"
-              alt={`${t.interface.send} ${t.interface.icon}`}
-              title={`${t.interface.send} ${t.interface.email}`}
-              onClick={() => {
-                /** */
-              }}
-            />
-          </Button>
-        </Grid>
+        {!logged && (
+          <Grid direction="column" align="center">
+            <Button disabled={load || other} onClick={loginRedirect}>
+              <IconButton
+                src="/img/ui/google-logo.svg"
+                alt={`${t.interface.send} ${t.interface.icon}`}
+                title={`${t.interface.send} ${t.interface.email}`}
+                onClick={() => {
+                  /** */
+                }}
+              />
+            </Button>
+          </Grid>
+        )}
         <Description style={{ marginLeft: '2rem', marginRight: '2rem' }}>
           {description || t.content.siteDescription}.
         </Description>
@@ -540,7 +565,7 @@ const HomeComponent: NextComponentType<any, any, HomeProps> = (props): React.Rea
                       selected={sReg.test(item.start)}
                       onClick={() => {
                         if (!other) {
-                          const _start = item.start.replace(/\.\d+/, '');
+                          const _start = getSeconds(item.start);
                           const newQ: Query = Object.assign({}, query);
                           newQ.s = _start;
                           updateQuery(newQ);

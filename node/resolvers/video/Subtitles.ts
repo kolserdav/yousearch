@@ -67,7 +67,7 @@ const Search: RequestHandler<Schema.Params.Subtitles, any> = async (_parent, par
   }
   const { Token } = user;
   const { type, access } = Token[0];
-  const resSubs = await new Promise((resolve) => {
+  const resSubs: string = await new Promise((resolve) => {
     axios
       .request({
         url: `https://www.googleapis.com/youtube/v3/captions/${videoID}`,
@@ -84,11 +84,22 @@ const Search: RequestHandler<Schema.Params.Subtitles, any> = async (_parent, par
         resolve(err.response.data.error.message);
       });
   });
+  const items = [];
+  resSubs.split('\n\n').map((item) => {
+    let start: string | RegExpMatchArray = item.match(/^\d+:\d+:\d+\.\d+/);
+    start = start ? start[0] : '';
+    let text: string | RegExpMatchArray = item.match(/\n.*$/);
+    text = text ? text[0].replace(/\n/, '') : '';
+    items.push({
+      start,
+      text,
+    });
+  });
   return {
-    result: 'error',
+    result: 'success',
     message: resSubs,
     lang: input.lang,
-    items: [],
+    items,
   };
 };
 

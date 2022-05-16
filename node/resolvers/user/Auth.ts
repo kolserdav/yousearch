@@ -10,17 +10,17 @@ import * as lib from '../../lib';
  */
 const Auth: RequestHandler<void, Schema.Values.Auth> = async (_parent, params, context) => {
   const { headers } = context;
-  const { lang, xqt } = headers;
+  const { lang, xqt, authorization } = headers;
   const t = srv.getLang(lang);
   const guestRes: Schema.Values.Auth = {
     result: 'success',
     message: 'auth',
     role: 'guest',
   };
-  if (!xqt) {
+  if (!authorization) {
     return guestRes;
   }
-  const parsedToken = lib.parseToken(xqt);
+  const parsedToken = lib.parseToken(authorization);
   if (parsedToken === null) {
     return guestRes;
   }
